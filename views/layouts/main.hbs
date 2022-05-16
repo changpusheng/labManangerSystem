@@ -9,14 +9,16 @@
   <title>實驗室耗材溶劑管理</title>
 </head>
 
-<body>
-  <main role="main">
-    <div class="album bg-light pt-5">
-      <div class="container">
+<body class="d-flex flex-column h-100 bg-light">
+  {{>header}}
+  <main class="flex-shrink-0" role="main">
+    <div class="album bg-light container pt-5">
+      <div class="p-5">
         {{{body}}}
       </div>
     </div>
   </main>
+  {{>footer}}
 
   <script src="../../javascript/bootstrap.min.js"></script>
 </body>
