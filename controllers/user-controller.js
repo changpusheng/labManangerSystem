@@ -1,6 +1,9 @@
 const userController = {
-  getSignin: (req, res, next) => {
+  getSignin: (req, res) => {
     res.render('users/signin')
+  },
+  getSignup: (req, res) => {
+    res.render('users/signup')
   }
 }
 

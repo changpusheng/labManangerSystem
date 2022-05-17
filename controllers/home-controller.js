@@ -1,5 +1,5 @@
 const homeController = {
-  gethome: (req, res, next) => {
+  gethome: (req, res) => {
     res.render('home')
   }
 }
