@@ -1,6 +1,6 @@
 const userController = {
   getSignin: (req, res, next) => {
-    res.render('signin')
+    res.render('users/signin')
   }
 }
 
