@@ -1,9 +1,8 @@
 <div class="row mt-5">
   <div class="col-md-6 m-auto">
     <div class="card card-body">
-      {{>messages}}
       <h1 class="text-center mt-3">帳號登入</h1>
-      <form action="/login" method="POST">
+      <form action="/users/signin" method="POST">
         <div class="form-group mb-2">
           <label for="account">帳號:</label>
           <input type="text" id="account" name="account" class="form-control" placeholder="Enter Account">

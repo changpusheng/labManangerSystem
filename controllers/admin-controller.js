@@ -1,6 +1,6 @@
 const adminCroller = {
-  getUsers: (req, res, next) => {
-    return res.render('admin/users')
+  getBackSide: (req, res, next) => {
+    return res.render('admin/backside')
   }
 }
 
