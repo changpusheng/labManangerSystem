@@ -5,10 +5,11 @@ const admin = require('./modules/admin')
 const user = require('./modules/user')
 const { generalErrorHandler } = require('../middleware/error-handler')
 const { authenticated } = require('../middleware/auth')
+const { authenticatedAdmin } = require('../middleware/auth')
 
 router.use('/users', user)
 router.use('/', authenticated, home)
-router.use('/admin', admin)
+router.use('/admin', authenticatedAdmin, admin)
 router.use('/', generalErrorHandler)
 
 module.exports = router

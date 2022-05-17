@@ -32,7 +32,7 @@ const userController = {
       })
     ).then(() => {
       req.flash('success_messages', '成功註冊帳號！')
-      res.redirect('/users/signin')
+      res.redirect('/')
     }).catch(err => next(err))
   }
 }
