@@ -34,10 +34,6 @@ const itemSchema = new Schema({
     type: String,
     required: false
   },
-  image: {
-    type: String,
-    required: false
-  },
   categoryId: {
     type: Schema.Types.ObjectId,
     ref: 'Category',

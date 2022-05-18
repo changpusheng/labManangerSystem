@@ -2,10 +2,13 @@ const Item = require('../models/item')
 
 const itemController = {
   getSolven: (req, res) => {
-    res.render('solven')
+    res.render('item/solven')
   },
   getToxicSolven: (req, res) => {
-    res.render('toxic')
+    res.render('item/toxic')
+  },
+  getCreateItem: (req, res) => {
+    res.render('item/createItem')
   }
 }
 

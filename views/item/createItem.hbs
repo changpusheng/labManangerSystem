@@ -1,0 +1,54 @@
+<div id="container">
+  <div class="row mt-5">
+    <div class="col-md-4 m-auto">
+      <div class="card card-body">
+        <div class="input-group-text justify-content-center fs-4 fw-bold">新增品項</div>
+        <hr>
+        <form action="/item/create" method="POST">
+          <div class="input-group mb-3">
+            <select class="form-select" aria-label="Default select example" name="categoryId">
+              <option selected>選擇分類</option>
+              <option value="1">一般溶劑</option>
+              <option value="2">毒化物</option>
+              <option value="3">耗材</option>
+            </select>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="name">品名</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="name"
+              name="name">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="englishName">英文縮寫</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="englishName"
+              name="englishName">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="stock">現有庫存</span>
+            <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="stock"
+              name="stock" min="0">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="safeStock">安全庫存</span>
+            <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="safeStock"
+              name="safeStock" min="0">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="fullStock">每次購買的數量</span>
+            <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="fullStock"
+              name="fullStock" min="0">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="casNumber">casNumber</span>
+            <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="casNumber"
+              name="casNumber" min="0">
+          </div>
+
+          <button type="submit" class="btn btn-primary">送出</button>
+          <a type="button" class="btn btn-primary" href="/">取消</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
