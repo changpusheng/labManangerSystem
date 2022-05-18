@@ -1,39 +1,45 @@
+{{>admin-tab route = 'user'}}
 <br />
-<br />
-<a href="/users/signup" class="btn btn-primary">新增使用者</a>
-<table class="table align-middle">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Acount</th>
-      <th scope="col">Role</th>
-      <th scope="col">#</th>
-      <th scope="col">#</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each users}}
-    <tr>
-      <td>{{this.name}}</td>
-      <td>{{this.account}}</td>
-      <td>
-        {{#if this.isAdmin}}管理員{{else}}一般使用者{{/if}}
-      </td>
-      <td>
-        <form action="/admin/users/{{this._id}}?_method=PATCH" method="POST">
-          <button class="btn btn-outline-primary" type="submit">
-            {{#if this.isAdmin}}設定為使用者{{else}}設定為管理員{{/if}}
-          </button>
-        </form>
-      </td>
-      <td>
-        <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
-          <button class="btn btn-outline-danger" type="submit" onclick="return confirm('確定要刪除{{this.name}}嗎?')">
-            刪除
-          </button>
-        </form>
-      </td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+<div class="row mt-2">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      <a href="/admin/signup" class="btn btn-primary">新增使用者</a>
+      <table class="table align-middle">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Acount</th>
+            <th scope="col">Role</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+          <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.account}}</td>
+            <td>
+              {{#if this.isAdmin}}管理員{{else}}一般使用者{{/if}}
+            </td>
+            <td>
+              <form action="/admin/users/{{this._id}}?_method=PATCH" method="POST">
+                <button class="btn btn-outline-primary" type="submit">
+                  {{#if this.isAdmin}}設定為使用者{{else}}設定為管理員{{/if}}
+                </button>
+              </form>
+            </td>
+            <td>
+              <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
+                <button class="btn btn-outline-danger" type="submit" onclick="return confirm('確定要刪除{{this.name}}嗎?')">
+                  刪除
+                </button>
+              </form>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

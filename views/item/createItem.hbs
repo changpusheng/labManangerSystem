@@ -8,9 +8,9 @@
           <div class="input-group mb-3">
             <select class="form-select" aria-label="Default select example" name="categoryId">
               <option selected>選擇分類</option>
-              <option value="1">一般溶劑</option>
-              <option value="2">毒化物</option>
-              <option value="3">耗材</option>
+              {{#each categories}}
+              <option value="{{this._id}}">{{this.name}}</option>
+              {{/each}}
             </select>
           </div>
           <div class="input-group mb-3">

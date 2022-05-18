@@ -2,31 +2,31 @@
   <div class="col-md-6 m-auto">
     <div class="card card-body">
       <h1 class="text-center mt-3">註冊帳號</h1>
-      <form action="/users/signup" method="POST">
+      <form action="/admin/signup" method="POST">
         <div class="form-group mb-2">
-          <label for="name">Name</label>
+          <label for="name">姓名</label>
           <input type="text" id="name" name="name" class="form-control" placeholder="Enter Name" value="{{name}}">
         </div>
         <div class="form-group mb-2">
-          <label for="account">Account</label>
+          <label for="account">登入帳號</label>
           <input type="account" id="account" name="account" class="form-control" placeholder="Enter account"
             value="{{account}}">
         </div>
         <div class="form-group mb-2">
-          <label for="password">Password</label>
+          <label for="password">登入密碼</label>
           <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password"
             value="{{password}}">
         </div>
         <div class="form-group mb-2">
-          <label for="confirmPassword">Confirm Password</label>
+          <label for="confirmPassword">登入密碼確認</label>
           <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
             placeholder="Confirm Password" value="{{confirmPassword}}">
         </div>
         <button type="submit" class="btn btn-primary btn-block">註冊</button>
+        <a href="/admin/backside" type="button" class="btn btn-primary btn-block">取消</a>
       </form>
-      <p class="lead mt-4">
-        回到登入畫面=> <a href="/users/signin">Login</a>
-      </p>
+
+
     </div>
   </div>
 </div>
