@@ -4,8 +4,11 @@ const Unit = require('../models/unit')
 
 const itemController = {
   getSolven: (req, res) => {
-    Item.find().populate('categoryId').lean().then(item => {
+    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
+      const percent = normalSolven.map(obj =>
+        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
+      )
       res.render('item/solven', {
         normalSolven
       })

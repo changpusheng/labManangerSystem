@@ -1,0 +1,24 @@
+<div class="col-sm-2 mt-3">
+  <div class="card">
+    <div class="card-body ">
+      <h5 class="card-title">{{this.name}} <h6>[{{this.categoryId.name}}]</h6>
+        <h6>casNo:{{this.casNumber}}</h6>
+        <h6>[{{this.englishName}}]</h6>
+      </h5>
+      <p>
+      <h4 class="card-text">庫存:{{this.stock}} {{this.unitId.name}}</h4>
+      </p>
+      <p>
+      <div class="progress">
+        <div class="progress-bar {{#percentAlert this.stock this.safeStock}}bg-warning {{/percentAlert}}"
+          role="progressbar" style="width: {{this.percent}}%;" aria-valuenow="{{this.percent}}" aria-valuemin="0"
+          aria-valuemax="100">
+          {{this.percent}}%</div>
+      </div>
+      </p>
+      <p><a href="#" class="btn btn-primary">領用</a>
+        <a href="#" class="btn btn-success">入庫</a>
+      </p>
+    </div>
+  </div>
+</div>
