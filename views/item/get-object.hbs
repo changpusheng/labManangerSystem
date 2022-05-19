@@ -5,11 +5,11 @@
     <div class="col-md-4 m-auto">
       {{>shopping-tab route = 'get-object'}}
       <div class="card card-body">
-        <div class="input-group-text justify-content-center fs-4 fw-bold mt-2">領用</div>
+        <div class="input-group-text justify-content-center fs-4 fw-bold mt-2">領用[{{item.name}}]</div>
         <hr>
 
         <blockquote class="blockquote text-center">
-          <p>[{{item.name}}]</p>
+          <p>[{{item.englishName}}]</p>
           <p>庫存:{{item.stock}}{{item.unitId.name}}</p>
         </blockquote>
         <form action="/item/get-object/{{item._id}}" method="POST">

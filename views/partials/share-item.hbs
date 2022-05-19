@@ -1,12 +1,15 @@
 <div class="col-sm-2 mt-3">
-  <div class="card">
+  <div class="card {{#ifCond this.stock 0}} border border-2 border-danger{{else}}
+    {{#percentAlert this.stock this.safeStock}} 
+    border border-2 border-warning
+     {{/percentAlert}}{{/ifCond}}">
     <div class="card-body text-center">
-      <h5 class="card-title">{{this.name}} <h6>[{{this.categoryId.name}}]</h6>
+      <h5 class="card-title fw-bold ">{{this.name}} <h6>[{{this.categoryId.name}}]</h6>
         <h6>casNo:{{this.casNumber}}</h6>
         <h6>[{{this.englishName}}]</h6>
       </h5>
       <p>
-      <h4 class="card-text">庫存:{{this.stock}} {{this.unitId.name}}</h4>
+      <h4 class="card-text fw-bold">庫存:{{this.stock}} {{this.unitId.name}}</h4>
       </p>
       <p>
       <div class="progress">
@@ -16,7 +19,16 @@
           {{this.percent}}%</div>
       </div>
       </p>
-      <p><a href="/item/get-object/{{this._id}}" class="btn btn-outline-success">領用/購買</a>
+      <p>
+        {{#ifCond this.stock 0}}
+        <a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-danger ">請補貨</a>
+        {{else}}
+        {{#percentAlert this.stock this.safeStock}}
+        <a href="/item/get-object/{{this._id}}" class="btn btn-outline-warning">快沒貨了</a>
+        {{else}}
+        <a href="/item/get-object/{{this._id}}" class="btn btn-outline-success">供貨正常</a>
+        {{/percentAlert}}
+        {{/ifCond}}
       </p>
     </div>
   </div>

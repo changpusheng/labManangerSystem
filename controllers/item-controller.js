@@ -1,6 +1,8 @@
 const Item = require('../models/item')
 const Category = require('../models/category')
 const Unit = require('../models/unit')
+const Record = require('../models/record')
+const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 
 const itemController = {
   getSolven: (req, res) => {
@@ -67,15 +69,24 @@ const itemController = {
     }).catch(err => next(err))
   }, postObject: (req, res, next) => {
     Item.findById(req.params.id).populate('unitId').then(item => {
-      if (!item) throw new Error("User didn't exist!")
+      if (!item) throw new Error("item didn't exist!")
       const { getNumber } = req.body
       item.stock -= getNumber
       if (item.stock < 0) throw new Error("庫存不足!")
       return item.save()
     }).then(item => {
       const { getNumber } = req.body
-      req.flash('success_messages', `${item.name}領取${getNumber
-        }${item.unitId.name}成功`)
+      if (!item) throw new Error("item didn't exist!")
+      return Record.create({
+        inputNumber: 0,
+        outNumber: getNumber,
+        createAt: currentYearMonDate(),
+        itemId: item._id,
+        userId: req.user._id
+      })
+    }).then(item => {
+      if (!item) throw new Error("item didn't exist!")
+      req.flash('success_messages', '領取成功')
       res.redirect('/item/normalSolven')
     }).catch(err => next(err))
   }
