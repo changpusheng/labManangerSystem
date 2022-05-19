@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const Category = require('../models/category')
 const bcrypt = require('bcryptjs')
-const category = require('../models/category')
+const Unit = require('../models/unit')
 
 
 const adminCroller = {
@@ -42,7 +42,7 @@ const adminCroller = {
       res.redirect('/admin/backside')
     }).catch(err => next(err))
   },
-  getCategories: (req, res) => {
+  getCategories: (req, res, next) => {
     return Promise.all([
       Category.find().lean(),
       req.params.id ? Category.findById(req.params.id).lean() : null
@@ -100,6 +100,26 @@ const adminCroller = {
     ).then(() => {
       req.flash('success_messages', '成功註冊帳號！')
       res.redirect('/admin/backside')
+    }).catch(err => next(err))
+  },
+  getUnits: (req, res, next) => {
+    return Promise.all([Unit.find().lean(),
+    req.params.id ? Unit.findById(req.params.id).lean() : null])
+      .then(([units, unit]) => {
+        res.render('admin/unit', { unit, units })
+      }).catch(err => next(err))
+  },
+  postUnit: (req, res, next) => {
+    const { name } = req.body
+    if (!name) throw new Error('請輸入分類')
+    Unit.findOne({ name }).then(name => {
+      if (name) throw new Error('已經有該單位名稱')
+    }).then(() => {
+      return Unit.create({ name })
+        .then(() => {
+          req.flash('success_messages', '成功新增單位')
+          res.redirect('/admin/units')
+        }).catch(err => next(err))
     }).catch(err => next(err))
   }
 }

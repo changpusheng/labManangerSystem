@@ -14,6 +14,8 @@ router.post('/signup', adminCroller.postSignup)
 router.get('/backside', adminCroller.getBackSide)
 router.get('/categories', adminCroller.getCategories)
 router.post('/categories', adminCroller.postCategory)
+router.get('/units',adminCroller.getUnits)
+router.post('/units',adminCroller.postUnit)
 
 
 

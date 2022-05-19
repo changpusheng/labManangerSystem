@@ -1,5 +1,5 @@
 <div id="container">
-  <div class="row mt-5">
+  <div class="row mt-3">
     <div class="col-md-4 m-auto">
       <div class="card card-body">
         <div class="input-group-text justify-content-center fs-4 fw-bold">新增品項</div>
@@ -7,8 +7,16 @@
         <form action="/item/create" method="POST">
           <div class="input-group mb-3">
             <select class="form-select" aria-label="Default select example" name="categoryId">
-              <option selected>選擇分類</option>
+              <option selected disabled>選擇分類</option>
               {{#each categories}}
+              <option value="{{this._id}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="input-group mb-3">
+            <select class="form-select" aria-label="Default select example" name="unitId">
+              <option selected disabled>選擇計量單位</option>
+              {{#each units}}
               <option value="{{this._id}}">{{this.name}}</option>
               {{/each}}
             </select>

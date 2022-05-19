@@ -11,14 +11,14 @@
         <ul class="navbar-nav ms-auto mb-2 mb-md-0">
           {{#if user.isAdmin}}
           <li class="nav-item">
-            <a href="/admin/backside" class="nav-link">Admin 後台</a>
+            <a href="/admin/backside" class="nav-link">後台管理</a>
           </li>
           {{/if}}
           <li class="nav-item d-inline-flex align-items-center">
             <span class="text-white nav-link">Hi, {{ user.name }}</span>
           </li>
           <li class="nav-item">
-            <a href="/users/logout"><button class="btn btn-outline-success my-sm-0 my-2">Logout</button></a>
+            <a href="/users/logout"><button class="btn btn-outline-warning my-sm-0 my-2">登出</button></a>
           </li>
         </ul>
       </div>

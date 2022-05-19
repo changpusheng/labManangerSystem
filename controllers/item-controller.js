@@ -1,28 +1,33 @@
 const Item = require('../models/item')
 const Category = require('../models/category')
+const Unit = require('../models/unit')
 
 const itemController = {
   getSolven: (req, res) => {
-    res.render('item/solven')
+    Item.find().populate('categoryId').lean().then(item => {
+      const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
+      res.render('item/solven', {
+        normalSolven
+      })
+    })
   },
   getToxicSolven: (req, res) => {
     res.render('item/toxic')
   },
   getCreateItem: (req, res, next) => {
-    Category.find().lean().then(categories => {
-      if (!categories) throw new Error("Category didn't exist!")
-      res.render('item/createItem', { categories })
-    }
-    ).catch(err => next(err))
+    return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units]) => {
+      if (!categories || !units) throw new Error("Category/unit didn't exist!")
+      res.render('item/createItem', { categories, units })
+    }).catch(err => next(err))
   },
   postCreateItem: (req, res, next) => {
-    const { categoryId, name, englishName, stock, safeStock, fullStock, casNumber
+    const { unitId, categoryId, name, englishName, stock, safeStock, fullStock, casNumber
     } = req.body
-    if (!categoryId || !name || !englishName || !stock || !safeStock || !fullStock || !casNumber) throw new Error('有空格')
+    if (!name || !englishName || !stock || !safeStock || !fullStock || !casNumber) throw new Error('有空格')
+    if (!unitId || !categoryId) throw new Error('沒有選擇分類')
     Item.findOne({ name }).then(name => {
       if (name) throw new Error('已經有該品項')
     }).then(() => {
-      const userId = req.user._id
       Item.create({
         name,
         stock,
@@ -31,7 +36,7 @@ const itemController = {
         categoryId,
         fullStock,
         casNumber,
-        unitId: userId
+        unitId
       })
     })
       .then(() => {
