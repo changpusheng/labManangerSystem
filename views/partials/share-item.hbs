@@ -1,6 +1,6 @@
 <div class="col-sm-2 mt-3">
   <div class="card">
-    <div class="card-body ">
+    <div class="card-body text-center">
       <h5 class="card-title">{{this.name}} <h6>[{{this.categoryId.name}}]</h6>
         <h6>casNo:{{this.casNumber}}</h6>
         <h6>[{{this.englishName}}]</h6>
@@ -16,8 +16,7 @@
           {{this.percent}}%</div>
       </div>
       </p>
-      <p><a href="#" class="btn btn-primary">領用</a>
-        <a href="#" class="btn btn-success">入庫</a>
+      <p><a href="/item/get-object/{{this._id}}" class="btn btn-outline-success">領用/購買</a>
       </p>
     </div>
   </div>

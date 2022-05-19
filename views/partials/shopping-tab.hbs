@@ -1,0 +1,11 @@
+<div class="mt-1">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link {{#ifCond route 'get-object'}}active{{/ifCond}} " href="/item/get-object/{{item._id}}">領用</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {{#ifCond route 'shopping-object'}}active{{/ifCond}}"
+        href="/item/shopping-object/{{item._id}}">購買</a>
+    </li>
+  </ul>
+</div>
