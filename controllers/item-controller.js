@@ -2,6 +2,7 @@ const Item = require('../models/item')
 const Category = require('../models/category')
 const Unit = require('../models/unit')
 const Record = require('../models/record')
+const Buy = require('../models/buy')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 
 const itemController = {
@@ -51,19 +52,51 @@ const itemController = {
       .catch(err => next(err))
   },
   getShopping: (req, res, next) => {
-    Item.findById(req.params.id).populate('unitId').lean().then(item => {
-      if (!item) throw new Error("User didn't exist!")
-      res.render('item/shopping', { item })
+    return Promise.all([Item.findById(req.params.id).populate('unitId').lean(), Buy.find().populate(['itemId', 'userId'])])
+      .then(([item, buy]) => {
+        if (!item) throw new Error("item didn't exist!")
+        const buyIsDone = buy.filter(obj => obj.isDone === false)
+        const buyItemId = buyIsDone.filter(obj => obj.itemId._id.toJSON() === item._id.toJSON())
+        let buyItemIdtoJSON = JSON.stringify(buyItemId)
+        res.render('item/shopping', {
+          item, buyItemId, buyItemIdtoJSON
+        })
+      }).catch(err => next(err))
+  },
+  postShopping: (req, res, next) => {
+    Item.findById(req.params.id).then(item => {
+      if (!item) throw new Error("item didn't exist!")
+      const { number, commit
+      } = req.body
+      if (!number) throw new Error('購買數量不能空白')
+      Buy.find().populate('itemId').then(buy => {
+        const buyIsDone = buy.filter(obj => obj.isDone === false)
+        const buyNewArr = buyIsDone.map(obj => obj.itemId._id.toJSON())
+        if (buyNewArr.includes(item._id.toJSON())) throw new Error('有訂單未結案')
+      }).then(() => {
+        Buy.create({
+          number,
+          createAt: currentYearMonDate(),
+          commit,
+          itemId: item._id,
+          userId: req.user._id
+        }).then(() => {
+          req.flash('success_messages', '新增訂單')
+          res.redirect('/')
+        }).catch(err => next(err))
+      }).catch(err => next(err))
     }).catch(err => next(err))
   },
+
   getObject: (req, res, next) => {
     Item.findById(req.params.id).populate('unitId').lean().then(item => {
       if (!item) throw new Error("User didn't exist!")
       res.render('item/get-object', { item })
     }).catch(err => next(err))
   },
+
   saveObject: (req, res, next) => {
-    Item.findById(req.params.id).populate('unitId').lean().then(item => {
+    Item.findById(req.params.id).lean().then(item => {
       if (!item) throw new Error("User didn't exist!")
       res.render('item/save-object', { item })
     }).catch(err => next(err))

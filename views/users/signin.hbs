@@ -1,17 +1,18 @@
 <div class="row mt-5">
   <div class="col-md-6 m-auto">
     <div class="card card-body">
-      <h1 class="text-center mt-3">帳號登入</h1>
+      <h1 class="text-center mt-3">WELCOME</h1>
       <form action="/users/signin" method="POST">
         <div class="form-group mb-2">
           <label for="account">帳號:</label>
-          <input type="text" id="account" name="account" class="form-control" placeholder="Enter Account">
+          <input type="text" id="account" name="account" class="form-control" placeholder="輸入工號">
         </div>
         <div class="form-group mb-2">
           <label for="password">密碼:</label>
-          <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password">
+          <input type="password" id="password" name="password" class="form-control" placeholder="輸入密碼">
         </div>
         <button type="submit" class="btn btn-primary btn-block">登入</button>
+        <a href="javascript:history.back()" type="button" class="btn btn-primary btn-block">取消</a>
       </form>
     </div>
   </div>

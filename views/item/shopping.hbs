@@ -3,16 +3,63 @@
     <div class="col-md-4 m-auto">
       {{>shopping-tab route = 'shopping-object'}}
       <div class="card card-body">
-
         <div class="input-group-text justify-content-center fs-4 fw-bold mt-2">購買[{{item.name}}]</div>
         <hr>
+        <blockquote class="blockquote text-center">
+          <p>[{{item.englishName}}]</p>
+          <!-- Button trigger modal 彈跳視窗按鈕-->
+          <div id="shoppingdatafilter" style="display: none;">{{buyItemIdtoJSON}}</div>
+          <p>未結案訂單共
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop">
+              {{buyItemId.length}}
+            </button>
+            筆
+          </p>
+          <!-- Modal 彈跳視窗 -->
+          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">訂單清單</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="shoppingList">
 
-        
-
-
-
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p>庫存:{{item.stock}}{{item.unitId.name}}</p>
+        </blockquote>
+        <form action="/item/shopping-object/{{item._id}}" method="POST">
+          <blockquote class="blockquote ">
+            <div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="shoppingNumber">購買數量</span>
+                <input type="number" class="form-control" aria-label="Sizing example input"
+                  aria-describedby="shoppingNumber" name="number" min="0" placeholder="輸入購買數量" required>
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="chemicalNumber">訂單編號/備註</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                  aria-describedby="chemicalNumber" name="commit" placeholder="輸入備註或流水編號" required>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+              <button class="btn btn-outline-primary " type="submit"
+                onclick="return confirm('確定是要購買[{{item.name}}]嗎?')">
+                送出
+              </button>
+              <a type="button" class="btn btn-outline-danger ms-3" href="/item/normalSolven">取消</a>
+            </div>
+          </blockquote>
+        </form>
       </div>
     </div>
   </div>
-
 </div>
