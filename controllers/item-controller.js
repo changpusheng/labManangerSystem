@@ -74,17 +74,24 @@ const itemController = {
         const buyNewArr = buyIsDone.map(obj => obj.itemId._id.toJSON())
         if (buyNewArr.includes(item._id.toJSON())) throw new Error('有訂單未結案')
       }).then(() => {
-        Buy.create({
+        Item.findById(req.params.id).then(item => {
+          item.isBuy = true
+          return item.save()
+        }).catch(err =>next(errs))
+      }).then(() => {
+        return Buy.create({
           number,
           createAt: currentYearMonDate(),
           commit,
           itemId: item._id,
           userId: req.user._id
-        }).then(() => {
+        }).then(item => {
+          console.log(item)
           req.flash('success_messages', '新增訂單')
           res.redirect('/')
         }).catch(err => next(err))
       }).catch(err => next(err))
+
     }).catch(err => next(err))
   },
 

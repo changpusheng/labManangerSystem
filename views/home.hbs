@@ -36,7 +36,7 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        未結案{{buyIsDone.length}}筆
+        未結案共{{buyIsDone.length}}筆
       </div>
       <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
         <div>
@@ -59,7 +59,7 @@
                 <td>{{this.itemId.name}}</td>
                 <td>{{this.number}}{{this.itemId.unitId.name}}</td>
                 <td>{{this.userId.name}}</td>
-                <td><a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-primary">結案</a></td>
+                <td><a href="/item/shopping-object/{{this.itemId._id}}" class="btn btn-outline-primary">結案</a></td>
               </tr>
               {{/each}}
             </tbody>
@@ -67,9 +67,6 @@
           <hr>
         </div>
       </div>
-
-
-
     </div>
   </div>
 </div>

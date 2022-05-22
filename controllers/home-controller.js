@@ -10,8 +10,9 @@ const homeController = {
     Item.find()
       .populate(['categoryId', 'unitId']).lean()])
       .then(([buys, items]) => {
-        const buyIsDone = buys.filter(obj => obj.isDone === false)
-        const itemObjs = items.filter(obj => obj.stock < obj.safeStock)
+        const buyIsDone = buys.filter(obj => obj.isDone === false && obj.itemId.isBuy === true)
+        const itemObjs = items.filter(obj => obj.stock < obj.safeStock && obj.isBuy === false)
+        
         res.render('home', {
           buyIsDone
           , itemObjs
