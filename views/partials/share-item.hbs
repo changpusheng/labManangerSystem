@@ -24,9 +24,9 @@
         <a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-danger ">請補貨</a>
         {{else}}
         {{#percentAlert this.stock this.safeStock}}
-        <a href="/item/get-object/{{this._id}}" class="btn btn-outline-warning">快沒貨了</a>
+        <a href="/item/objectget/{{this._id}}" class="btn btn-outline-warning">快沒貨了</a>
         {{else}}
-        <a href="/item/get-object/{{this._id}}" class="btn btn-outline-success">供貨正常</a>
+        <a href="/item/objectget/{{this._id}}" class="btn btn-outline-success">供貨正常</a>
         {{/percentAlert}}
         {{/ifCond}}
       </p>

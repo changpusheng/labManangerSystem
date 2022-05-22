@@ -77,7 +77,7 @@ const itemController = {
         Item.findById(req.params.id).then(item => {
           item.isBuy = true
           return item.save()
-        }).catch(err =>next(errs))
+        }).catch(err => next(errs))
       }).then(() => {
         return Buy.create({
           number,
@@ -95,19 +95,32 @@ const itemController = {
     }).catch(err => next(err))
   },
 
-  getObject: (req, res, next) => {
+  getObjectSave: (req, res, next) => {
+    return Promise.all([Item.findById(req.params.id).populate('unitId').lean(), Buy.find().populate(['itemId', 'userId'])])
+      .then(([item, buy]) => {
+        if (!item) throw new Error("item didn't exist!")
+        const buyIsDone = buy.filter(obj => obj.isDone === false)
+        const buyItemId = buyIsDone.filter(obj => obj.itemId._id.toJSON() === item._id.toJSON())
+        let latelyObj
+        if (!buyItemId[0]) {
+          latelyObj = []
+        } else (
+          latelyObj = buyItemId.slice(-1)[0].toJSON()
+        )
+        let buyItemIdtoJSON = JSON.stringify(buyItemId)
+        res.render('item/save-object', {
+          item, latelyObj, buyItemId, buyItemIdtoJSON
+        })
+      }).catch(err => next(err))
+  }
+  ,
+  getObjectGet: (req, res, next) => {
     Item.findById(req.params.id).populate('unitId').lean().then(item => {
       if (!item) throw new Error("User didn't exist!")
       res.render('item/get-object', { item })
     }).catch(err => next(err))
   },
-
-  saveObject: (req, res, next) => {
-    Item.findById(req.params.id).lean().then(item => {
-      if (!item) throw new Error("User didn't exist!")
-      res.render('item/save-object', { item })
-    }).catch(err => next(err))
-  }, postObject: (req, res, next) => {
+  postObjectGet: (req, res, next) => {
     Item.findById(req.params.id).populate('unitId').then(item => {
       if (!item) throw new Error("item didn't exist!")
       const { getNumber } = req.body

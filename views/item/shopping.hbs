@@ -8,7 +8,7 @@
         <blockquote class="blockquote text-center">
           <p>[{{item.englishName}}]</p>
           <!-- Button trigger modal 彈跳視窗按鈕-->
-          <div id="shoppingdatafilter" style="display: none;">{{buyItemIdtoJSON}}</div>
+          <div class="shoppingdatafilter" style="display: none;">{{buyItemIdtoJSON}}</div>
           <p>未結案訂單共
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
               data-bs-target="#staticBackdrop">
@@ -25,7 +25,7 @@
                   <h5 class="modal-title" id="staticBackdropLabel">訂單清單</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="shoppingList">
+                <div class="modal-body shoppingList">
 
                 </div>
                 <div class="modal-footer">

@@ -1,7 +1,10 @@
-let shoppingGetJsonData = document.querySelector('#shoppingdatafilter').innerText
+let shoppingGetJsonData = document.querySelector('.shoppingdatafilter').innerText
 let buyItemId = JSON.parse(shoppingGetJsonData)
 
-const contentTitle = `<table class="table table-striped">
+
+
+function list(data) {
+  const contentTitle = `<table class="table table-striped">
   <thead>
   <tr>
     <th scope="col">流水號</th>
@@ -16,10 +19,10 @@ const contentTitle = `<table class="table table-striped">
     <tbody>
  `
 
-let product = ''
-buyItemId.forEach(obj => {
-  let container = `<tr> <th scope="row"> ${obj
-    .commit} </th> <td>${obj.itemId.name}</td>
+  let product = ''
+  data.forEach(obj => {
+    let container = `<tr> <th scope="row"> ${obj
+      .commit} </th> <td>${obj.itemId.name}</td>
     <td>${obj.number}</td>
     <td>${obj.createAt}</td>
     <td>${obj.userId.name}</td>
@@ -28,13 +31,19 @@ buyItemId.forEach(obj => {
         href="/item/normalSolven">通知</a></td>
     </tr>
     `
-  product += container
-  return product
-})
+    product += container
+    return product
+  })
 
-const comtentFooter = `</tbody>
+  const comtentFooter = `</tbody>
 </table>`
 
+  const totalContent = contentTitle + product + comtentFooter
+  return totalContent
+}
 
-document.querySelector('#shoppingList').innerHTML = contentTitle + product + comtentFooter
+
+document.querySelector('.shoppingList').innerHTML = list(buyItemId)
+
+
 
