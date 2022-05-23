@@ -10,14 +10,15 @@ db.on('error', () => { console.log('mongoose error!') })
 
 db.once('open', () => {
   bcrypt.genSalt(10).then(salt =>
-    bcrypt.hash(process.env.userPassword, salt)
+    bcrypt.hash(process.env.user_Password, salt)
   ).then(hash =>
     User.create({
-      name: process.env.userName,
-      account: process.env.userAccount,
-      email: process.env.email,
+      name: process.env.user_Name,
+      account: process.env.user_Account,
+      email: process.env.user_Email,
       password: hash,
       isAdmin: true
-    }).catch(err => console.log(err))
+    })
   ).catch(err => console.log(err))
 })
+
