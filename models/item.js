@@ -30,6 +30,10 @@ const itemSchema = new Schema({
     type: Boolean,
     default: false
   },
+  factors: {
+    type: Number,
+    default: true
+  },
   image: {
     type: String,
     required: false

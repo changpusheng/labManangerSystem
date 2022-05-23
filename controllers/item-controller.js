@@ -9,7 +9,7 @@ const itemController = {
   getSolven: (req, res) => {
     Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
-      const percent = normalSolven.map(obj =>
+      normalSolven.map(obj =>
         obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
       )
       res.render('item/solven', {
@@ -18,7 +18,15 @@ const itemController = {
     })
   },
   getToxicSolven: (req, res) => {
-    res.render('item/toxic')
+    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
+      const toxicSolven = item.filter(obj => obj.categoryId.name === '毒化物')
+      toxicSolven.map(obj =>
+        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
+      )
+      res.render('item/toxic', {
+        toxicSolven
+      })
+    })
   },
   getCreateItem: (req, res, next) => {
     return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units]) => {
@@ -27,22 +35,32 @@ const itemController = {
     }).catch(err => next(err))
   },
   postCreateItem: (req, res, next) => {
-    const { unitId, categoryId, name, englishName, stock, safeStock, fullStock, casNumber
+    const { otherFactorsValue, factors, unitId, categoryId, name, englishName, stock, safeStock, fullStock, casNumber
     } = req.body
-    if (!name || !englishName || !stock || !safeStock || !fullStock || !casNumber) throw new Error('有空格')
+    if (!factors || !name || !englishName || !stock || !safeStock || !fullStock || !casNumber) throw new Error('有空格')
     if (!unitId || !categoryId) throw new Error('沒有選擇分類')
-    Item.findOne({ name }).then(name => {
-      if (name) throw new Error('已經有該品項')
+
+    let factorValue = factors
+    if (!factors) throw new Error("請選擇項目")
+    if (factors === 'other') {
+      if (!otherFactorsValue) throw new Error("入庫數量未填")
+      factorValue = otherFactorsValue
+    }
+
+
+    Item.findOne({ name }).then(obj => {
+      if (obj) throw new Error('已經有該品項')
     }).then(() => {
       Item.create({
         name,
-        stock,
-        safeStock,
+        stock: stock * Number(factorValue),
+        safeStock: safeStock * Number(factorValue),
         englishName,
         categoryId,
-        fullStock,
+        fullStock: fullStock * Number(factorValue),
         casNumber,
-        unitId
+        unitId,
+        factorValue: Number(factorValue)
       })
     })
       .then(() => {
@@ -86,7 +104,6 @@ const itemController = {
           itemId: item._id,
           userId: req.user._id
         }).then(item => {
-          console.log(item)
           req.flash('success_messages', '新增訂單')
           res.redirect('/')
         }).catch(err => next(err))
@@ -121,6 +138,12 @@ const itemController = {
         if (!buy) throw new Error("Buyitem didn't exist!")
         const buyIsDone = buy.filter(obj => obj.isDone === false)
         const buyItemId = buyIsDone.filter(obj => obj.itemId._id.toJSON() === item._id.toJSON())
+        let latelyObj
+        if (!buyItemId[0]) {
+          latelyObj = []
+        } else (
+          latelyObj = buyItemId.slice(-1)[0]
+        )
         const { saveNumber, otherNumber
         } = req.body
         let saveNumberValue = saveNumber
@@ -130,14 +153,23 @@ const itemController = {
           saveNumberValue = otherNumber
         }
         item.stock += Number(saveNumberValue)
-        if (buyItemId) {
-          Buy.findById(buyItemId[0]._id.toJSON()).then(obj => {
+        item.isBuy = false
+        item.fullStock = item.stock
+        Buy.findById(latelyObj._id.toJSON()).then(obj => {
+          if (latelyObj) {
             obj.isDone = true
             obj.save()
-            req.flash('success_messages', `單號${obj.commit}結案`)
-            note = `單號${obj.commit}結案`
-          })
-        }
+            if (saveNumber === 'other') {
+              if (otherNumber) {
+                req.flash('success_messages', `單號${obj.commit}結案,入庫數量改為其他:${saveNumberValue}${item.unitId.name}`)
+                note = `單號${obj.commit}結案,入庫數量改為其他:${saveNumberValue}${item.unitId.name}`
+              }
+            } else {
+              req.flash('success_messages', `單號${obj.commit}結案`)
+              note = `單號${obj.commit}結案`
+            }
+          }
+        })
         return item.save()
       }).then(item => {
         if (!item) throw new Error("item didn't exist!")
