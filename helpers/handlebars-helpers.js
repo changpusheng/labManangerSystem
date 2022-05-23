@@ -22,10 +22,12 @@ module.exports = {
   factorChangeValue: (facters, number) => {
     let value = facters * number
     return value.toFixed(3)
-  }, toFixed: (value, number) => {
+  },
+  toFixed: (value, number) => {
     let finalValue = value.toFixed(number)
     return finalValue
-  }, toLastNumber: (value) => {
+  },
+  toLastNumber: (value) => {
     let getValue = value.toJSON().slice(-5)
     return getValue
   }

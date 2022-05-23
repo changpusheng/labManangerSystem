@@ -1,17 +1,69 @@
 <div class="container">
-
-
   {{>admin-tab route = 'record'}}
   <div class="mt-3">
     {{>record-tab route ='itemUseRecord' }}
-
     <div class="row">
+      <div class="container">
+        <br />
+        <div class="row mt-2">
+          <div class="col-md-12 m-auto">
+            <div class="card card-body">
 
-      {{#each consumablesLC}}
-      {{>share-item}}
-      {{/each}}
-
-
+              <table class="table align-middle">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">日期</th>
+                    <th scope="col">分類</th>
+                    <th scope="col">品名</th>
+                    <th scope="col">領用量</th>
+                    <th scope="col">入庫量</th>
+                    <th scope="col">購買單號</th>
+                    <th scope="col">使用人</th>
+                    <th scope="col">備註</th>
+                    <th scope="col">通知</th>
+                    <th scope="col">CHECK</th>
+                    {{#if user.isAdmin}}
+                    <th scope="col">刪除</th>
+                    {{/if}}
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each records}}
+                  <tr>
+                    <td>{{this.createAt}}</td>
+                    <td>[{{this.itemId.categoryId.name}}]</td>
+                    <td>{{this.itemId.name}}</td>
+                    <td>{{this.outNumber}}{{this.itemId.unitId.name}}</td>
+                    <td>{{this.inputNumber}}{{this.itemId.unitId.name}}</td>
+                    <td><a href="#">pqq</a></td>
+                    <td>{{this.userId.name}}</td>
+                    <td>{{this.note}}</td>
+                    <td>{{#ifCond this.itemId.categoryId.name '毒化物'}}<a href="#" class="btn btn-outline-success" {{#if
+                        this.isInform}}onclick="return false;" style="opacity: 0.2" {{/if}}>{{#if
+                        this.isInform}}已通知{{else}}通知{{/if}}</a>{{else}}
+                      非管制物{{/ifCond}}</td>
+                    <td>{{#ifCond this.itemId.categoryId.name '毒化物'}}<a href="#" class="btn btn-outline-success" {{#if
+                        this.isCheck}}onclick="return false;" style="opacity: 0.2" {{/if}}>{{#if
+                        this.isCheck}}已確認{{else}}確認{{/if}}</a>{{else}}
+                      非管制物{{/ifCond}}</td>
+                    <td>
+                      {{#if this.userId.isAdmin}}
+                      <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
+                        <button class="btn btn-outline-danger" type="submit"
+                          onclick="return confirm('確定要刪除{{this.name}}嗎?')">
+                          刪除
+                        </button>
+                      </form>
+                      {{/if}}
+                    </td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
   </div>
+</div>

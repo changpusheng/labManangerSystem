@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chart.js": "^3.7.1",
     "connect-flash": "^0.1.1",
     "dayjs": "^1.11.2",
     "dotenv": "^16.0.1",
@@ -21,8 +22,10 @@
     "express-session": "^1.17.3",
     "method-override": "^3.0.0",
     "mongoose": "^6.3.3",
+    "nodemailer": "^6.7.5",
     "nodemon": "^2.0.16",
     "passport": "^0.5.3",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "xlsx": "^0.18.5"
   }
 }

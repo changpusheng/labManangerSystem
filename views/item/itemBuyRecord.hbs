@@ -1,16 +1,48 @@
 <div class="container">
-
-
   {{>admin-tab route = 'record'}}
   <div class="mt-3">
     {{>record-tab route ='itemBuyRecord' }}
     <div class="row">
+      <div class="container">
+        <br />
+        <div class="row mt-2">
+          <div class="col-md-6 m-auto">
+            <div class="card card-body">
 
-      {{#each consumablesLC}}
-      {{>share-item}}
-      {{/each}}
-
-
+              <table class="table align-middle">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">領用</th>
+                    <th scope="col">入庫</th>
+                    <th scope="col">購買</th>
+                    <th scope="col">使用人</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">#</th>
+                    <th scope="col">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each buys}}
+                  <tr>
+                    <td>{{this.itemId.name}}</td>
+                    <td>{{this.outNumber}}{{this.c}}</td>
+                    <td>
+                      <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
+                        <button class="btn btn-outline-danger" type="submit"
+                          onclick="return confirm('確定要刪除{{this.name}}嗎?')">
+                          刪除
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
   </div>
+</div>
