@@ -12,6 +12,7 @@
           <table class="table">
             <thead>
               <tr>
+                <th scope="col">品項編號</th>
                 <th scope="col">類別</th>
                 <th scope="col">品名</th>
                 <th scope="col">庫存</th>
@@ -21,9 +22,10 @@
             <tbody>
               {{#each itemObjs}}
               <tr>
+                <th scope="row">{{toLastNumber this._id}}</th>
                 <th scope="row">{{this.categoryId.name}}</th>
                 <td>{{this.name}}</td>
-                <td>{{this.stock}}{{this.unitId.name}}</td>
+                <td>{{toFixed this.stock 3}}{{this.unitId.name}}</td>
                 <td><a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-success">請購</a></td>
               </tr>
               {{/each}}
@@ -49,7 +51,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">流水號</th>
+                <th scope="col">小量化學編號</th>
                 <th scope="col">類別</th>
                 <th scope="col">品名</th>
                 <th scope="col">購買數量</th>

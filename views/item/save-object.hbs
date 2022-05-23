@@ -10,7 +10,7 @@
         <hr>
         <blockquote class="blockquote text-center">
           <p>{{item.name}}</p>
-          <p>庫存:{{item.stock}}{{item.unitId.name}}</p>
+          <p>庫存:{{toFixed item.stock 3}}{{item.unitId.name}}</p>
         </blockquote>
 
 
@@ -67,7 +67,7 @@
             <button class="btn btn-outline-primary " type="submit" onclick="return confirm('確定是要入庫[{{item.name}}]嗎?')">
               入庫
             </button>
-            <a type="button" class="btn btn-outline-danger ms-3" href="javascript:history.back()">取消</a>
+            <a type="button" class="btn btn-outline-danger ms-3" href="/">取消</a>
           </div>
 
         </form>

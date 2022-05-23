@@ -18,5 +18,15 @@ module.exports = {
   },
   ifNot: function (a, b, options) {
     return a !== b ? options.fn(this) : options.inverse(this)
+  },
+  factorChangeValue: (facters, number) => {
+    let value = facters * number
+    return value.toFixed(3)
+  }, toFixed: (value, number) => {
+    let finalValue = value.toFixed(number)
+    return finalValue
+  }, toLastNumber: (value) => {
+    let getValue = value.toJSON().slice(-5)
+    return getValue
   }
 }

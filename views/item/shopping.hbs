@@ -34,14 +34,14 @@
               </div>
             </div>
           </div>
-          <p>庫存:{{item.stock}}{{item.unitId.name}}</p>
+          <p>庫存:{{toFixed item.stock 3}}{{item.unitId.name}}</p>
         </blockquote>
         <form action="/item/shopping-object/{{item._id}}" method="POST">
           <blockquote class="blockquote ">
             <div>
               <div class="input-group mb-3">
-                <span class="input-group-text" id="shoppingNumber">購買數量</span>
-                <input type="number" class="form-control" aria-label="Sizing example input"
+                <span class="input-group-text" id="shoppingNumber">購買數量{{item.unitId.name}}</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
                   aria-describedby="shoppingNumber" name="number" min="0" placeholder="輸入購買數量" required>
               </div>
               <div class="input-group mb-3">
@@ -55,7 +55,7 @@
                 onclick="return confirm('確定是要購買[{{item.name}}]嗎?')">
                 送出
               </button>
-              <a type="button" class="btn btn-outline-danger ms-3" href="javascript:history.back()">取消</a>
+              <a type="button" class="btn btn-outline-danger ms-3" href="/">取消</a>
             </div>
           </blockquote>
         </form>

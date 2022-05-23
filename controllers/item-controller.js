@@ -35,9 +35,9 @@ const itemController = {
     }).catch(err => next(err))
   },
   postCreateItem: (req, res, next) => {
-    const { otherFactorsValue, factors, unitId, categoryId, name, englishName, stock, safeStock, fullStock, casNumber
+    const { otherFactorsValue, factors, unitId, categoryId, name, englishName, stock, safeStock, casNumber
     } = req.body
-    if (!factors || !name || !englishName || !stock || !safeStock || !fullStock || !casNumber) throw new Error('有空格')
+    if (!factors || !name || !englishName || !stock || !safeStock || !casNumber) throw new Error('有空格')
     if (!unitId || !categoryId) throw new Error('沒有選擇分類')
 
     let factorValue = factors
@@ -57,10 +57,10 @@ const itemController = {
         safeStock: safeStock * Number(factorValue),
         englishName,
         categoryId,
-        fullStock: fullStock * Number(factorValue),
+        fullStock: stock * Number(factorValue),
         casNumber,
         unitId,
-        factorValue: Number(factorValue)
+        factors: Number(factorValue)
       })
     })
       .then(() => {
@@ -175,10 +175,10 @@ const itemController = {
         if (!item) throw new Error("item didn't exist!")
         const { saveNumber, otherNumber
         } = req.body
-        let saveNumberValue = saveNumber
+        let saveNumberValue = Number(saveNumber)
         if (saveNumber === 'other') {
           if (!otherNumber) throw new Error("入庫數量未填")
-          saveNumberValue = otherNumber
+          saveNumberValue = Number(otherNumber)
         }
         return Record.create({
           inputNumber: saveNumberValue,
@@ -196,7 +196,9 @@ const itemController = {
   getObjectGet: (req, res, next) => {
     Item.findById(req.params.id).populate('unitId').lean().then(item => {
       if (!item) throw new Error("User didn't exist!")
-      res.render('item/get-object', { item })
+      res.render('item/get-object', {
+        item
+      })
     }).catch(err => next(err))
   },
   postObjectGet: (req, res, next) => {
