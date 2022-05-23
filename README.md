@@ -5,31 +5,26 @@
 畫面渲染:
 <ul>
 <li>
-登入頁面/創帳號頁面
+登入頁面/最新動態
     <div >
-    <img src="**" style="width:70%;"alt="登入畫面">
-   <img src="**" style="width:70%;" alt="創帳號畫面">
+    <img src="https://user-images.githubusercontent.com/88585009/169865248-9b3a2be2-64ba-40cf-882c-f6b0ef69217b.png" style="width:70%;"alt="登入畫面">
+   <img src="https://user-images.githubusercontent.com/88585009/169865436-d9ca565b-d229-4516-89b4-952c77af1d0d.png" style="width:70%;" alt="最新動態">
     </div>
 </li>
     <li>
 一般溶劑頁面
     <div >
-    <img src="***" style="width:70%;"alt="一般溶劑頁面">
+    <img src="https://user-images.githubusercontent.com/88585009/169865484-eae2c135-8f76-4ce5-a556-79909d3c3811.png" style="width:70%;"alt="一般溶劑頁面">
     </div>
 </li>
     <li>
-統計頁面
+後台
     <div >
-    <img src="**" style="width:70%;"alt="統計頁面">
+    <img src="https://user-images.githubusercontent.com/88585009/169865617-ff660e52-d709-4b64-9a17-207f66748afb.png" style="width:70%;"alt="後台">
     </div>
 </li>
     <li>
-新增溶劑
-    <div >
-    <img src="**" style="width:70%;"alt="新增溶劑">
-    </div>
-</li>
-    <li>
+
 
 </li>
 </ul>
@@ -72,10 +67,7 @@ $git cd  labManagerSystem/
 $npm init -y
 </li>
 <li>
-$npm install express express-handlebars nodemon mongoose express-session method-override
-</li>
- <li>
-$npm run seed
+$npm install i
 </li>
 <li>
 $npm run dev
@@ -93,26 +85,6 @@ mongoose connected!
 登入系統/保持登入
 </li>
 <li>
-
+領用/入庫/購買/追蹤存量/確認訂單
 </li>
 </ul>
-
-更新:
-<ul>
-<li>
-
-</li>
-    <li>
-
-</li>
-    <li>
-
-</li>
-    <li>
- 
-</li>
-    <li>
-
-</li>
-</ul>
-
