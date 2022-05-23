@@ -6,7 +6,7 @@ const Buy = require('../models/buy')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 
 const itemController = {
-  getSolven: (req, res) => {
+  getSolven: (req, res, next) => {
     Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
       normalSolven.map(obj =>
@@ -15,9 +15,9 @@ const itemController = {
       res.render('item/solven', {
         normalSolven
       })
-    })
+    }).catch(err => next(err))
   },
-  getToxicSolven: (req, res) => {
+  getToxicSolven: (req, res, next) => {
     Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const toxicSolven = item.filter(obj => obj.categoryId.name === '毒化物')
       toxicSolven.map(obj =>
@@ -26,7 +26,29 @@ const itemController = {
       res.render('item/toxic', {
         toxicSolven
       })
-    })
+    }).catch(err => next(err))
+  },
+  getConsumablesGC: (req, res, next) => {
+    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
+      const consumablesGC = item.filter(obj => obj.categoryId.name === 'GC耗材')
+      consumablesGC.map(obj =>
+        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
+      )
+      res.render('item/consumablesGC', {
+        consumablesGC
+      })
+    }).catch(err => next(err))
+  },
+  getConsumablesLC: (req, res, next) => {
+    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
+      const consumablesLC = item.filter(obj => obj.categoryId.name === 'LC耗材')
+      consumablesLC.map(obj =>
+        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
+      )
+      res.render('item/consumablesLC', {
+        consumablesLC
+      })
+    }).catch(err => next(err))
   },
   getCreateItem: (req, res, next) => {
     return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units]) => {
@@ -46,8 +68,6 @@ const itemController = {
       if (!otherFactorsValue) throw new Error("入庫數量未填")
       factorValue = otherFactorsValue
     }
-
-
     Item.findOne({ name }).then(obj => {
       if (obj) throw new Error('已經有該品項')
     }).then(() => {
@@ -189,7 +209,7 @@ const itemController = {
           note
         }).then(() => {
           req.flash('success_messages', '入庫成功')
-          res.redirect('/item/normalSolven')
+          res.redirect('/')
         }).catch(err => next(err))
       }).catch(err => next(err))
   },
@@ -219,7 +239,7 @@ const itemController = {
         userId: req.user._id
       }).then(() => {
         req.flash('success_messages', '領取成功')
-        res.redirect('/item/normalSolven')
+        res.redirect('/')
       }).catch(err => next(err))
     }).catch(err => next(err))
   }

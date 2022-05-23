@@ -22,6 +22,14 @@ const recordSchema = new Schema({
     index: true,
     required: true
   },
+  isInform: {
+    type: Boolean,
+    default: false
+  },
+  isCheck: {
+    type: Boolean,
+    default: false
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',

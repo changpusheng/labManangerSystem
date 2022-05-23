@@ -1,55 +1,57 @@
-{{>admin-tab route = 'unit'}}
-<br />
+<div class="container">
+  {{>admin-tab route = 'unit'}}
+  <br />
 
-<div class="row mt-2">
-  <div class="col-md-6 m-auto">
-    <div class="card card-body">
-      <div class="d-flex align-items-center pt-1 pb-1 my-3 text-white-50 bg-purple">
-        {{#if unit}}
-        <form class="row" action="/admin/units/{{category._id}}?_method=PUT" method="POST">
-          <div class="col-auto">
-            <input class="form-control" type="text" placeholder="name" name="name" value="{{unit.name}}">
-          </div>
-          <div class="col-auto">
-            <button class="btn btn-warning" type="submit">更改</button>
-            <a class="btn btn-link link-secondary" href="/admin/categories">or Create New</a>
-          </div>
-        </form>
-        {{else}}
-        <form class="row" action="/admin/units" method="POST">
-          <div class="col-auto">
-            <input class="form-control" type="text" placeholder="Unit Name" name="name" required>
-          </div>
-          <div class="col-auto">
-            <button class="btn btn-success" type="submit">新增單位</button>
-          </div>
-        </form>
-        {{/if}}
+  <div class="row mt-2">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <div class="d-flex align-items-center pt-1 pb-1 my-3 text-white-50 bg-purple">
+          {{#if unit}}
+          <form class="row" action="/admin/units/{{category._id}}?_method=PUT" method="POST">
+            <div class="col-auto">
+              <input class="form-control" type="text" placeholder="name" name="name" value="{{unit.name}}">
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-warning" type="submit">更改</button>
+              <a class="btn btn-link link-secondary" href="/admin/categories">or Create New</a>
+            </div>
+          </form>
+          {{else}}
+          <form class="row" action="/admin/units" method="POST">
+            <div class="col-auto">
+              <input class="form-control" type="text" placeholder="Unit Name" name="name" required>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-outline-success" type="submit">新增單位</button>
+            </div>
+          </form>
+          {{/if}}
+        </div>
+        <table class="table align-middle">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">#</th>
+              <th scope="col">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each units}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td><a href="/admin/categories/{{this._id}}" class="btn btn-outline-primary">編輯</a></td>
+              <td>
+                <form action="/admin/categories/{{this._id}}?_method=Delete" method="POST">
+                  <button class="btn btn-outline-danger" type="submit" onclick="return confirm('確定要刪除{{this.name}}嗎?')">
+                    刪除
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
       </div>
-      <table class="table align-middle">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">#</th>
-            <th scope="col">#</th>
-          </tr> 
-        </thead>
-        <tbody>
-          {{#each units}}
-          <tr>
-            <td>{{this.name}}</td>
-            <td><a href="/admin/categories/{{this._id}}" class="btn btn-outline-primary">編輯</a></td>
-            <td>
-              <form action="/admin/categories/{{this._id}}?_method=Delete" method="POST">
-                <button class="btn btn-outline-danger" type="submit" onclick="return confirm('確定要刪除{{this.name}}嗎?')">
-                  刪除
-                </button>
-              </form>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
     </div>
   </div>
 </div>
