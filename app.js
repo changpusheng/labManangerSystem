@@ -11,6 +11,10 @@ const { getUser } = require('./helpers/auth-helpers')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 require('./models/mongoose')
 
+if (process.env.NODE.ENV !== 'production') {
+  require('dotenv').config()
+}
+
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs', helpers: handlebarsHelpers }))
 app.set('view engine', 'hbs')
 app.use(methodOverride('_method'))

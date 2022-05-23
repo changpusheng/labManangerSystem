@@ -85,8 +85,8 @@ const adminCroller = {
     res.render('users/signup')
   },
   postSignup: (req, res, next) => {
-    const { name, account, password, confirmPassword } = req.body
-    if (!name || !account || !password || !confirmPassword) throw new Error('有空格')
+    const { email, name, account, password, confirmPassword } = req.body
+    if (!email || !name || !account || !password || !confirmPassword) throw new Error('有空格')
     if (password !== confirmPassword) throw new Error('密碼與確認密碼不同!')
     User.findOne({ account }).then(user => {
       if (user) throw new Error('帳號已註冊!')
@@ -95,6 +95,7 @@ const adminCroller = {
       User.create({
         name,
         account,
+        email,
         password: hash
       })
     ).then(() => {
