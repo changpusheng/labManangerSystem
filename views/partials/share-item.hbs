@@ -14,9 +14,11 @@
       <p>
       <div class="progress">
         <div class="progress-bar {{#percentAlert this.stock this.safeStock}}bg-warning {{/percentAlert}}"
-          role="progressbar" style="width: {{this.percent}}%;" aria-valuenow="{{this.percent}}" aria-valuemin="0"
+          role="progressbar"
+          style="width: {{#percentMax this.percent 100}} 100{{else}}{{this.percent}}{{/percentMax}}%;"
+          aria-valuenow="{{#percentMax this.percent 100}} 100{{else}}{{this.percent}}{{/percentMax}}" aria-valuemin="0"
           aria-valuemax="100">
-          {{this.percent}}%</div>
+          {{#percentMax this.percent 100}} 100{{else}}{{this.percent}}{{/percentMax}}%</div>
       </div>
       </p>
       <p>

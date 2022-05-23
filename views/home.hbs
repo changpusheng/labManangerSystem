@@ -7,6 +7,7 @@
         低於安全存量共{{itemObjs.length}}筆
       </div>
       <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+        {{#if itemObjs.length}}
         <div>
           <table class="table">
             <thead>
@@ -30,6 +31,10 @@
           </table>
           <hr>
         </div>
+        {{else}}
+        <div class="input-group-text justify-content-center fs-5 fw-bold">未請購項目:無
+        </div>
+        {{/if}}
       </div>
     </div>
   </div>
@@ -39,6 +44,7 @@
         未結案共{{buyIsDone.length}}筆
       </div>
       <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+        {{#if buyIsDone.length}}
         <div>
           <table class="table">
             <thead>
@@ -66,6 +72,9 @@
           </table>
           <hr>
         </div>
+        {{else}}
+        <div class="input-group-text justify-content-center fs-5 fw-bold">未結案項目:無</div>
+        {{/if}}
       </div>
     </div>
   </div>

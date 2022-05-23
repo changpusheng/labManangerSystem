@@ -94,11 +94,11 @@ const itemController = {
 
     }).catch(err => next(err))
   },
-
   getObjectSave: (req, res, next) => {
     return Promise.all([Item.findById(req.params.id).populate('unitId').lean(), Buy.find().populate(['itemId', 'userId'])])
       .then(([item, buy]) => {
         if (!item) throw new Error("item didn't exist!")
+        if (!buy) throw new Error("item didn't exist!")
         const buyIsDone = buy.filter(obj => obj.isDone === false)
         const buyItemId = buyIsDone.filter(obj => obj.itemId._id.toJSON() === item._id.toJSON())
         let latelyObj
@@ -112,8 +112,55 @@ const itemController = {
           item, latelyObj, buyItemId, buyItemIdtoJSON
         })
       }).catch(err => next(err))
-  }
-  ,
+  },
+  postObjectSave: (req, res, next) => {
+    let note
+    return Promise.all([Item.findById(req.params.id).populate('unitId'), Buy.find().populate(['itemId', 'userId'])])
+      .then(([item, buy]) => {
+        if (!item) throw new Error("item didn't exist!")
+        if (!buy) throw new Error("Buyitem didn't exist!")
+        const buyIsDone = buy.filter(obj => obj.isDone === false)
+        const buyItemId = buyIsDone.filter(obj => obj.itemId._id.toJSON() === item._id.toJSON())
+        const { saveNumber, otherNumber
+        } = req.body
+        let saveNumberValue = saveNumber
+        if (!saveNumber) throw new Error("請選擇項目")
+        if (saveNumber === 'other') {
+          if (!otherNumber) throw new Error("入庫數量未填")
+          saveNumberValue = otherNumber
+        }
+        item.stock += Number(saveNumberValue)
+        if (buyItemId) {
+          Buy.findById(buyItemId[0]._id.toJSON()).then(obj => {
+            obj.isDone = true
+            obj.save()
+            req.flash('success_messages', `單號${obj.commit}結案`)
+            note = `單號${obj.commit}結案`
+          })
+        }
+        return item.save()
+      }).then(item => {
+        if (!item) throw new Error("item didn't exist!")
+        const { saveNumber, otherNumber
+        } = req.body
+        let saveNumberValue = saveNumber
+        if (saveNumber === 'other') {
+          if (!otherNumber) throw new Error("入庫數量未填")
+          saveNumberValue = otherNumber
+        }
+        return Record.create({
+          inputNumber: saveNumberValue,
+          outNumber: 0,
+          createAt: currentYearMonDate(),
+          itemId: item._id,
+          userId: req.user._id,
+          note
+        }).then(() => {
+          req.flash('success_messages', '入庫成功')
+          res.redirect('/item/normalSolven')
+        }).catch(err => next(err))
+      }).catch(err => next(err))
+  },
   getObjectGet: (req, res, next) => {
     Item.findById(req.params.id).populate('unitId').lean().then(item => {
       if (!item) throw new Error("User didn't exist!")
@@ -136,11 +183,10 @@ const itemController = {
         createAt: currentYearMonDate(),
         itemId: item._id,
         userId: req.user._id
-      })
-    }).then(item => {
-      if (!item) throw new Error("item didn't exist!")
-      req.flash('success_messages', '領取成功')
-      res.redirect('/item/normalSolven')
+      }).then(() => {
+        req.flash('success_messages', '領取成功')
+        res.redirect('/item/normalSolven')
+      }).catch(err => next(err))
     }).catch(err => next(err))
   }
 }

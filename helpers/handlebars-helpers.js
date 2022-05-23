@@ -12,5 +12,8 @@ module.exports = {
   relativeTimeFromNow: a => dayjs(a).fromNow(),
   percentAlert: function (a, b, options) {
     return a < b ? options.fn(this) : options.inverse(this)
+  },
+  percentMax: function (a, b, options) {
+    return a > b ? options.fn(this) : options.inverse(this)
   }
 }

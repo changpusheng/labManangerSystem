@@ -17,6 +17,10 @@ const buySchema = new Schema({
     type: Boolean,
     default: false
   },
+  note: {
+    type: String,
+    required: false
+  },
   itemId: {
     type: Schema.Types.ObjectId,
     ref: 'Item',

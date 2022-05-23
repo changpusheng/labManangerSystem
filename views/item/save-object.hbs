@@ -9,67 +9,67 @@
         <div class="input-group-text justify-content-center fs-4 fw-bold mt-2">入庫</div>
         <hr>
         <blockquote class="blockquote text-center">
-          <p>[{{item.englishName}}]</p>
-          <!-- Button trigger modal 彈跳視窗按鈕-->
-          <div class="shoppingdatafilter" style="display: none;">{{buyItemIdtoJSON}}</div>
-          <p>未結案訂單共
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop">
-              {{buyItemId.length}}
-            </button>
-            筆
-          </p>
-          <!-- Modal 彈跳視窗 -->
-          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">訂單清單</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body shoppingList">
+          <p>{{item.name}}</p>
+          <p>庫存:{{item.stock}}{{item.unitId.name}}</p>
+        </blockquote>
 
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+        <form action="/item/objectsave/{{item._id}}" method="POST">
+          <div class="blockquote m-auto col-md-8">
+            <!-- Button trigger modal 彈跳視窗按鈕-->
+            <div class="shoppingdatafilter" style="display: none;">{{buyItemIdtoJSON}}</div>
+            <p>未結案訂單共
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                {{buyItemId.length}}
+              </button>
+              筆
+            </p>
+            <!-- Modal 彈跳視窗 -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">訂單清單</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body shoppingList">
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <p>庫存:{{item.stock}}{{item.unitId.name}}</p>
-        </blockquote>
-        <form action="/item/objectsave/{{item._id}}" method="POST">
-          <blockquote class="blockquote ">
-
             <div>
               {{#if latelyObj}}
-              <div>
-                訂單流水號:{{latelyObj.commit}}
-              </div>
-              <div class="form-check ">
+              訂單流水號:{{latelyObj.commit}}
+              <div class="form-check mt-2">
                 <input class="form-check-input" type="radio" name="saveNumber" id="saveobject01"
                   value="{{latelyObj.number}}" checked>
-                <label class="form-check-label ms-2" for="saveobject01">
+                <label class="form-check-label ms-2 " for="saveobject01">
                   訂購數量:{{latelyObj.number}}{{item.unitId.name}}
                 </label>
               </div>
               {{/if}}
-              <div class="form-check ">
-                <input class="form-check-input" type="radio" name="saveNumber" id="saveobject02" value="0">
-                <label class="form-check-label ms-2" for="saveobject02">
-                  其他:<input type="number" name="other" style="width: 100px;">
-                </label>
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="radio" name="saveNumber" id="saveobject02" value="other">
+                <span class="input-group-text" id="saveNumber">其他數量</span>
+                <input type="number" class="form-control" aria-label="Sizing example input"
+                  aria-describedby="otherNumber" name="otherNumber" placeholder="輸入其他數量">
+
               </div>
             </div>
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-outline-primary " type="submit"
-                onclick="return confirm('確定是要入庫[{{item.name}}]嗎?')">
-                入庫
-              </button>
-              <a type="button" class="btn btn-outline-danger ms-3" href="javascript:history.back()">取消</a>
-            </div>
-          </blockquote>
+          </div>
+          <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-outline-primary " type="submit" onclick="return confirm('確定是要入庫[{{item.name}}]嗎?')">
+              入庫
+            </button>
+            <a type="button" class="btn btn-outline-danger ms-3" href="javascript:history.back()">取消</a>
+          </div>
+
         </form>
 
 

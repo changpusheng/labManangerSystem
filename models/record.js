@@ -12,6 +12,10 @@ const recordSchema = new Schema({
     type: String,
     required: true
   },
+  note: {
+    type: String,
+    required: false
+  },
   itemId: {
     type: Schema.Types.ObjectId,
     ref: 'Item',
