@@ -16,7 +16,8 @@ db.once('open', () => {
       name: process.env.userName,
       account: process.env.userAccount,
       email: process.env.email,
-      password: hash
+      password: hash,
+      isAdmin: true
     }).catch(err => console.log(err))
   ).catch(err => console.log(err))
 })
