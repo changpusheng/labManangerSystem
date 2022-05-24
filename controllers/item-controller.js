@@ -197,12 +197,6 @@ const itemController = {
         if (!buy) throw new Error("Buyitem didn't exist!")
         const buyIsDone = buy.filter(obj => obj.isDone === false)
         const buyItemId = buyIsDone.filter(obj => obj.itemId._id.toJSON() === item._id.toJSON())
-        let latelyObj
-        if (!buyItemId[0]) {
-          latelyObj = []
-        } else (
-          latelyObj = buyItemId.slice(-1)[0]
-        )
         const { saveNumber, otherNumber
         } = req.body
         let saveNumberValue = saveNumber
@@ -211,13 +205,15 @@ const itemController = {
           if (!otherNumber) throw new Error("入庫數量未填")
           saveNumberValue = otherNumber
         }
-        item.stock += Number(saveNumberValue)
-        item.isBuy = false
-        item.fullStock = item.stock
-        Buy.findById(latelyObj._id.toJSON()).then(obj => {
-          if (latelyObj) {
+        if (buyItemId[0]) {
+          let latelyObj = buyItemId.slice(-1)[0]
+          item.stock += Number(saveNumberValue)
+          item.isBuy = false
+          item.fullStock = item.stock
+          Buy.findById(latelyObj._id.toJSON()).then(obj => {
             obj.isDone = true
             obj.save()
+            buyId = obj._id
             if (saveNumber === 'other') {
               if (otherNumber) {
                 req.flash('success_messages', `單號${obj.commit}結案,其他選項:${saveNumberValue}${item.unitId.name}`)
@@ -227,10 +223,14 @@ const itemController = {
               req.flash('success_messages', `單號${obj.commit}結案`)
               note = `單號${obj.commit}結案`
             }
-            console.log(obj)
-            buyId = obj._id
-          }
-        })
+          })
+        }
+        item.stock += Number(saveNumberValue)
+        item.isBuy = false
+        item.fullStock = item.stock
+        if (!buyItemId[0]) {
+          req.flash('success_messages', '無購買單號')
+        }
         return item.save()
       }).then(item => {
         if (!item) throw new Error("item didn't exist!")
