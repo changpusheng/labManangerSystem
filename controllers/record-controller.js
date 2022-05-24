@@ -7,7 +7,6 @@ const recordContriller = {
       .populate({ path: 'itemId', populate: { path: 'categoryId' } })
       .populate({ path: 'itemId', populate: { path: 'unitId' } })
       .lean().sort({ 'createAt': -1 }).then(records => {
-        console.log(records)
         res.render('item/itemUseRecord', { records })
       })
   },

@@ -32,6 +32,12 @@ const buySchema = new Schema({
     ref: 'User',
     index: true,
     required: true
+  },
+  recordId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Record',
+    index: true,
+    required: false
   }
 })
 

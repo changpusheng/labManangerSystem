@@ -4,9 +4,14 @@ const recordSchema = new Schema({
   inputNumber: {
     type: Number,
     required: true
-  }, outNumber: {
+  },
+  outNumber: {
     type: Number,
     required: true
+  },
+  stockNumber: {
+    type: Number,
+    required: false
   },
   createAt: {
     type: String,

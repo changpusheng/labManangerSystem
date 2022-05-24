@@ -9,44 +9,82 @@ const itemController = {
   getSolven: (req, res, next) => {
     Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
-      normalSolven.map(obj =>
-        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
+      normalSolven.map(obj => {
+        if (!obj.fullStock) {
+          obj.fullStock = 0.1
+        }
+        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
+      }
       )
+      //排序由小到大 讓低水位的在前
+      const normalSolvenSort = normalSolven.sort(function (a, b) {
+        if (a.percent > b.percent) return 1
+        if (a.percent < b.percent) return -1
+        return 0
+      })
       res.render('item/solven', {
-        normalSolven
+        normalSolven: normalSolvenSort
       })
     }).catch(err => next(err))
   },
   getToxicSolven: (req, res, next) => {
     Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const toxicSolven = item.filter(obj => obj.categoryId.name === '毒化物')
-      toxicSolven.map(obj =>
-        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
-      )
+      toxicSolven.map(obj => {
+        if (!obj.fullStock) {
+          obj.fullStock = 0.1
+        }
+        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
+      })
+      //排序由小到大 讓低水位的在前
+      const toxicSolvenSort = toxicSolven.sort(function (a, b) {
+        if (a.percent > b.percent) return 1
+        if (a.percent < b.percent) return -1
+        return 0
+      })
       res.render('item/toxic', {
-        toxicSolven
+        toxicSolven: toxicSolvenSort
       })
     }).catch(err => next(err))
   },
   getConsumablesGC: (req, res, next) => {
     Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const consumablesGC = item.filter(obj => obj.categoryId.name === 'GC耗材')
-      consumablesGC.map(obj =>
-        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
-      )
+      consumablesGC.map(obj => {
+        if (!obj.fullStock) {
+          obj.fullStock = 0.1
+        }
+        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
+      })
+      //排序由小到大 讓低水位的在前
+      const consumablesGCSort = consumablesGC.sort(function (a, b) {
+        if (a.percent > b.percent) return 1
+        if (a.percent < b.percent) return -1
+        return 0
+      })
       res.render('item/consumablesGC', {
-        consumablesGC
+        consumablesGC: consumablesGCSort
       })
     }).catch(err => next(err))
   },
   getConsumablesLC: (req, res, next) => {
     Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
       const consumablesLC = item.filter(obj => obj.categoryId.name === 'LC耗材')
-      consumablesLC.map(obj =>
-        obj['percent'] = parseInt((obj.stock / obj.fullStock) * 100)
+      consumablesLC.map(obj => {
+        if (!obj.fullStock) {
+          obj.fullStock = 0.1
+        }
+        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
+      }
       )
+      //排序由小到大 讓低水位的在前
+      const consumablesLCSort = consumablesLC.sort(function (a, b) {
+        if (a.percent > b.percent) return 1
+        if (a.percent < b.percent) return -1
+        return 0
+      })
       res.render('item/consumablesLC', {
-        consumablesLC
+        consumablesLC: consumablesLCSort
       })
     }).catch(err => next(err))
   },
@@ -123,7 +161,7 @@ const itemController = {
           commit,
           itemId: item._id,
           userId: req.user._id
-        }).then(item => {
+        }).then(() => {
           req.flash('success_messages', '新增訂單')
           res.redirect('/')
         }).catch(err => next(err))
@@ -151,7 +189,8 @@ const itemController = {
       }).catch(err => next(err))
   },
   postObjectSave: (req, res, next) => {
-    let note
+    let note = '無單號'
+    let buyId
     return Promise.all([Item.findById(req.params.id).populate('unitId'), Buy.find().populate(['itemId', 'userId'])])
       .then(([item, buy]) => {
         if (!item) throw new Error("item didn't exist!")
@@ -181,13 +220,15 @@ const itemController = {
             obj.save()
             if (saveNumber === 'other') {
               if (otherNumber) {
-                req.flash('success_messages', `單號${obj.commit}結案,入庫數量改為其他:${saveNumberValue}${item.unitId.name}`)
-                note = `單號${obj.commit}結案,入庫數量改為其他:${saveNumberValue}${item.unitId.name}`
+                req.flash('success_messages', `單號${obj.commit}結案,其他選項:${saveNumberValue}${item.unitId.name}`)
+                note = `單號${obj.commit}結案,其他選項:${saveNumberValue}${item.unitId.name}`
               }
             } else {
               req.flash('success_messages', `單號${obj.commit}結案`)
               note = `單號${obj.commit}結案`
             }
+            console.log(obj)
+            buyId = obj._id
           }
         })
         return item.save()
@@ -206,7 +247,8 @@ const itemController = {
           createAt: currentYearMonDate(),
           itemId: item._id,
           userId: req.user._id,
-          note
+          note,
+          buyId
         }).then(() => {
           req.flash('success_messages', '入庫成功')
           res.redirect('/')

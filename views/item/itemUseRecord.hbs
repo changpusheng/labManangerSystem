@@ -17,6 +17,7 @@
                     <th scope="col">品名</th>
                     <th scope="col">領用量</th>
                     <th scope="col">入庫量</th>
+                    <th scope="col">庫存</th>
                     <th scope="col">購買單號</th>
                     <th scope="col">使用人</th>
                     <th scope="col">備註</th>
@@ -35,6 +36,7 @@
                     <td>{{this.itemId.name}}</td>
                     <td>{{this.outNumber}}{{this.itemId.unitId.name}}</td>
                     <td>{{this.inputNumber}}{{this.itemId.unitId.name}}</td>
+                    <td>{{this.itemId.stock}}{{this.itemId.unitId.name}}</td>
                     <td><a href="#">pqq</a></td>
                     <td>{{this.userId.name}}</td>
                     <td>{{this.note}}</td>
