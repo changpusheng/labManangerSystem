@@ -12,15 +12,16 @@
               <table class="table align-middle">
                 <thead class="thead-dark">
                   <tr>
+                    <th scope="col">編號</th>
                     <th scope="col">日期</th>
                     <th scope="col">分類</th>
                     <th scope="col">品名</th>
                     <th scope="col">領用量</th>
                     <th scope="col">入庫量</th>
-                    <th scope="col">庫存</th>
+                    <th scope="col">剩餘庫存量</th>
                     <th scope="col">購買單號</th>
                     <th scope="col">使用人</th>
-                    <th scope="col">備註</th>
+                    <th scope="col">備註/單號</th>
                     <th scope="col">通知</th>
                     <th scope="col">CHECK</th>
                     {{#if user.isAdmin}}
@@ -31,12 +32,13 @@
                 <tbody>
                   {{#each records}}
                   <tr>
+                    <td>{{toLastNumber this._id}}</td>
                     <td>{{this.createAt}}</td>
                     <td>[{{this.itemId.categoryId.name}}]</td>
                     <td>{{this.itemId.name}}</td>
-                    <td>{{this.outNumber}}{{this.itemId.unitId.name}}</td>
-                    <td>{{this.inputNumber}}{{this.itemId.unitId.name}}</td>
-                    <td>{{this.itemId.stock}}{{this.itemId.unitId.name}}</td>
+                    <td>{{toFixed this.outNumber 3}}{{this.itemId.unitId.name}}</td>
+                    <td>{{toFixed this.inputNumber 3}}{{this.itemId.unitId.name}}</td>
+                    <td>{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}}</td>
                     <td><a href="#">pqq</a></td>
                     <td>{{this.userId.name}}</td>
                     <td>{{this.note}}</td>
@@ -50,7 +52,7 @@
                       非管制物{{/ifCond}}</td>
                     <td>
                       {{#if this.userId.isAdmin}}
-                      <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
+                      <form action="/admin/itemUseRecord/{{this._id}}?_method=Delete" method="POST">
                         <button class="btn btn-outline-danger" type="submit"
                           onclick="return confirm('確定要刪除{{this.name}}嗎?')">
                           刪除

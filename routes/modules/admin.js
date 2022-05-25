@@ -3,7 +3,7 @@ const router = express.Router()
 const adminCroller = require('../../controllers/admin-controller')
 
 
-
+router.delete('/itemUseRecord/:id', adminCroller.deleteItemUseRecord)
 router.patch('/users/:id', adminCroller.patchUser)
 router.delete('/users/:id', adminCroller.deleteUser)
 router.get('/categories/:id', adminCroller.getCategories)
@@ -14,8 +14,8 @@ router.post('/signup', adminCroller.postSignup)
 router.get('/backside', adminCroller.getBackSide)
 router.get('/categories', adminCroller.getCategories)
 router.post('/categories', adminCroller.postCategory)
-router.get('/units',adminCroller.getUnits)
-router.post('/units',adminCroller.postUnit)
+router.get('/units', adminCroller.getUnits)
+router.post('/units', adminCroller.postUnit)
 
 
 

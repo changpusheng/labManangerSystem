@@ -80,34 +80,40 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6 mt-3">
+  <div class="col-md-12 mt-3">
     <div class="card">
       <div class="card-header">
-        毒化物領用記錄(近10筆)
+        毒化物領用記錄(近10筆)(依時間排序:第一筆為最新日期))
       </div>
       <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
-        {{#if buyIsDone.length}}
+        {{#if acnRecordobjs.length}}
         <div>
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">小量化學編號</th>
-                <th scope="col">類別</th>
+                <th scope="col">編號</th>
+                <th scope="col">時間</th>
                 <th scope="col">品名</th>
-                <th scope="col">購買數量</th>
-                <th scope="col">請購人</th>
-                <th scope="col">功能</th>
+                <th scope="col">領用量(kg)</th>
+                <th scope="col">入庫量(kg)</th>
+                <th scope="col">剩餘庫存量(kg)</th>
+                <th scope="col">使用人</th>
+                <th scope="col">狀態</th>
+                <th scope="col">確認</th>
               </tr>
             </thead>
             <tbody>
-              {{#each buyIsDone}}
+              {{#each acnRecordobjs}}
               <tr>
-                <th scope="row">{{this.commit}}</th>
-                <td>{{this.itemId.categoryId.name}}</td>
+                <th scope="row">{{toLastNumber this._id}}</th>
+                <th scope="row">{{this.createAt}}</th>
                 <td>{{this.itemId.name}}</td>
-                <td>{{this.number}}{{this.itemId.unitId.name}}</td>
+                <td>{{toFixed this.outNumber 3}}</td>
+                <td>{{toFixed this.inputNumber 3}}</td>
+                <td>{{toFixed this.stockNumber 3}}</td>
                 <td>{{this.userId.name}}</td>
-                <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">結案</a></td>
+                <td>{{this.note}}</td>
+                <td><a href="/item/toxic-isCheck/{{this.itemId._id}}" class="btn btn-outline-primary">確認</a></td>
               </tr>
               {{/each}}
             </tbody>
@@ -115,7 +121,7 @@
           <hr>
         </div>
         {{else}}
-        <div class="input-group-text justify-content-center fs-5 fw-bold">未結案項目:無</div>
+        <div class="input-group-text justify-content-center fs-5 fw-bold">無</div>
         {{/if}}
       </div>
     </div>

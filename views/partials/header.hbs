@@ -21,6 +21,10 @@
             <a href="/users/logout"><button class="btn btn-outline-warning my-sm-0 my-2">登出</button></a>
           </li>
         </ul>
+        {{else}}
+        <li class="nav-item">
+          <a href="/users/signin"><button class="btn btn-outline-warning my-sm-0 my-2">登入</button></a>
+        </li>
       </div>
       {{/if}}
     </div>

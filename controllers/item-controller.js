@@ -95,6 +95,7 @@ const itemController = {
     }).catch(err => next(err))
   },
   postCreateItem: (req, res, next) => {
+
     const { otherFactorsValue, factors, unitId, categoryId, name, englishName, stock, safeStock, casNumber
     } = req.body
     if (!factors || !name || !englishName || !stock || !safeStock || !casNumber) throw new Error('有空格')
@@ -123,7 +124,7 @@ const itemController = {
     })
       .then(() => {
         req.flash('success_messages', '新增成功')
-        res.redirect('/item/normalSolven')
+        res.redirect('/')
       })
       .catch(err => next(err))
   },
@@ -153,7 +154,7 @@ const itemController = {
         Item.findById(req.params.id).then(item => {
           item.isBuy = true
           return item.save()
-        }).catch(err => next(errs))
+        }).catch(err => next(err))
       }).then(() => {
         return Buy.create({
           number,
@@ -191,10 +192,12 @@ const itemController = {
   postObjectSave: (req, res, next) => {
     let note = '無單號'
     let buyId
+    let stock
     return Promise.all([Item.findById(req.params.id).populate('unitId'), Buy.find().populate(['itemId', 'userId'])])
       .then(([item, buy]) => {
         if (!item) throw new Error("item didn't exist!")
         if (!buy) throw new Error("Buyitem didn't exist!")
+        stock = item.stock
         const buyIsDone = buy.filter(obj => obj.isDone === false)
         const buyItemId = buyIsDone.filter(obj => obj.itemId._id.toJSON() === item._id.toJSON())
         const { saveNumber, otherNumber
@@ -234,6 +237,7 @@ const itemController = {
         return item.save()
       }).then(item => {
         if (!item) throw new Error("item didn't exist!")
+        if (!stock) throw new Error("stock didn't exist!")
         const { saveNumber, otherNumber
         } = req.body
         let saveNumberValue = Number(saveNumber)
@@ -248,6 +252,7 @@ const itemController = {
           itemId: item._id,
           userId: req.user._id,
           note,
+          stockNumber: Number(stock) + saveNumberValue,
           buyId
         }).then(() => {
           req.flash('success_messages', '入庫成功')
@@ -264,8 +269,10 @@ const itemController = {
     }).catch(err => next(err))
   },
   postObjectGet: (req, res, next) => {
+    let stock
     Item.findById(req.params.id).populate('unitId').then(item => {
       if (!item) throw new Error("item didn't exist!")
+      stock = item.stock
       const { getNumber } = req.body
       item.stock -= getNumber
       if (item.stock < 0) throw new Error("庫存不足!")
@@ -275,9 +282,10 @@ const itemController = {
       if (!item) throw new Error("item didn't exist!")
       return Record.create({
         inputNumber: 0,
-        outNumber: getNumber,
+        outNumber: Number(getNumber),
         createAt: currentYearMonDate(),
         itemId: item._id,
+        stockNumber: Number(stock) - Number(getNumber),
         userId: req.user._id
       }).then(() => {
         req.flash('success_messages', '領取成功')

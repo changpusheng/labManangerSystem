@@ -2,6 +2,7 @@ const User = require('../models/user')
 const Category = require('../models/category')
 const bcrypt = require('bcryptjs')
 const Unit = require('../models/unit')
+const Record = require('../models/record')
 
 
 const adminCroller = {
@@ -121,6 +122,15 @@ const adminCroller = {
           req.flash('success_messages', '成功新增單位')
           res.redirect('/admin/units')
         }).catch(err => next(err))
+    }).catch(err => next(err))
+  },
+  deleteItemUseRecord: (req, res, next) => {
+    Record.findById(req.params.id).then(record => {
+      if (!record) throw new Error('紀錄不存在')
+      record.remove()
+    }).then(() => {
+      req.flash('success_messages', '刪除成功')
+      res.redirect('/record/itemUseRecord')
     }).catch(err => next(err))
   }
 }

@@ -11,7 +11,7 @@ const recordSchema = new Schema({
   },
   stockNumber: {
     type: Number,
-    required: false
+    required: true
   },
   createAt: {
     type: String,
