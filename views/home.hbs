@@ -6,7 +6,7 @@
       <div class="card-header ">
         低於安全存量共{{itemObjs.length}}筆
       </div>
-      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+      <div class="card-body" style="overflow-y:auto;height:200px;display:block;">
         {{#if itemObjs.length}}
         <div>
           <table class="table">
@@ -45,7 +45,7 @@
       <div class="card-header">
         未結案共{{buyIsDone.length}}筆
       </div>
-      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+      <div class="card-body" style="overflow-y:auto;height:200px;display:block;">
         {{#if buyIsDone.length}}
         <div>
           <table class="table">
@@ -83,7 +83,7 @@
   <div class="col-md-12 mt-3">
     <div class="card">
       <div class="card-header">
-        毒化物領用記錄(近10筆)(依時間排序:第一筆為最新日期))
+        毒化物領用記錄(近5筆)(依時間排序:第一筆為最新日期))
       </div>
       <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
         {{#if acnRecordobjs.length}}
@@ -98,7 +98,6 @@
                 <th scope="col">入庫量(kg)</th>
                 <th scope="col">剩餘庫存量(kg)</th>
                 <th scope="col">使用人</th>
-                <th scope="col">狀態</th>
                 <th scope="col">確認</th>
               </tr>
             </thead>
@@ -112,8 +111,16 @@
                 <td>{{toFixed this.inputNumber 3}}</td>
                 <td>{{toFixed this.stockNumber 3}}</td>
                 <td>{{this.userId.name}}</td>
-                <td>{{this.note}}</td>
-                <td><a href="/item/toxic-isCheck/{{this.itemId._id}}" class="btn btn-outline-primary">確認</a></td>
+                <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
+                  <td><button type="submit" {{#if this.isCheck}}class="btn btn-outline-success" disabled {{else}}
+                      class="btn btn-outline-primary" onclick="return confirm(`確認單號{{toLastNumber this._id}}?`)"
+                      {{/if}}>
+                      {{#if this.isCheck}}
+                      完成
+                      {{else}}
+                      待確認
+                      {{/if}}</a></td>
+                </form>
               </tr>
               {{/each}}
             </tbody>

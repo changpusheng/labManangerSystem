@@ -292,6 +292,20 @@ const itemController = {
         res.redirect('/')
       }).catch(err => next(err))
     }).catch(err => next(err))
+  },
+  postToxicCheck: (req, res, next) => {
+    Record.findById(req.params.id).then(obj => {
+      if (!obj) throw new Error('紀錄ID不存在')
+      if (!obj.isCheck) {
+        obj.isCheck = true
+        req.flash('success_messages', `單號${req.params.id}確認完成`)
+        return obj.save()
+      } else {
+        req.flash('warning_msg', `單號${req.params.id}已經確認`)
+      }
+    }).then(() => {
+      res.redirect('/')
+    })
   }
 }
 
