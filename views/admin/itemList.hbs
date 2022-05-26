@@ -1,0 +1,56 @@
+<div class="container">
+  {{>admin-tab route = 'itemList'}}
+  <div class="mt-3">
+    <div class="row">
+      <div class="container">
+        <br />
+        <div class="row mt-2">
+          <div class="col-md-12 m-auto">
+            <div class="card card-body">
+
+              <table class="table align-middle">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">分類</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">縮寫</th>
+                    <th scope="col">Cas.</th>
+                    <th scope="col">庫存</th>
+                    <th scope="col">安全存量</th>
+                    <th scope="col">最大庫存量</th>
+                    <th scope="col">是否購買</th>
+                    <th scope="col">劑量單位</th>
+                    <th scope="col">Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each items}}
+                  <tr>
+                    <td>{{this.categoryId.name}}</td>
+                    <td>{{this.name}}</td>
+                    <td class="text-truncate" style="max-width:80px;">{{this.englishName}}</td>
+                    <td>{{this.casNumber}}</td>
+                    <td>{{toFixed this.stock 3}}</td>
+                    <td>{{toFixed this.safeStock 3}}</td>
+                    <td>{{toFixed this.fullStock 3}}</td>
+                    <td>{{#if this.isBuy}} 已經請購 {{else}} 尚未請購 {{/if}}</td>
+                    <td>{{this.unitId.name}}</td>
+                    <td>
+                      <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
+                        <button class="btn btn-outline-danger" type="submit"
+                          onclick="return confirm('確定要刪除{{this.name}}嗎?')">
+                          刪除
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,7 +3,7 @@ const Category = require('../models/category')
 const bcrypt = require('bcryptjs')
 const Unit = require('../models/unit')
 const Record = require('../models/record')
-
+const Item = require('../models/item')
 
 const adminCroller = {
   getBackSide: (req, res, next) => {
@@ -131,6 +131,11 @@ const adminCroller = {
     }).then(() => {
       req.flash('success_messages', '刪除成功')
       res.redirect('/record/itemUseRecord')
+    }).catch(err => next(err))
+  },
+  getItemList: (req, res, next) => {
+    Item.find().populate(['categoryId', 'unitId']).lean().then(items => {
+      res.render('admin/itemList', { items })
     }).catch(err => next(err))
   }
 }

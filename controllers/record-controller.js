@@ -7,12 +7,12 @@ const recordContriller = {
       .populate({ path: 'itemId', populate: { path: 'categoryId' } })
       .populate({ path: 'itemId', populate: { path: 'unitId' } })
       .lean().sort({ 'createAt': -1 }).then(records => {
-        res.render('item/itemUseRecord', { records })
+        res.render('admin/itemUseRecord', { records })
       })
   },
   getItemBuyRecord: (req, res) => {
     Buy.find().populate(['userId', 'itemId']).lean().then(Buys => {
-      res.render('item/itemBuyRecord', { Buys })
+      res.render('admin/itemBuyRecord', { Buys })
     })
   }
 }
