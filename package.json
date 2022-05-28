@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "package": "npm i bcryptjs chart.js connect-flash dayjs dotenv express express-handlebars express-session method-override mongoose nodemailer nodemon passport passport-local xlsx",
     "seed": "node models/seeds/userSeeder.js",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"

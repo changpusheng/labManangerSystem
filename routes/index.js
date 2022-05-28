@@ -11,9 +11,9 @@ const { authenticatedAdmin } = require('../middleware/auth')
 
 router.use('/item', authenticated, item)
 router.use('/record', authenticated, record)
+router.use('/admin', authenticatedAdmin, admin)
 router.use('/users', user)
 router.use('/', home)
-router.use('/admin', authenticatedAdmin, admin)
 router.use('/', generalErrorHandler)
 
 module.exports = router

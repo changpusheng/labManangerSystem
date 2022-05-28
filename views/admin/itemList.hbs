@@ -36,7 +36,7 @@
                     <td>{{#if this.isBuy}} 已經請購 {{else}} 尚未請購 {{/if}}</td>
                     <td>{{this.unitId.name}}</td>
                     <td>
-                      <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
+                      <form action="/admin/itemList/{{this._id}}?_method=Delete" method="POST">
                         <button class="btn btn-outline-danger" type="submit"
                           onclick="return confirm('確定要刪除{{this.name}}嗎?')">
                           刪除

@@ -5,6 +5,7 @@ const adminCroller = require('../../controllers/admin-controller')
 
 router.delete('/itemUseRecord/:id', adminCroller.deleteItemUseRecord)
 router.patch('/users/:id', adminCroller.patchUser)
+router.delete('/itemList/:id', adminCroller.deleteitemList)
 router.delete('/users/:id', adminCroller.deleteUser)
 router.get('/categories/:id', adminCroller.getCategories)
 router.put('/categories/:id', adminCroller.putCategory)
