@@ -105,7 +105,7 @@
               {{#each acnRecordobjs}}
               <tr>
                 <th scope="row">{{toLastNumber this._id}}</th>
-                <th scope="row">{{this.createAt}}</th>
+                <th scope="row">{{relativeTimeFromNow this.createAt}}</th>
                 <td>{{this.itemId.name}}</td>
                 <td>{{toFixed this.outNumber 3}}</td>
                 <td>{{toFixed this.inputNumber 3}}</td>
@@ -113,7 +113,8 @@
                 <td>{{this.userId.name}}</td>
                 <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
                   <td><button type="submit" {{#if this.isCheck}}class="btn btn-outline-success" disabled {{else}}
-                      class="btn btn-outline-primary" onclick="return confirm(`確認單號{{toLastNumber this._id}}?`)"
+                      class="btn btn-outline-primary"
+                      onclick="return confirm(`單號{{toLastNumber this._id}}確認領用{{toFixed this.outNumber 3}}{{this.itemId.unitId.name}}、入庫{{toFixed this.inputNumber 3}}{{this.itemId.unitId.name}}、剩餘庫存{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}}`)"
                       {{/if}}>
                       {{#if this.isCheck}}
                       完成

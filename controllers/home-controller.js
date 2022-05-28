@@ -19,7 +19,6 @@ const homeController = {
         const buyIsDone = buys.filter(obj => obj.isDone === false && obj.itemId.isBuy === true)
         if (records.length) {
           const acnCategoryObj = items.filter(obj => obj.categoryId.name === '毒化物' && obj.englishName === 'ACN')
-          console.log(acnRecordobjs)
           //撈出毒化物ACN前5筆使用資料
           if (acnCategoryObj.length) {
             const acnId = acnCategoryObj[0]._id.toJSON()

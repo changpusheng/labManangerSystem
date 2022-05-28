@@ -6,29 +6,38 @@
       <div class="container">
         <br />
         <div class="row mt-2">
-          <div class="col-md-6 m-auto">
+          <div class="col-md-12 m-auto">
             <div class="card card-body">
 
               <table class="table align-middle">
                 <thead class="thead-dark">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">領用</th>
-                    <th scope="col">入庫</th>
-                    <th scope="col">購買</th>
-                    <th scope="col">使用人</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">#</th>
-                    <th scope="col">#</th>
+                    <th scope="col">編號</th>
+                    <th scope="col">日期</th>
+                    <th scope="col">分類</th>
+                    <th scope="col">品名</th>
+                    <th scope="col">購買數量</th>
+                    <th scope="col">請購人</th>
+                    <th scope="col">備註</th>
+                    <th scope="col">結案</th>
+                    {{#if user.isAdmin}}
+                    <th scope="col">刪除</th>
+                    {{/if}}
                   </tr>
                 </thead>
                 <tbody>
                   {{#each buys}}
                   <tr>
+                    <td>{{toLastNumber this._id}}</td>
+                    <td>{{this.createAt}}</td>
+                    <td>[{{this.itemId.categoryId.name}}]</td>
                     <td>{{this.itemId.name}}</td>
-                    <td>{{this.outNumber}}{{this.c}}</td>
+                    <td>{{this.number}}</td>
+                    <td>{{this.userId.name}}</td>
+                    <td>{{this.note}}</td>
+                    <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">結案</a></td>
                     <td>
-                      <form action="/admin/users/{{this._id}}?_method=Delete" method="POST">
+                      <form action="/admin/itemBuyRecord/{{this._id}}?_method=Delete" method="POST">
                         <button class="btn btn-outline-danger" type="submit"
                           onclick="return confirm('確定要刪除{{this.name}}嗎?')">
                           刪除

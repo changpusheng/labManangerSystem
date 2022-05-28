@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const Unit = require('../models/unit')
 const Record = require('../models/record')
 const Item = require('../models/item')
+const Buy = require('../models/buy')
 
 const adminCroller = {
   getBackSide: (req, res, next) => {
@@ -131,6 +132,15 @@ const adminCroller = {
     }).then(() => {
       req.flash('success_messages', '刪除成功')
       res.redirect('/record/itemUseRecord')
+    }).catch(err => next(err))
+  },
+  deleteItemBuyRecord: (req, res, next) => {
+    Buy.findById(req.params.id).then(record => {
+      if (!record) throw new Error('紀錄不存在')
+      record.remove()
+    }).then(() => {
+      req.flash('success_messages', '刪除成功')
+      res.redirect('/record/itemBuyRecord')
     }).catch(err => next(err))
   },
   getItemList: (req, res, next) => {

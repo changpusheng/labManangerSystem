@@ -3,6 +3,7 @@ const Category = require('../models/category')
 const Unit = require('../models/unit')
 const Record = require('../models/record')
 const Buy = require('../models/buy')
+const dayjs = require('dayjs')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 
 const itemController = {
@@ -89,13 +90,12 @@ const itemController = {
     }).catch(err => next(err))
   },
   getCreateItem: (req, res, next) => {
-    return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units]) => {
+    return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units, items]) => {
       if (!categories || !units) throw new Error("Category/unit didn't exist!")
       res.render('item/createItem', { categories, units })
     }).catch(err => next(err))
   },
   postCreateItem: (req, res, next) => {
-
     const { otherFactorsValue, factors, unitId, categoryId, name, englishName, stock, safeStock, casNumber
     } = req.body
     if (!factors || !name || !englishName || !stock || !safeStock || !casNumber) throw new Error('有空格')
@@ -158,7 +158,7 @@ const itemController = {
       }).then(() => {
         return Buy.create({
           number,
-          createAt: currentYearMonDate(),
+          createAt: dayjs().format(),
           commit,
           itemId: item._id,
           userId: req.user._id
@@ -209,10 +209,9 @@ const itemController = {
           saveNumberValue = otherNumber
         }
         if (buyItemId[0]) {
+          //如果有購買單號
           let latelyObj = buyItemId.slice(-1)[0]
-          item.stock += Number(saveNumberValue)
           item.isBuy = false
-          item.fullStock = item.stock
           Buy.findById(latelyObj._id.toJSON()).then(obj => {
             obj.isDone = true
             obj.save()
@@ -238,7 +237,7 @@ const itemController = {
       }).then(item => {
         if (!item) throw new Error("item didn't exist!")
         if (!stock) throw new Error("stock didn't exist!")
-        const { saveNumber, otherNumber
+        const { saveNumber, otherNumber, note
         } = req.body
         let saveNumberValue = Number(saveNumber)
         if (saveNumber === 'other') {
@@ -248,7 +247,7 @@ const itemController = {
         return Record.create({
           inputNumber: saveNumberValue,
           outNumber: 0,
-          createAt: currentYearMonDate(),
+          createAt: dayjs().format(),
           itemId: item._id,
           userId: req.user._id,
           note,
@@ -283,7 +282,7 @@ const itemController = {
       return Record.create({
         inputNumber: 0,
         outNumber: Number(getNumber),
-        createAt: currentYearMonDate(),
+        createAt: dayjs().format(),
         itemId: item._id,
         stockNumber: Number(stock) - Number(getNumber),
         userId: req.user._id
