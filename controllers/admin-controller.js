@@ -144,15 +144,17 @@ const adminCroller = {
     }).catch(err => next(err))
   },
   getItemList: (req, res, next) => {
-    Item.find().populate(['categoryId', 'unitId']).lean().then(items => {
+    return Promise.all([Item.find().populate(['categoryId', 'unitId']).lean(),
+    req.params.id ? Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean() : null
+    ]).then(([items, item]) => {
       if (!items) throw new Error('沒有物件')
-      res.render('admin/itemList', { items })
+      res.render('admin/itemList', { items, item })
     }).catch(err => next(err))
   },
   deleteitemList: (req, res, next) => {
     Item.findById(req.params.id).then(item => {
       if (!item) throw new Error('此ID搜尋不到')
-      item.remove()
+      return item.remove()
     }).then(() => {
       req.flash('success_messages', '刪除成功')
       res.redirect('/admin/itemList')

@@ -4,7 +4,7 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header ">
-        低於安全存量共{{itemObjs.length}}筆
+        低於安全存量並且還沒請購的品項共{{itemObjs.length}}筆
       </div>
       <div class="card-body" style="overflow-y:auto;height:200px;display:block;">
         {{#if itemObjs.length}}
@@ -12,8 +12,6 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">編號</th>
-                <th scope="col">類別</th>
                 <th scope="col">品名</th>
                 <th scope="col">庫存</th>
                 <th scope="col">功能</th>
@@ -22,8 +20,6 @@
             <tbody>
               {{#each itemObjs}}
               <tr>
-                <th scope="row">{{toLastNumber this._id}}</th>
-                <th scope="row">{{this.categoryId.name}}</th>
                 <td>{{this.name}}</td>
                 <td>{{toFixed this.stock 3}}{{this.unitId.name}}</td>
                 <td><a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-success">請購</a></td>
@@ -52,7 +48,6 @@
             <thead>
               <tr>
                 <th scope="col">小量化學編號</th>
-                <th scope="col">類別</th>
                 <th scope="col">品名</th>
                 <th scope="col">購買數量</th>
                 <th scope="col">請購人</th>
@@ -62,12 +57,47 @@
             <tbody>
               {{#each buyIsDone}}
               <tr>
-                <th scope="row">{{this.commit}}</th>
-                <td>{{this.itemId.categoryId.name}}</td>
+                <td>{{this.commit}}</td>
                 <td>{{this.itemId.name}}</td>
                 <td>{{this.number}}{{this.itemId.unitId.name}}</td>
                 <td>{{this.userId.name}}</td>
-                <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">結案</a></td>
+                <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">待結案</a></td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <hr>
+        </div>
+        {{else}}
+        <div class="input-group-text justify-content-center fs-5 fw-bold">未結案項目:無</div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 mt-3">
+    <div class="card">
+      <div class="card-header">
+        統計圖
+      </div>
+      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+        {{#if buyIsDone.length}}
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                {{!-- <th scope="col">品名</th>
+                <th scope="col">購買數量</th>
+                <th scope="col">請購人</th>
+                <th scope="col">功能</th> --}}
+              </tr>
+            </thead>
+            <tbody>
+              {{#each buyIsDone}}
+              <tr>
+                {{!-- <td>{{this.itemId.name}}</td>
+                <td>{{this.number}}{{this.itemId.unitId.name}}</td>
+                <td>{{this.userId.name}}</td>
+                <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">結案</a></td> --}}
               </tr>
               {{/each}}
             </tbody>
@@ -91,7 +121,6 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">編號</th>
                 <th scope="col">時間</th>
                 <th scope="col">品名</th>
                 <th scope="col">領用量(kg)</th>
@@ -104,8 +133,7 @@
             <tbody>
               {{#each acnRecordobjs}}
               <tr>
-                <th scope="row">{{toLastNumber this._id}}</th>
-                <th scope="row">{{relativeTimeFromNow this.createAt}}</th>
+                <th scope="row">{{currentYearMonDate this.createAt}}</th>
                 <td>{{this.itemId.name}}</td>
                 <td>{{toFixed this.outNumber 3}}</td>
                 <td>{{toFixed this.inputNumber 3}}</td>
@@ -114,13 +142,13 @@
                 <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
                   <td><button type="submit" {{#if this.isCheck}}class="btn btn-outline-success" disabled {{else}}
                       class="btn btn-outline-primary"
-                      onclick="return confirm(`單號{{toLastNumber this._id}}確認領用{{toFixed this.outNumber 3}}{{this.itemId.unitId.name}}、入庫{{toFixed this.inputNumber 3}}{{this.itemId.unitId.name}}、剩餘庫存{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}}`)"
+                      onclick="return confirm(`單號{{toLastNumber this._id}} 領用{{toFixed this.outNumber 3}}{{this.itemId.unitId.name}}、入庫{{toFixed this.inputNumber 3}}{{this.itemId.unitId.name}}、剩餘庫存{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}}`)"
                       {{/if}}>
                       {{#if this.isCheck}}
-                      完成
+                      已確認
                       {{else}}
-                      確認
-                      {{/if}}</a></td>
+                      待確認
+                      {{/if}}</button></td>
                 </form>
               </tr>
               {{/each}}

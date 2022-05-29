@@ -147,8 +147,8 @@ const itemController = {
       } = req.body
       if (!number) throw new Error('購買數量不能空白')
       Buy.find().populate('itemId').then(buy => {
-        const buyIsDone = buy.filter(obj => obj.isDone === false)
-        const buyNewArr = buyIsDone.map(obj => obj.itemId._id.toJSON())
+        const buyisDone = buy.filter(obj => obj.isDone === false)
+        const buyNewArr = buyisDone.map(obj => obj.itemId._id.toJSON())
         if (buyNewArr.includes(item._id.toJSON())) throw new Error('有訂單未結案')
       }).then(() => {
         Item.findById(req.params.id).then(item => {

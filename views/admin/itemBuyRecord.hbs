@@ -35,7 +35,12 @@
                     <td>{{this.number}}</td>
                     <td>{{this.userId.name}}</td>
                     <td>{{this.note}}</td>
-                    <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">結案</a></td>
+                    <td><a class="btn btn-outline-primary" {{#if this.isDone}} onclick="return false;"
+                        style="opacity: 0.2" disabled{{else}} href="/item/objectsave/{{this.itemId._id}}" {{/if}}>{{#if
+                        this.isDone}}已結案{{else}}
+                        待結案
+                        {{/if}}</a>
+                    </td>
                     <td>
                       <form action="/admin/itemBuyRecord/{{this._id}}?_method=Delete" method="POST">
                         <button class="btn btn-outline-danger" type="submit"

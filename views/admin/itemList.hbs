@@ -7,7 +7,6 @@
         <div class="row mt-2">
           <div class="col-md-12 m-auto">
             <div class="card card-body">
-
               <table class="table align-middle">
                 <thead class="thead-dark">
                   <tr>
@@ -20,10 +19,39 @@
                     <th scope="col">最大庫存量</th>
                     <th scope="col">是否購買</th>
                     <th scope="col">劑量單位</th>
-                    <th scope="col">Role</th>
+                    <th scope="col">#</th>
+                    <th scope="col">#</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {{#if item}}
+                  <tr>
+                    <td>{{item.categoryId.name}}</td>
+                    <td>{{item.name}}</td>
+                    <td class="text-truncate" style="max-width:80px;">{{item.englishName}}</td>
+                    <td>{{item.casNumber}}</td>
+                    <td>{{toFixed item.stock 3}}</td>
+                    <td>{{toFixed item.safeStock 3}}</td>
+                    <td>{{toFixed item.fullStock 3}}</td>
+                    <td>{{#if item.isBuy}} 已經請購 {{else}} 尚未請購 {{/if}}</td>
+                    <td>{{item.unitId.name}}</td>
+                    <td>
+                      <form action="/admin/itemList/{{item._id}}?_method=Delete" method="POST">
+                        <button class="btn btn-outline-danger" type="submit"
+                          onclick="return confirm('確定要刪除{{item.name}}嗎?')">
+                          刪除
+                        </button>
+                      </form>
+                    </td>
+                    <td>
+                      <form action="/admin/itemList/{{item._id}}" method="POST">
+                        <button class="btn btn-outline-danger" type="submit">
+                          送出
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  {{else}}
                   {{#each items}}
                   <tr>
                     <td>{{this.categoryId.name}}</td>
@@ -43,8 +71,15 @@
                         </button>
                       </form>
                     </td>
+                    <td>
+                      <a class="btn btn-outline-danger" href="/admin/itemList/{{this._id}}">
+                        更改
+                      </a>
+                    </td>
                   </tr>
                   {{/each}}
+                  {{/if}}
+
                 </tbody>
               </table>
             </div>

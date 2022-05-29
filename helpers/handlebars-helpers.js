@@ -6,7 +6,7 @@ dayjs.extend(relativeTime) //近期時間
 module.exports = {
   currentDay: (a) => dayjs.js(new Date()),
   currentYear: () => dayjs().year(),
-  currentYearMonDate: () => date = dayjs().format('YYYY/MM/DD--HH:mm'),
+  currentYearMonDate: (a) => dayjs(a).format('YYYY/MM/DD'),
   ifCond: function (a, b, options) {
     return a === b ? options.fn(this) : options.inverse(this)
   },

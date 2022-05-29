@@ -13,7 +13,7 @@ const homeController = {
     ]).then(([buys, items, records]) => {
       let acnRecordobjs
       if (items.length) {
-        //撈出還沒購買且低於安全存量資料
+        //撈出還沒購買或低於安全存量資料
         const itemObjs = items.filter(obj => obj.stock < obj.safeStock && obj.isBuy === false)
         //撈出已經購買但還沒有結案的資料
         const buyIsDone = buys.filter(obj => obj.isDone === false && obj.itemId.isBuy === true)

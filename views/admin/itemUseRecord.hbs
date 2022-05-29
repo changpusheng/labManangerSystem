@@ -40,12 +40,23 @@
                     <td>{{this.userId.name}}</td>
                     <td>{{#ifCond this.itemId.categoryId.name '毒化物'}}<a href="#" class="btn btn-outline-success" {{#if
                         this.isInform}}onclick="return false;" style="opacity: 0.2" {{/if}}>{{#if
-                        this.isInform}}已通知{{else}}通知{{/if}}</a>{{else}}
+                        this.isInform}}已通知{{else}}待通知{{/if}}</a>{{else}}
                       非管制物{{/ifCond}}</td>
-                    <td>{{#ifCond this.itemId.categoryId.name '毒化物'}}<a href="#" class="btn btn-outline-success" {{#if
-                        this.isCheck}}onclick="return false;" style="opacity: 0.2" {{/if}}>{{#if
-                        this.isCheck}}已確認{{else}}確認{{/if}}</a>{{else}}
-                      非管制物{{/ifCond}}</td>
+                    <td>{{#ifCond this.itemId.categoryId.name '毒化物'}}
+                      <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
+                        <button type="submit" {{#if this.isCheck}}class="btn btn-outline-success" disabled {{else}}
+                          class="btn btn-outline-primary"
+                          onclick="return confirm(`單號{{toLastNumber this._id}}確認領用{{toFixed this.outNumber 3}}{{this.itemId.unitId.name}}、入庫{{toFixed this.inputNumber 3}}{{this.itemId.unitId.name}}、剩餘庫存{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}}`)"
+                          {{/if}}>
+                          {{#if this.isCheck}}
+                          已確認
+                          {{else}}
+                          待確認
+                          {{/if}}</button>
+                      </form>
+                      {{else}}
+                      非管制物{{/ifCond}}
+                    </td>
                     <td>
                       {{#if this.userId.isAdmin}}
                       <form action="/admin/itemUseRecord/{{this._id}}?_method=Delete" method="POST">
