@@ -90,7 +90,7 @@ const itemController = {
     }).catch(err => next(err))
   },
   getCreateItem: (req, res, next) => {
-    return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units, items]) => {
+    return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units]) => {
       if (!categories || !units) throw new Error("Category/unit didn't exist!")
       res.render('item/createItem', { categories, units })
     }).catch(err => next(err))

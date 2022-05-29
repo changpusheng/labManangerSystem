@@ -5,6 +5,7 @@ const Unit = require('../models/unit')
 const Record = require('../models/record')
 const Item = require('../models/item')
 const Buy = require('../models/buy')
+const dayjs = require('dayjs')
 
 const adminCroller = {
   getBackSide: (req, res, next) => {
@@ -145,10 +146,42 @@ const adminCroller = {
   },
   getItemList: (req, res, next) => {
     return Promise.all([Item.find().populate(['categoryId', 'unitId']).lean(),
-    req.params.id ? Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean() : null
-    ]).then(([items, item]) => {
+    req.params.id ? Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean() : null,
+    Category.find().lean(),
+    Unit.find().lean()
+    ]).then(([items, item, categories, units]) => {
       if (!items) throw new Error('沒有物件')
-      res.render('admin/itemList', { items, item })
+      res.render('admin/itemList', { items, item, categories, units })
+    }).catch(err => next(err))
+  },
+  postItemList: (req, res, next) => {
+    const { name, englishName, categoryId, casNumber, stock, safeStock, fullStock, unitId } = req.body
+    Item.findById(req.params.id).then(item => {
+      if (!item) throw new Error('此ID搜尋不到')
+      item.name = name
+      item.englishName = englishName
+      item.categoryId = categoryId
+      item.casNumber = casNumber
+      item.stock = stock
+      item.safeStock = safeStock
+      item.fullStock = fullStock
+      item.unitId = unitId
+      return item.save()
+    }).then(item => {
+      if (!item) throw new Error('此ID搜尋不到')
+      Record.create({
+        inputNumber: 0,
+        outNumber: 0,
+        stockNumber: item.stock,
+        createAt: dayjs().format(),
+        note: '更改',
+        itemId: req.params.id,
+        userId: req.user._id,
+        isCount: true
+      }).catch(err => next(err))
+    }).then(() => {
+      req.flash('success_massages', '更改成功')
+      res.redirect('/admin/itemList')
     }).catch(err => next(err))
   },
   deleteitemList: (req, res, next) => {

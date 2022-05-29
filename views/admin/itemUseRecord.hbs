@@ -12,6 +12,7 @@
               <table class="table align-middle">
                 <thead class="thead-dark">
                   <tr>
+                    <th scope="col">狀態</th>
                     <th scope="col">編號</th>
                     <th scope="col">日期</th>
                     <th scope="col">分類</th>
@@ -30,6 +31,11 @@
                 <tbody>
                   {{#each records}}
                   <tr>
+                    <td style="{{#percentMax this.inputNumber 0}} color:green;{{else}} {{#percentMax this.outNumber 0}} color:red;{{else}} color: blue; {{/percentMax}} {{/percentMax}}
+                      font-weight:900">
+                      {{#if
+                      this.isCount}}盤點{{/if}}{{#percentMax this.outNumber 0}}領用{{/percentMax}}
+                      {{#percentMax this.inputNumber 0}}入庫{{/percentMax}}</td>
                     <td>{{toLastNumber this._id}}</td>
                     <td>{{this.createAt}}</td>
                     <td>[{{this.itemId.categoryId.name}}]</td>
@@ -58,7 +64,7 @@
                       非管制物{{/ifCond}}
                     </td>
                     <td>
-                      {{#if this.userId.isAdmin}}
+                      {{#if ../user.isAdmin}}
                       <form action="/admin/itemUseRecord/{{this._id}}?_method=Delete" method="POST">
                         <button class="btn btn-outline-danger" type="submit"
                           onclick="return confirm('確定要刪除{{this.name}}嗎?')">

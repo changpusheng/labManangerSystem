@@ -24,32 +24,54 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {{#if item}}
-                  <tr>
-                    <td>{{item.categoryId.name}}</td>
-                    <td>{{item.name}}</td>
-                    <td class="text-truncate" style="max-width:80px;">{{item.englishName}}</td>
-                    <td>{{item.casNumber}}</td>
-                    <td>{{toFixed item.stock 3}}</td>
-                    <td>{{toFixed item.safeStock 3}}</td>
-                    <td>{{toFixed item.fullStock 3}}</td>
-                    <td>{{#if item.isBuy}} 已經請購 {{else}} 尚未請購 {{/if}}</td>
-                    <td>{{item.unitId.name}}</td>
-                    <td>
-                      <form action="/admin/itemList/{{item._id}}?_method=Delete" method="POST">
-                        <button class="btn btn-outline-danger" type="submit"
-                          onclick="return confirm('確定要刪除{{item.name}}嗎?')">
-                          刪除
-                        </button>
-                      </form>
-                    </td>
-                    <td>
-                      <form action="/admin/itemList/{{item._id}}" method="POST">
+                  <form action="/admin/itemList/{{item._id}}" method="POST">
+                    {{#if item}}
+                    <tr>
+                      <td>
+                        <select class="form-select" aria-label="Default select example" name="categoryId">
+                          {{#each categories}}
+                          <option value="{{this._id}}" {{#ifCond this.name ../item.categoryId.name}} selected
+                            {{/ifCond}}>
+                            {{this.name}}</option>
+                          {{/each}}
+                        </select>
+                      </td>
+                      <td><input type="text" class="form-control" name="name" value="{{item.name}}"
+                          placeholder="{{item.name}}" style="width: 100px;"></td>
+                      <td class="text-truncate" style="max-width:80px;"><input type="text" class="form-control"
+                          name="englishName" value="{{item.englishName}}" placeholder="{{item.englishName}}"
+                          style="width: 80px;"></td>
+                      <td><input type="text" class="form-control" name="casNumber" value="{{item.casNumber}}"
+                          placeholder="{{item.casNumber}}" style="width: 100px;"></td>
+                      <td><input type="text" class="form-control" name="stock" value="{{toFixed item.stock 3}}"
+                          placeholder="{{toFixed item.stock 3}}" style="width: 100px;"></td>
+                      <td><input type="text" class="form-control" name="safeStock" value="{{toFixed item.safeStock 3}}"
+                          placeholder="{{toFixed item.safeStock 3}}" style="width: 100px;"></td>
+                      <td><input type="text" class="form-control" name="fullStock" value="{{toFixed item.fullStock 3}}"
+                          placeholder="{{toFixed item.fullStock 3}}" style="width: 100px;"></td>
+                      <td>{{#if item.isBuy}} 已經請購 {{else}} 尚未請購 {{/if}}</td>
+                      <td>
+                        <select class="form-select" aria-label="Default select example" name="unitId">
+                          {{#each units}}
+                          <option value="{{this._id}}" {{#ifCond this.name ../item.unitId.name}} selected {{/ifCond}}>
+                            {{this.name}}</option>
+                          {{/each}}
+                        </select>
+                      </td>
+                      <td>
                         <button class="btn btn-outline-danger" type="submit">
                           送出
                         </button>
-                      </form>
-                    </td>
+                      </td>
+                      <td>
+                        <form action="/admin/itemList/{{item._id}}?_method=Delete" method="POST">
+                          <button class="btn btn-outline-danger" type="submit"
+                            onclick="return confirm('確定要刪除{{item.name}}嗎?')">
+                            刪除
+                          </button>
+                        </form>
+                      </td>
+                  </form>
                   </tr>
                   {{else}}
                   {{#each items}}
@@ -64,17 +86,17 @@
                     <td>{{#if this.isBuy}} 已經請購 {{else}} 尚未請購 {{/if}}</td>
                     <td>{{this.unitId.name}}</td>
                     <td>
+                      <a class="btn btn-outline-danger" href="/admin/itemList/{{this._id}}">
+                        更改
+                      </a>
+                    </td>
+                    <td>
                       <form action="/admin/itemList/{{this._id}}?_method=Delete" method="POST">
                         <button class="btn btn-outline-danger" type="submit"
                           onclick="return confirm('確定要刪除{{this.name}}嗎?')">
                           刪除
                         </button>
                       </form>
-                    </td>
-                    <td>
-                      <a class="btn btn-outline-danger" href="/admin/itemList/{{this._id}}">
-                        更改
-                      </a>
                     </td>
                   </tr>
                   {{/each}}
