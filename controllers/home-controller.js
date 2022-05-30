@@ -1,6 +1,7 @@
 const Buy = require('../models/buy')
 const Item = require('../models/item')
 const Record = require('../models/record')
+const dayjs = require('dayjs')
 
 const homeController = {
   gethome: (req, res, next) => {
@@ -24,6 +25,18 @@ const homeController = {
             const acnId = acnCategoryObj[0]._id.toJSON()
             acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 5)
           }
+
+          //撈出每日溶劑使用量
+          const chartDateArr = []
+
+          for (let i = 0; i <= 3; i++) {
+            const chartDatObj = {}
+            chartDatObj['date'] = `2022/10/1${i}`
+            chartDatObj['number'] = i
+            chartDateArr.push(chartDatObj)
+          }
+
+          console.log(chartDateArr)
         }
         res.render('home', {
           buyIsDone

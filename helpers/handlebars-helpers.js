@@ -4,7 +4,7 @@ const relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime) //近期時間
 
 module.exports = {
-  currentDay: (a) => dayjs.js(new Date()),
+  currentDay: () => dayjs().format('YYYY/MM/DD'),
   currentYear: () => dayjs().year(),
   currentYearMonDate: (a) => dayjs(a).format('YYYY/MM/DD'),
   ifCond: function (a, b, options) {
