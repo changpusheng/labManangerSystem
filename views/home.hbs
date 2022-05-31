@@ -74,39 +74,33 @@
       </div>
     </div>
   </div>
-  <div class="col-md-12 mt-3">
+
+  <div id="recordsTotalNumber" style="display: none;">{{recordsTotalNumber}}</div>
+  <div id="recordsDay" style="display: none;">{{recordsDay}}</div>
+  <div id="recordsToxicTotalNumber" style="display: none;">{{recordsToxicTotalNumber}}</div>
+  <div id="recordsToxicDay" style="display: none;">{{recordsToxicDay}}</div>
+
+  <div class="col-md-6 mt-3">
     <div class="card">
       <div class="card-header">
-        統計圖
+        一般溶劑使用量
       </div>
-      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
-        {{#if buyIsDone.length}}
-        <div>
-          <table class="table">
-            <thead>
-              <tr>
-                {{!-- <th scope="col">品名</th>
-                <th scope="col">購買數量</th>
-                <th scope="col">請購人</th>
-                <th scope="col">功能</th> --}}
-              </tr>
-            </thead>
-            <tbody>
-              {{#each buyIsDone}}
-              <tr>
-                {{!-- <td>{{this.itemId.name}}</td>
-                <td>{{this.number}}{{this.itemId.unitId.name}}</td>
-                <td>{{this.userId.name}}</td>
-                <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">結案</a></td> --}}
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-          <hr>
+      <div class="card-body" style="height:300px;">
+        <div style="width: 550px;">
+          <canvas id="myChart"></canvas>
         </div>
-        {{else}}
-        <div class="input-group-text justify-content-center fs-5 fw-bold">未結案項目:無</div>
-        {{/if}}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 mt-3">
+    <div class="card">
+      <div class="card-header">
+        毒化物使用量
+      </div>
+      <div class="card-body" style="height:300px;">
+        <div style="width: 550px;">
+          <canvas id="toxicChart"></canvas>
+        </div>
       </div>
     </div>
   </div>
