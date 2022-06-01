@@ -17,6 +17,7 @@
                     <th scope="col">分類</th>
                     <th scope="col">品名</th>
                     <th scope="col">購買數量</th>
+                    <th scope="col">單位</th>
                     <th scope="col">請購人</th>
                     <th scope="col">備註</th>
                     <th scope="col">結案</th>
@@ -33,6 +34,7 @@
                     <td>[{{this.itemId.categoryId.name}}]</td>
                     <td>{{this.itemId.name}}</td>
                     <td>{{this.number}}</td>
+                    <td>{{this.itemId.unitId.name}}</td>
                     <td>{{this.userId.name}}</td>
                     <td>{{this.note}}</td>
                     <td><a class="btn btn-outline-primary" {{#if this.isDone}} onclick="return false;"

@@ -31,5 +31,11 @@ module.exports = {
   toLastNumber: (value) => {
     let getValue = value.toJSON().slice(-5)
     return getValue
+  },
+  bottleNumber: (value, number, density, vol) => {
+    let bottleNumber = value.toFixed(number) / density / vol
+    let remainder = (bottleNumber - Math.trunc(bottleNumber)) * vol
+    let finalValue = Math.trunc(bottleNumber) + '瓶' + remainder.toFixed(2) + 'L'
+    return finalValue
   }
 }

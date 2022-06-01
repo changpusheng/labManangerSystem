@@ -236,7 +236,6 @@ const itemController = {
         return item.save()
       }).then(item => {
         if (!item) throw new Error("item didn't exist!")
-        if (!stock) throw new Error("stock didn't exist!")
         const { saveNumber, otherNumber, note
         } = req.body
         let saveNumberValue = Number(saveNumber)

@@ -13,25 +13,25 @@ db.on('error', () => { console.log('mongoose error!') })
 
 db.once('open', () => {
   return Promise.all([Item.find().lean(), User.find().lean()]).then(([items, users]) => {
-    for (let j = 0; j <= 2; j++) {
-      for (let i = 1; i <= 30; i++) {
-        if (i % 2 === 0) {
+    let useNumber
+    for (let i = 0; i <= 2; i++) {
+      for (let j = 1; j <= 12; j++) {
+        for (let k = 1; k <= 30; k++) {
+          if (k % 2 === 0) {
+            useNumber = 1 + i
+          } else if (k % 3 === 0) {
+            useNumber = 3 - i
+          } else {
+            useNumber = 2
+          }
+          let year = 2018 + i
           Record.create({
             inputNumber: 0,
-            outNumber: 0 + i + j,
-            stockNumber: 0 + i + j,
-            createAt: dayjs(`2018-06-${i}`).format(),
-            itemId: items[j]._id,
-            userId: users[0]._id
-          }).catch(err => console.log(err))
-        } else {
-          Record.create({
-            inputNumber: 0,
-            outNumber: 40 - i - j,
-            stockNumber: 40 - i - j,
-            createAt: dayjs(`2018-06-${i}`).format(),
-            itemId: items[j]._id,
-            userId: users[0]._id
+            outNumber: useNumber,
+            stockNumber: 500 - 2,
+            createAt: dayjs(`${year}-${j}-${k}`).format(),
+            itemId: items[i]._id,
+            userId: users[1]._id
           }).catch(err => console.log(err))
         }
       }

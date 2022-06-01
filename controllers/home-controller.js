@@ -15,6 +15,8 @@ const homeController = {
       let acnRecordobjs
       let recordsDay
       let recordsTotalNumber
+      let recordsToxicDay
+      let recordsToxicTotalNumber
       if (items.length) {
         //撈出還沒購買或低於安全存量資料
         const itemObjs = items.filter(obj => obj.stock < obj.safeStock && obj.isBuy === false)
@@ -27,37 +29,35 @@ const homeController = {
             const acnId = acnCategoryObj[0]._id.toJSON()
             acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 5)
           }
-
           //一般溶劑使用量
           //撈出每日溶劑使用量
           const chartDateArr = []
           const chartDateOutNumber = []
           const outputDataArr = []
+          //毒化物溶劑使用量
+          const toxicDateArr = []
+          const toxicDateOutNumber = []
+          const toxicOutputDataArr = []
 
           const normalObj = records.filter(obj => {
             return obj.itemId.categoryId.name !== '毒化物'
           })
           normalObj.map(obj => {
-            const date = dayjs(obj.createAt).format('YYYY/MM/DD')
+            const date = dayjs(obj.createAt).format('YYYY/MM')
             chartDateArr.push(date)
           })
           //剔除重覆的元素
           const chartDateFilter = chartDateArr.filter((date, index) => {
             return chartDateArr.indexOf(date) === index
           })
-          //單日使用量加總函式
-          function filterOutNumberValue(index) {
-            const itemFilter = records.filter(obj => {
-              return (dayjs(obj.createAt).format('YYYY/MM/DD') === chartDateArr[index]) && obj.itemId.categoryId.name !== '毒化物'
+          //每日使用量加入陣列
+          for (let i = 0; i < chartDateFilter.length; i++) {
+            const itemFilter = normalObj.filter(obj => {
+              return dayjs(obj.createAt).format('YYYY/MM') === chartDateFilter[i]
             })
             const itemMap = itemFilter.map(obj => obj.outNumber)
             const outNumberTotalValue = itemMap.reduce((pre, curr) => pre + curr)
             chartDateOutNumber.push(outNumberTotalValue)
-          }
-
-          //每日使用量加入陣列
-          for (let i = 0; i < chartDateFilter.length; i++) {
-            filterOutNumberValue(i)
           }
           //物件寫入日期與使用量
           for (let i = 0; i < chartDateFilter.length; i++) {
@@ -70,44 +70,31 @@ const homeController = {
           const daySort = outputDataArr.sort((a, b) => {
             return a > b ? 1 : -1
           })
-
           recordsDay = daySort.map(obj => {
-            return dayjs(obj.date).format('YYYY/MM/DD')
+            return dayjs(obj.date).format('YYYY/MM')
           })
-
           recordsTotalNumber = daySort.map(obj => {
             return obj.number
           })
-          //毒化物溶劑使用量
-          const toxicDateArr = []
-          const toxicDateOutNumber = []
-          const toxicOutputDataArr = []
-
           const toxicObj = records.filter(obj => {
             return obj.itemId.categoryId.name !== '一般溶劑'
           })
-
           toxicObj.map(obj => {
-            const date = dayjs(obj.createAt).format('YYYY/MM/DD')
+            const date = dayjs(obj.createAt).format('YYYY/MM')
             toxicDateArr.push(date)
           })
           //剔除重覆的元素
           const toxicDateFilter = toxicDateArr.filter((date, index) => {
             return toxicDateArr.indexOf(date) === index
           })
-          //單日使用量加總函式
-          function toxicValue(index) {
-            const itemFilter = records.filter(obj => {
-              return (dayjs(obj.createAt).format('YYYY/MM/DD') === toxicDateArr[index]) && obj.itemId.categoryId.name !== '一般溶劑'
+          //每日使用量加入陣列
+          for (let i = 0; i < toxicDateFilter.length; i++) {
+            const itemFilter = toxicObj.filter(obj => {
+              return dayjs(obj.createAt).format('YYYY/MM') === toxicDateFilter[i]
             })
             const itemMap = itemFilter.map(obj => obj.outNumber)
             const outNumberTotalValue = itemMap.reduce((pre, curr) => pre + curr)
             toxicDateOutNumber.push(outNumberTotalValue)
-          }
-
-          //每日使用量加入陣列
-          for (let i = 0; i < toxicDateFilter.length; i++) {
-            toxicValue(i)
           }
           //物件寫入日期與使用量
           for (let i = 0; i < toxicDateFilter.length; i++) {
@@ -120,11 +107,9 @@ const homeController = {
           const dayToxicSort = toxicOutputDataArr.sort((a, b) => {
             return a > b ? 1 : -1
           })
-
           recordsToxicDay = dayToxicSort.map(obj => {
-            return dayjs(obj.date).format('YYYY/MM/DD')
+            return dayjs(obj.date).format('YYYY/MM')
           })
-
           recordsToxicTotalNumber = dayToxicSort.map(obj => {
             return obj.number
           })
