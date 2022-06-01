@@ -14,7 +14,7 @@ db.on('error', () => { console.log('mongoose error!') })
 db.once('open', () => {
   return Promise.all([Item.find().lean(), User.find().lean()]).then(([items, users]) => {
     let useNumber
-    for (let i = 0; i <= 2; i++) {
+    for (let i = 0; i <= 3; i++) {
       for (let j = 1; j <= 12; j++) {
         for (let k = 1; k <= 30; k++) {
           if (k % 2 === 0) {

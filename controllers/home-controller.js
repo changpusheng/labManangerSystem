@@ -29,6 +29,21 @@ const homeController = {
             const acnId = acnCategoryObj[0]._id.toJSON()
             acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 5)
           }
+
+          //刪除超過兩年的紀錄
+          const filteYear = records.filter(obj => {
+            let Year = dayjs().year()
+            return (Year - dayjs(obj.createAt).year()) > 3
+          })
+
+          if (filteYear.length) {
+            filteYear.map(obj => {
+              Record.findById(obj._id).then(item => {
+                return item.remove()
+              }).catch(err => next(err))
+            })
+          }
+
           //一般溶劑使用量
           //撈出每日溶劑使用量
           const chartDateArr = []
