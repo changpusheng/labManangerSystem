@@ -1,19 +1,14 @@
 <div id="container">
-
   <div class="row mt-3">
-
     <div class="col-md-4 m-auto">
       {{>shopping-tab route = 'save-object'}}
       <div class="card card-body">
-
         <div class="input-group-text justify-content-center fs-4 fw-bold mt-2">入庫</div>
         <hr>
         <blockquote class="blockquote text-center">
           <p>{{item.name}}</p>
           <p>庫存:{{toFixed item.stock 3}}{{item.unitId.name}}</p>
         </blockquote>
-
-
         <form action="/item/objectsave/{{item._id}}" method="POST">
           <div class="blockquote m-auto col-md-8">
             <!-- Button trigger modal 彈跳視窗按鈕-->
@@ -28,14 +23,13 @@
             <!-- Modal 彈跳視窗 -->
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
               aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg">
+              <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">訂單清單</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body shoppingList">
-
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -59,7 +53,6 @@
                 <span class="input-group-text" id="saveNumber">其他數量</span>
                 <input type="number" class="form-control" aria-label="Sizing example input"
                   aria-describedby="otherNumber" name="otherNumber" placeholder="輸入其他數量">
-
               </div>
             </div>
           </div>
@@ -69,14 +62,8 @@
             </button>
             <a type="button" class="btn btn-outline-danger ms-3" href="/">取消</a>
           </div>
-
         </form>
-
-
-
-
       </div>
     </div>
   </div>
-
 </div>

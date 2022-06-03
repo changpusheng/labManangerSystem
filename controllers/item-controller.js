@@ -4,6 +4,7 @@ const Unit = require('../models/unit')
 const Record = require('../models/record')
 const Buy = require('../models/buy')
 const dayjs = require('dayjs')
+const sentEmail = require('../public/javascript/email')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 
 const itemController = {
@@ -285,9 +286,22 @@ const itemController = {
         itemId: item._id,
         stockNumber: Number(stock) - Number(getNumber),
         userId: req.user._id
-      }).then(() => {
-        req.flash('success_messages', '領取成功')
-        res.redirect('/')
+      }).then(item => {
+        Item.findById(req.params.id).populate('categoryId').lean().then(obj => {
+          if (obj.categoryId.name === '毒化物') {
+            const titleContent = `${req.user.name}領用${item.outNumber}kg,ACN剩餘庫存${item.stockNumber.toFixed(3)}kg(無內文)`
+            sentEmail(titleContent)
+            item.isInform = true
+            item.save()
+          }
+        }).catch(err => next(err))
+        return item
+      }).then(obj => {
+        Item.findById(obj.itemId._id.toJSON()).populate('unitId').lean().then(item => {
+          req.flash('success_messages', `成功領取${item.name}${obj.outNumber
+            }${item.unitId.name}`)
+          res.redirect('/')
+        })
       }).catch(err => next(err))
     }).catch(err => next(err))
   },

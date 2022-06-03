@@ -1,8 +1,6 @@
 let shoppingGetJsonData = document.querySelector('.shoppingdatafilter').innerText
 let buyItemId = JSON.parse(shoppingGetJsonData)
 
-
-
 function list(data) {
   const contentTitle = `<table class="table table-striped">
   <thead>
@@ -18,7 +16,6 @@ function list(data) {
    </thead>
     <tbody>
  `
-
   let product = ''
   data.forEach(obj => {
     let container = `<tr> <th scope="row"> ${obj
@@ -28,22 +25,17 @@ function list(data) {
     <td>${obj.userId.name}</td>
      <td>未結案</td>
      <td> <a type="button" class="btn btn-outline-success ms-3"
-        href="/item/normalSolven">通知</a></td>
+        href="/item/normalSolven">通知</a>
+        </td>
     </tr>
     `
     product += container
     return product
   })
-
   const comtentFooter = `</tbody>
 </table>`
-
   const totalContent = contentTitle + product + comtentFooter
   return totalContent
 }
 
-
 document.querySelector('.shoppingList').innerHTML = list(buyItemId)
-
-
-

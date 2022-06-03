@@ -78,18 +78,25 @@
   </div>
 
   <div id="recordsTotalNumber" style="display: none;">{{recordsTotalNumber}}</div>
-  <div id="recordsDay" style="display: none;">{{recordsDay}}</div>
+  <div id="recordsDay" style="display: none;">{{recordsMonth}}</div>
   <div id="recordsToxicTotalNumber" style="display: none;">{{recordsToxicTotalNumber}}</div>
-  <div id="recordsToxicDay" style="display: none;">{{recordsToxicDay}}</div>
+  <div id="recordsToxicDay" style="display: none;">{{recordsToxicMonth}}</div>
 
   <div class="col-md-6 mt-3">
     <div class="card">
       <div class="card-header">
-        一般溶劑每個月使用量(單位:瓶)
+        折線圖(溶劑每個月使用量)
       </div>
-      <div class="card-body" style="height:350px;">
+      <div class="card-body" style="height:360px;">
+
+        <div>
+          <button class="btn btn-outline-primary btn-sm active" id="normalSolvent">一般溶劑</button>
+          <button class="btn btn-outline-primary btn-sm" id="toxicSolvent">毒化物</button>
+        </div>
+
         <div style="width: 100%;">
-          <canvas id="myChart"></canvas>
+          <canvas id="myChartNormal"></canvas>
+          <canvas id="myChartToxic" hidden></canvas>
         </div>
       </div>
     </div>
@@ -97,12 +104,10 @@
   <div class="col-md-6 mt-3">
     <div class="card">
       <div class="card-header">
-        毒化物每個月使用量(單位:kg)
+        待盤點項目
       </div>
-      <div class="card-body" style="height:350px;">
-        <div style="width: 100%;">
-          <canvas id="toxicChart"></canvas>
-        </div>
+      <div class="card-body" style="height: 360px;">
+     
       </div>
     </div>
   </div>

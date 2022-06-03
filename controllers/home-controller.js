@@ -13,10 +13,6 @@ const homeController = {
     Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 })
     ]).then(([buys, items, records]) => {
       let acnRecordobjs
-      let recordsDay
-      let recordsTotalNumber
-      let recordsToxicDay
-      let recordsToxicTotalNumber
       if (items.length) {
         //撈出還沒購買或低於安全存量資料
         const itemObjs = items.filter(obj => obj.stock < obj.safeStock && obj.isBuy === false)
@@ -45,10 +41,14 @@ const homeController = {
           }
 
           //一般溶劑使用量
-          //撈出每日溶劑使用量
+          //撈出每月溶劑使用量
           const chartDateArr = []
           const chartDateOutNumber = []
           const outputDataArr = []
+          //每週
+          const normalWeek = []
+          const chartWeekOutNumber = []
+          const outputWeekArr = []
           //毒化物溶劑使用量
           const toxicDateArr = []
           const toxicDateOutNumber = []
@@ -61,11 +61,13 @@ const homeController = {
             const date = dayjs(obj.createAt).format('YYYY/MM')
             chartDateArr.push(date)
           })
+
           //剔除重覆的元素
           const chartDateFilter = chartDateArr.filter((date, index) => {
             return chartDateArr.indexOf(date) === index
           })
-          //每日使用量加入陣列
+
+          //使用量加入陣列
           for (let i = 0; i < chartDateFilter.length; i++) {
             const itemFilter = normalObj.filter(obj => {
               return dayjs(obj.createAt).format('YYYY/MM') === chartDateFilter[i]
@@ -74,6 +76,8 @@ const homeController = {
             const outNumberTotalValue = itemMap.reduce((pre, curr) => pre + curr)
             chartDateOutNumber.push(outNumberTotalValue)
           }
+
+
           //物件寫入日期與使用量
           for (let i = 0; i < chartDateFilter.length; i++) {
             const outputData = {}
@@ -81,16 +85,23 @@ const homeController = {
             outputData['number'] = chartDateOutNumber[i]
             outputDataArr.push(outputData)
           }
+
+
           //依照日期排序
           const daySort = outputDataArr.sort((a, b) => {
             return a > b ? 1 : -1
           })
-          recordsDay = daySort.map(obj => {
+          
+          recordsMonth = daySort.map(obj => {
             return dayjs(obj.date).format('YYYY/MM')
           })
+
           recordsTotalNumber = daySort.map(obj => {
             return obj.number
           })
+
+
+          //毒化物
           const toxicObj = records.filter(obj => {
             return obj.itemId.categoryId.name !== '一般溶劑'
           })
@@ -122,20 +133,21 @@ const homeController = {
           const dayToxicSort = toxicOutputDataArr.sort((a, b) => {
             return a > b ? 1 : -1
           })
-          recordsToxicDay = dayToxicSort.map(obj => {
+          recordsToxicMonth = dayToxicSort.map(obj => {
             return dayjs(obj.date).format('YYYY/MM')
           })
           recordsToxicTotalNumber = dayToxicSort.map(obj => {
             return obj.number
           })
+
         }
         res.render('home', {
           buyIsDone
           , itemObjs
           , acnRecordobjs,
-          recordsDay: JSON.stringify(recordsDay),
+          recordsMonth: JSON.stringify(recordsMonth),
           recordsTotalNumber: JSON.stringify(recordsTotalNumber),
-          recordsToxicDay: JSON.stringify(recordsToxicDay),
+          recordsToxicMonth: JSON.stringify(recordsToxicMonth),
           recordsToxicTotalNumber: JSON.stringify(recordsToxicTotalNumber)
         })
       } else {
