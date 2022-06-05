@@ -76,30 +76,55 @@
       </div>
     </div>
   </div>
-
+  {{!-- 每天 --}}
+  <div id="recordsTotalNumberDay" style="display: none;">{{recordsTotalNumberDay}}</div>
+  <div id="recordsDay" style="display: none;">{{recordsDay}}</div>
+  <div id="recordsToxicTotalNumberDay" style="display: none;">{{recordsToxicTotalNumberDay}}</div>
+  <div id="recordsToxicDay" style="display: none;">{{recordsToxicDay}}</div>
+  <div id="avgNumberDay" style="display: none;">{{avgNumberDay}}</div>
+  <div id="avgTxicNumberDay" style="display: none;">{{avgTxicNumberDay}}</div>
+  {{!-- 每週 --}}
+  <div id="recordsTotalNumberWeek" style="display: none;">{{recordsTotalNumberWeek}}</div>
+  <div id="recordsWeek" style="display: none;">{{recordsWeek}}</div>
+  <div id="recordsToxicTotalNumberWeek" style="display: none;">{{recordsToxicTotalNumberWeek}}</div>
+  <div id="recordsToxicWeek" style="display: none;">{{recordsToxicWeek}}</div>
+  <div id="avgNumberWeek" style="display: none;">{{avgNumberWeek}}</div>
+  <div id="avgTxicNumberWeek" style="display: none;">{{avgTxicNumberWeek}}</div>
+  {{!-- 每月 --}}
   <div id="recordsTotalNumber" style="display: none;">{{recordsTotalNumber}}</div>
-  <div id="recordsDay" style="display: none;">{{recordsMonth}}</div>
+  <div id="recordsMonth" style="display: none;">{{recordsMonth}}</div>
   <div id="recordsToxicTotalNumber" style="display: none;">{{recordsToxicTotalNumber}}</div>
-  <div id="recordsToxicDay" style="display: none;">{{recordsToxicMonth}}</div>
-  <div id="normalAvg" style="display: none;">{{avgNumber}}</div>
-  <div id="toxicAvg" style="display: none;">{{avgTxicNumber}}</div>
+  <div id="recordsToxicMonth" style="display: none;">{{recordsToxicMonth}}</div>
+  <div id="normalAvgMonth" style="display: none;">{{avgNumberMonth}}</div>
+  <div id="toxicAvgMonth" style="display: none;">{{avgTxicNumberMonth}}</div>
 
 
   <div class="col-md-6 mt-3">
     <div class="card">
       <div class="card-header">
-        折線圖(溶劑每個月使用量)
+        折線圖(溶劑使用量)
       </div>
       <div class="card-body" style="height:360px;">
-
-        <div>
-          <button class="btn btn-outline-primary btn-sm active" id="normalSolvent">一般溶劑</button>
-          <button class="btn btn-outline-primary btn-sm" id="toxicSolvent">毒化物</button>
+        <div id="btnObjsId">
+          <div style="display: flex;justify-content:space-between">
+            <div>
+              <button class="btn btn-outline-primary btn-sm active normal" id="normalSolvent">一般溶劑</button>
+              <button class="btn btn-outline-primary btn-sm toxic" id="toxicSolvent">毒化物</button>
+            </div>
+            <div>
+              <button class="btn btn-outline-primary btn-sm active day" id="day">日線</button>
+              <button class="btn btn-outline-primary btn-sm week" id="week">週線</button>
+              <button class="btn btn-outline-primary btn-sm month" id="month">月線</button>
+            </div>
+          </div>
         </div>
-
         <div style="width: 100%;">
-          <canvas id="myChartNormal"></canvas>
-          <canvas id="myChartToxic" hidden></canvas>
+          <canvas id="myChartNormalMonth" hidden></canvas>
+          <canvas id="myChartToxicMonth" hidden></canvas>
+          <canvas id="myChartNormalWeek" hidden></canvas>
+          <canvas id="myChartToxicWeek" hidden></canvas>
+          <canvas id="myChartNormalDay"></canvas>
+          <canvas id="myChartToxicDay" hidden></canvas>
         </div>
       </div>
     </div>

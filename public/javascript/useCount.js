@@ -48,10 +48,7 @@ function useMonthNumber(records, category, day) {
 
 function useWeekNumber(records, category, day) {
   const chartDateArr = []
-  const chartDateOutNumber = []
-  const outputDataArr = []
   //撈出資料年分
-
   const normalObj = records.filter(obj => {
     return obj.itemId.categoryId.name !== category
   })
@@ -88,9 +85,6 @@ function useWeekNumber(records, category, day) {
     maxWeekYear['number'] = outNumberTotalValue
     weekOfYear.push(maxWeekYear)
   }
-
-
-
   const yearArr = []
   weekOfYear.map(obj => {
     const yearObj = dayjs(obj.date).format('YYYY')
@@ -127,8 +121,8 @@ function useWeekNumber(records, category, day) {
       })
       const init = 0
       const value = filter.reduce((pre, curr) => pre + curr, init)
-      weekYearFilterObj['year'] = yearFilter[i]
-      weekYearFilterObj['week'] = weekOnly[j]
+      let yearWeek = `${yearFilter[i]}第${weekOnly[j] + '週'}`
+      weekYearFilterObj['year'] = yearWeek
       weekYearFilterObj['value'] = value
       weekYearFilterArr.push(weekYearFilterObj)
     }
@@ -136,16 +130,32 @@ function useWeekNumber(records, category, day) {
 
 
   //依照日期排序
-  // const daySort = outputDataArr.sort((a, b) => {
-  //   return a > b ? 1 : -1
-  // })
+  const daySort = weekYearFilterArr.sort((a, b) => {
+    return a > b ? 1 : -1
+  })
 
-  return weekYearFilterArr
+  return daySort
+}
+
+
+function avgCount(normalTotalNumber, normalTotalDay, toxicTotalNumber, toxicTotalDay) {
+  //一般溶劑使用平均
+  const obj = {}
+  const init = 0
+  const totalNormalNumber = normalTotalNumber.reduce((pre, curr) => pre + curr, init)
+  const avgNumber = totalNormalNumber / normalTotalDay.length
+  //毒化物使用平均
+  const totalToxicNumber = toxicTotalNumber.reduce((pre, curr) => pre + curr, init)
+  const avgTxicNumber = totalToxicNumber / toxicTotalDay.length
+  obj['normal'] = avgNumber
+  obj['toxic'] = avgTxicNumber
+  return obj
 }
 
 
 
 module.exports = {
   useMonthNumber,
-  useWeekNumber
+  useWeekNumber,
+  avgCount
 }
