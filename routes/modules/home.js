@@ -4,5 +4,4 @@ const homeContriller = require('../../controllers/home-controller')
 
 router.get('/', homeContriller.gethome)
 
-
 module.exports = router

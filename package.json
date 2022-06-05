@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "itemSeed": "node models/seeds/itemSeeder.js",
     "email": "node public/javascript/email.js",
     "recordSeed": "node models/seeds/recordSeeder.js",
     "package": "npm i bcryptjs chart.js connect-flash dayjs dotenv express express-handlebars express-session method-override mongoose nodemailer nodemon passport passport-local xlsx",

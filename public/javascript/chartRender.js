@@ -3,6 +3,8 @@ let recordsTotalNumber = document.querySelector('#recordsTotalNumber').innerText
 let recordsTotalNumberObj = JSON.parse(recordsTotalNumber).slice(-25)
 let recordsDay = document.querySelector('#recordsDay').innerText
 let recordsDayObj = JSON.parse(recordsDay).slice(-25)
+let normalAvg = document.querySelector('#normalAvg').innerText
+let toxicAvg = document.querySelector('#toxicAvg').innerText
 
 //匯入毒化物資料
 
@@ -65,6 +67,7 @@ let myChartNormal = new Chart(ctxNormal, {  //先建立一個 chart
       yAxes: [{
         display: true,
         ticks: {
+          max: Math.ceil(Number(normalAvg)) * 2,
           min: 0
         }
       }]
@@ -95,6 +98,7 @@ let myChartToxic = new Chart(ctxToxic, {  //先建立一個 chart
       yAxes: [{
         display: true,
         ticks: {
+          max: Math.ceil(Number(toxicAvg)) * 2,
           min: 0
         }
       }]
