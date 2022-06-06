@@ -20,21 +20,33 @@ const homeController = {
       if (items.length) {
         let acnRecordobjs
         let recordsMonth
-        let recordsToxicMonth
         let recordsTotalNumber
+        let maxValueMonth
+        let minValueMonth
+        let recordsToxicMonth
         let recordsToxicTotalNumber
+        let maxValueToxicMonth
+        let minValueToxicMonth
         let avgNumberMonth
         let avgTxicNumberMonth
         let recordsDay
         let recordsTotalNumberDay
+        let maxValueDay
+        let minValueDay
         let recordsToxicDay
         let recordsToxicTotalNumberDay
+        let maxValueToxicDay
+        let minValueToxicDay
         let avgNumberDay
         let avgTxicNumberDay
         let recordsWeek
         let recordsTotalNumberWeek
+        let maxValueWeek
+        let minValueWeek
         let recordsToxicWeek
         let recordsToxicTotalNumberWeek
+        let maxValueToxicWeek
+        let minValueToxicWeek
         let avgNumberWeek
         let avgTxicNumberWeek
         //撈出還沒購買或低於安全存量資料
@@ -75,6 +87,9 @@ const homeController = {
             return obj.number
           })
 
+          maxValueDay = Math.max(...recordsTotalNumberDay)
+          minValueDay = Math.min(...recordsTotalNumberDay)
+
           recordsToxicDay = useMonthCount(records.slice(0, 60), '一般溶劑', everyDate).map(obj => {
             return dayjs(obj.date).format(`${everyDate
               }`)
@@ -82,10 +97,14 @@ const homeController = {
           recordsToxicTotalNumberDay = useMonthCount(records.slice(0, 60), '一般溶劑', everyDate).map(obj => {
             return obj.number
           })
+
+          maxValueToxicDay = Math.max(...recordsToxicTotalNumberDay)
+          minValueToxicDay = Math.min(...recordsToxicTotalNumberDay)
+
+
           const avgCountDay = avgCount(recordsTotalNumberDay, recordsDay, recordsToxicTotalNumberDay, recordsToxicDay)
           avgNumberDay = avgCountDay.normal
           avgTxicNumberDay = avgCountDay.toxic
-
 
           //每週資料
 
@@ -97,6 +116,9 @@ const homeController = {
             return obj.value
           })
 
+          maxValueWeek = Math.max(...recordsTotalNumberWeek)
+          minValueWeek = Math.min(...recordsTotalNumberWeek)
+
           recordsToxicWeek = useWeekhCount(records.slice(0, 120), '一般溶劑', everyDate).map(obj => {
             return obj.year
           })
@@ -104,6 +126,9 @@ const homeController = {
           recordsToxicTotalNumberWeek = useWeekhCount(records.slice(0, 120), '一般溶劑', everyDate).map(obj => {
             return obj.value
           })
+
+          maxValueToxicWeek = Math.max(...recordsToxicTotalNumberWeek)
+          minValueToxicWeek = Math.min(...recordsToxicTotalNumberWeek)
 
           const avgCountWeek = avgCount(recordsTotalNumberWeek, recordsWeek, recordsToxicTotalNumberWeek, recordsToxicWeek)
           avgNumberWeek = avgCountWeek.normal
@@ -118,6 +143,9 @@ const homeController = {
             return obj.number
           })
 
+          maxValueMonth = Math.max(...recordsTotalNumber)
+          minValueMonth = Math.min(...recordsTotalNumber)
+
           recordsToxicMonth = useMonthCount(records.slice(0, 240), '一般溶劑', date).map(obj => {
             return dayjs(obj.date).format(`${date
               }`)
@@ -125,6 +153,10 @@ const homeController = {
           recordsToxicTotalNumber = useMonthCount(records.slice(0, 240), '一般溶劑', date).map(obj => {
             return obj.number
           })
+
+          maxValueToxicMonth = Math.max(...recordsToxicTotalNumber)
+          minValueToxicMonth = Math.min(...recordsToxicTotalNumber)
+
           const avgCountMonth = avgCount(recordsTotalNumber, recordsTotalNumber, recordsToxicTotalNumber, recordsToxicMonth)
           avgNumberMonth = avgCountMonth.normal
           avgTxicNumberMonth = avgCountMonth.toxic
@@ -150,7 +182,19 @@ const homeController = {
           recordsToxicWeek: JSON.stringify(recordsToxicWeek),
           recordsToxicTotalNumberWeek: JSON.stringify(recordsToxicTotalNumberWeek),
           avgNumberWeek,
-          avgTxicNumberWeek
+          avgTxicNumberWeek,
+          maxValueMonth,
+          maxValueToxicMonth,
+          maxValueDay,
+          maxValueToxicDay,
+          maxValueWeek,
+          maxValueToxicWeek,
+          minValueMonth,
+          minValueToxicMonth,
+          minValueDay,
+          minValueToxicDay,
+          minValueWeek,
+          minValueToxicWeek
         })
       } else {
         res.render('home')
