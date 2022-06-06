@@ -9,7 +9,10 @@ const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 
 const itemController = {
   getSolven: (req, res, next) => {
-    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
+    const keyWord = req.query.normalSearch
+    const reg = RegExp(keyWord, 'i')
+    if (keyWord === ' ') throw new Error('搜尋欄不能空白')
+    Item.find(req.query.normalSearch ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
       const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
       normalSolven.map(obj => {
         if (!obj.fullStock) {
@@ -25,7 +28,8 @@ const itemController = {
         return 0
       })
       res.render('item/solven', {
-        normalSolven: normalSolvenSort
+        normalSolven: normalSolvenSort,
+        keyWord
       })
     }).catch(err => next(err))
   },
