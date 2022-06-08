@@ -1,6 +1,13 @@
 <div class="container">
   {{>admin-tab route = 'itemList'}}
   <div class="mt-3">
+    <form action="/admin/itemList" method="GET">
+      <div class="input-group mt-3 " style="width: 400px;">
+        <input type="text" class="form-control" name="itemList" placeholder="關鍵字搜尋(日期、分類、品名、使用人)"
+          aria-label="Recipient's username" aria-describedby="button-addon2" value="{{keyWord}}">
+        <button class="btn btn-outline-primary" type="submit" id="button-addon2">搜尋</button>
+      </div>
+    </form>
     <div class="row">
       <div class="container">
         <br />

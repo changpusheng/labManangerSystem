@@ -9,9 +9,11 @@ const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 
 const itemController = {
   getSolven: (req, res, next) => {
-    const keyWord = req.query.normalSearch
+    let keyWord = req.query.normalSearch
+    if (keyWord) {
+      keyWord = req.query.normalSearch.trim().toLowerCase()
+    }
     const reg = RegExp(keyWord, 'i')
-    if (keyWord === ' ') throw new Error('搜尋欄不能空白')
     Item.find(req.query.normalSearch ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
       const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
       normalSolven.map(obj => {
@@ -34,7 +36,12 @@ const itemController = {
     }).catch(err => next(err))
   },
   getToxicSolven: (req, res, next) => {
-    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
+    let keyWord = req.query.toxicSearch
+    if (keyWord) {
+      keyWord = req.query.toxicSearch.trim().toLowerCase()
+    }
+    const reg = RegExp(keyWord, 'i')
+    Item.find(req.query.toxicSearch ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
       const toxicSolven = item.filter(obj => obj.categoryId.name === '毒化物')
       toxicSolven.map(obj => {
         if (!obj.fullStock) {
@@ -49,12 +56,18 @@ const itemController = {
         return 0
       })
       res.render('item/toxic', {
-        toxicSolven: toxicSolvenSort
+        toxicSolven: toxicSolvenSort,
+        keyWord
       })
     }).catch(err => next(err))
   },
   getConsumablesGC: (req, res, next) => {
-    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
+    let keyWord = req.query.consumablesGC
+    if (keyWord) {
+      keyWord = req.query.consumablesGC.trim().toLowerCase()
+    }
+    const reg = RegExp(keyWord, 'i')
+    Item.find(req.query.consumablesGC ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
       const consumablesGC = item.filter(obj => obj.categoryId.name === 'GC耗材')
       consumablesGC.map(obj => {
         if (!obj.fullStock) {
@@ -69,12 +82,18 @@ const itemController = {
         return 0
       })
       res.render('item/consumablesGC', {
-        consumablesGC: consumablesGCSort
+        consumablesGC: consumablesGCSort,
+        keyWord
       })
     }).catch(err => next(err))
   },
   getConsumablesLC: (req, res, next) => {
-    Item.find().populate(['categoryId', 'unitId']).lean().then(item => {
+    let keyWord = req.query.consumablesLC
+    if (keyWord) {
+      keyWord = req.query.consumablesLC.trim().toLowerCase()
+    }
+    const reg = RegExp(keyWord, 'i')
+    Item.find(req.query.consumablesLC ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
       const consumablesLC = item.filter(obj => obj.categoryId.name === 'LC耗材')
       consumablesLC.map(obj => {
         if (!obj.fullStock) {
@@ -90,7 +109,8 @@ const itemController = {
         return 0
       })
       res.render('item/consumablesLC', {
-        consumablesLC: consumablesLCSort
+        consumablesLC: consumablesLCSort,
+        keyWord
       })
     }).catch(err => next(err))
   },
@@ -134,7 +154,7 @@ const itemController = {
       .catch(err => next(err))
   },
   getShopping: (req, res, next) => {
-    return Promise.all([Item.findById(req.params.id).populate('unitId').lean(), Buy.find().populate(['itemId', 'userId'])])
+    return Promise.all([Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean(), Buy.find().populate(['itemId', 'userId'])])
       .then(([item, buy]) => {
         if (!item) throw new Error("item didn't exist!")
         const buyIsDone = buy.filter(obj => obj.isDone === false)
@@ -176,7 +196,7 @@ const itemController = {
     }).catch(err => next(err))
   },
   getObjectSave: (req, res, next) => {
-    return Promise.all([Item.findById(req.params.id).populate('unitId').lean(), Buy.find().populate(['itemId', 'userId'])])
+    return Promise.all([Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean(), Buy.find().populate(['itemId', 'userId'])])
       .then(([item, buy]) => {
         if (!item) throw new Error("item didn't exist!")
         if (!buy) throw new Error("item didn't exist!")
@@ -264,7 +284,7 @@ const itemController = {
       }).catch(err => next(err))
   },
   getObjectGet: (req, res, next) => {
-    Item.findById(req.params.id).populate('unitId').lean().then(item => {
+    Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean().then(item => {
       if (!item) throw new Error("User didn't exist!")
       res.render('item/get-object', {
         item

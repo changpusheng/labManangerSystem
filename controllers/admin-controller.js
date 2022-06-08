@@ -6,6 +6,7 @@ const Record = require('../models/record')
 const Item = require('../models/item')
 const Buy = require('../models/buy')
 const dayjs = require('dayjs')
+const dimStringSearch = require('../public/javascript/dimStringSearch')
 
 const adminCroller = {
   getBackSide: (req, res, next) => {
@@ -151,7 +152,22 @@ const adminCroller = {
     Unit.find().lean()
     ]).then(([items, item, categories, units]) => {
       if (!items) throw new Error('沒有物件')
-      res.render('admin/itemList', { items, item, categories, units })
+      let keyWord = req.query.itemList
+      let filterObj
+      if (keyWord) {
+        keyWord = req.query.itemList.trim().toLowerCase()
+        const recordFileter = items.filter(obj => {
+          const categoryObj = dimStringSearch(obj.categoryId.name, keyWord)
+          const itemNameObj = dimStringSearch(obj.name, keyWord)
+          const englishNameObj = dimStringSearch(obj.englishName, keyWord)
+          const unitObj = dimStringSearch(obj.unitId.name, keyWord)
+          return categoryObj || itemNameObj || englishNameObj || unitObj
+        })
+        filterObj = recordFileter
+      } else {
+        filterObj = items
+      }
+      res.render('admin/itemList', { items: filterObj, item, categories, units })
     }).catch(err => next(err))
   },
   postItemList: (req, res, next) => {
