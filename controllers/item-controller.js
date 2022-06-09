@@ -6,9 +6,15 @@ const Buy = require('../models/buy')
 const dayjs = require('dayjs')
 const sentEmail = require('../public/javascript/email')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
+const { getOffset, getPagination } = require('../helpers/page-helper')
 
 const itemController = {
   getSolven: (req, res, next) => {
+    const DEFAULT_LIMIT = 8
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
+
     let keyWord = req.query.normalSearch
     if (keyWord) {
       keyWord = req.query.normalSearch.trim().toLowerCase()
@@ -28,14 +34,19 @@ const itemController = {
         if (a.percent > b.percent) return 1
         if (a.percent < b.percent) return -1
         return 0
-      })
+      }).slice(offset, offset + limit)
       res.render('item/solven', {
         normalSolven: normalSolvenSort,
-        keyWord
+        keyWord,
+        pagination: getPagination(limit, page, normalSolven.length)
       })
     }).catch(err => next(err))
   },
   getToxicSolven: (req, res, next) => {
+    const DEFAULT_LIMIT = 8
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
     let keyWord = req.query.toxicSearch
     if (keyWord) {
       keyWord = req.query.toxicSearch.trim().toLowerCase()
@@ -54,14 +65,19 @@ const itemController = {
         if (a.percent > b.percent) return 1
         if (a.percent < b.percent) return -1
         return 0
-      })
+      }).slice(offset, offset + limit)
       res.render('item/toxic', {
         toxicSolven: toxicSolvenSort,
-        keyWord
+        keyWord,
+        pagination: getPagination(limit, page, toxicSolven.length)
       })
     }).catch(err => next(err))
   },
   getConsumablesGC: (req, res, next) => {
+    const DEFAULT_LIMIT = 8
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
     let keyWord = req.query.consumablesGC
     if (keyWord) {
       keyWord = req.query.consumablesGC.trim().toLowerCase()
@@ -80,14 +96,19 @@ const itemController = {
         if (a.percent > b.percent) return 1
         if (a.percent < b.percent) return -1
         return 0
-      })
+      }).slice(offset, offset + limit)
       res.render('item/consumablesGC', {
         consumablesGC: consumablesGCSort,
-        keyWord
+        keyWord,
+        pagination: getPagination(limit, page, consumablesGC.length)
       })
     }).catch(err => next(err))
   },
   getConsumablesLC: (req, res, next) => {
+    const DEFAULT_LIMIT = 8
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
     let keyWord = req.query.consumablesLC
     if (keyWord) {
       keyWord = req.query.consumablesLC.trim().toLowerCase()
@@ -107,10 +128,11 @@ const itemController = {
         if (a.percent > b.percent) return 1
         if (a.percent < b.percent) return -1
         return 0
-      })
+      }).slice(offset, offset + limit)
       res.render('item/consumablesLC', {
         consumablesLC: consumablesLCSort,
-        keyWord
+        keyWord,
+        pagination: getPagination(limit, page, consumablesLC.length)
       })
     }).catch(err => next(err))
   },

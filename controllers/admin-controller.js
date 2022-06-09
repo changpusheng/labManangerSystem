@@ -7,6 +7,7 @@ const Item = require('../models/item')
 const Buy = require('../models/buy')
 const dayjs = require('dayjs')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
+const { getOffset, getPagination } = require('../helpers/page-helper')
 
 const adminCroller = {
   getBackSide: (req, res, next) => {
@@ -146,6 +147,10 @@ const adminCroller = {
     }).catch(err => next(err))
   },
   getItemList: (req, res, next) => {
+    const DEFAULT_LIMIT = 100
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
     return Promise.all([Item.find().populate(['categoryId', 'unitId']).lean(),
     req.params.id ? Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean() : null,
     Category.find().lean(),
@@ -154,6 +159,7 @@ const adminCroller = {
       if (!items) throw new Error('沒有物件')
       let keyWord = req.query.itemList
       let filterObj
+      let getPaginationfn
       if (keyWord) {
         keyWord = req.query.itemList.trim().toLowerCase()
         const recordFileter = items.filter(obj => {
@@ -163,11 +169,15 @@ const adminCroller = {
           const unitObj = dimStringSearch(obj.unitId.name, keyWord)
           return categoryObj || itemNameObj || englishNameObj || unitObj
         })
-        filterObj = recordFileter
+        filterObj = recordFileter.slice(offset, offset + limit)
+        getPaginationfn = getPagination(limit, page, recordFileter.length)
       } else {
-        filterObj = items
+        filterObj = items.slice(offset, offset + limit)
+        getPaginationfn = getPagination(limit, page, items.length)
       }
-      res.render('admin/itemList', { items: filterObj, item, categories, units })
+      res.render('admin/itemList', {
+        items: filterObj, item, categories, units, keyWord, pagination: getPaginationfn
+      })
     }).catch(err => next(err))
   },
   postItemList: (req, res, next) => {

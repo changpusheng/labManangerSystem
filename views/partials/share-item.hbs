@@ -1,4 +1,4 @@
-<div class="col-sm-4 mt-3">
+<div class="col-sm-3 mt-3">
   <div class="card {{#ifCond this.stock 0}} border border-2 border-danger{{else}}
     {{#percentAlert this.stock this.safeStock}} 
     border border-2 border-warning
@@ -23,12 +23,12 @@
       </p>
       <p>
         {{#ifCond this.stock 0}}
-        <a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-danger ">請補貨</a>
+        <a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-danger ">需要請購</a>
         {{else}}
         {{#percentAlert this.stock this.safeStock}}
-        <a href="/item/objectget/{{this._id}}" class="btn btn-outline-warning">快沒貨了</a>
+        <a href="/item/objectget/{{this._id}}" class="btn btn-outline-warning">低於安全庫存</a>
         {{else}}
-        <a href="/item/objectget/{{this._id}}" class="btn btn-outline-success">供貨正常</a>
+        <a href="/item/objectget/{{this._id}}" class="btn btn-outline-success">庫存正常</a>
         {{/percentAlert}}
         {{/ifCond}}
       </p>
