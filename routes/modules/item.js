@@ -10,10 +10,7 @@ router.get('/objectget/:id', itemController.getObjectGet)
 router.post('/objectsave/:id', itemController.postObjectSave)
 router.get('/objectsave/:id', itemController.getObjectSave)
 router.post('/create', itemController.postCreateItem)
-router.get('/consumablesLC', itemController.getConsumablesLC)
-router.get('/consumablesGC', itemController.getConsumablesGC)
-router.get('/normalSolven', itemController.getSolven)
-router.get('/toxic', itemController.getToxicSolven)
+router.get('/category', itemController.getCategory)
 router.get('/create', itemController.getCreateItem)
 
 

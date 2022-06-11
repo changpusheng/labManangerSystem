@@ -7,134 +7,55 @@ const dayjs = require('dayjs')
 const sentEmail = require('../public/javascript/email')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 const { getOffset, getPagination } = require('../helpers/page-helper')
+const dimStringSearch = require('../public/javascript/dimStringSearch')
 
 const itemController = {
-  getSolven: (req, res, next) => {
-    const DEFAULT_LIMIT = 8
+  getCategory: (req, res, next) => {
+    const categoryId = req.query.categoryId || ''
+    const DEFAULT_LIMIT = 12
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || DEFAULT_LIMIT
     const offset = getOffset(limit, page)
+    let keyWord = req.query.search
+    if (keyWord) {
+      keyWord = req.query.search.trim().toLowerCase()
+    }
+    const reg = RegExp(keyWord, 'i')
+    Promise.all([Item.find(req.query.search ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean(),
+    Category.find().lean()
+    ])
+      .then(([item, categories]) => {
+        let categoryObj
+        if (!categoryId) {
+          categoryObj = item
+        } else {
+          categoryObj = item.filter(obj => {
+            const objIdToJSON = obj.categoryId._id.toJSON()
+            return objIdToJSON === req.query.categoryId
+          })
+        }
+        categoryObj.map(obj => {
+          if (!obj.fullStock) {
+            obj.fullStock = 0.1
+          }
+          obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
+        })
 
-    let keyWord = req.query.normalSearch
-    if (keyWord) {
-      keyWord = req.query.normalSearch.trim().toLowerCase()
-    }
-    const reg = RegExp(keyWord, 'i')
-    Item.find(req.query.normalSearch ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
-      const normalSolven = item.filter(obj => obj.categoryId.name === '一般溶劑')
-      normalSolven.map(obj => {
-        if (!obj.fullStock) {
-          obj.fullStock = 0.1
-        }
-        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
-      }
-      )
-      //排序由小到大 讓低水位的在前
-      const normalSolvenSort = normalSolven.sort(function (a, b) {
-        if (a.percent > b.percent) return 1
-        if (a.percent < b.percent) return -1
-        return 0
-      }).slice(offset, offset + limit)
-      res.render('item/solven', {
-        normalSolven: normalSolvenSort,
-        keyWord,
-        pagination: getPagination(limit, page, normalSolven.length)
-      })
-    }).catch(err => next(err))
-  },
-  getToxicSolven: (req, res, next) => {
-    const DEFAULT_LIMIT = 8
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || DEFAULT_LIMIT
-    const offset = getOffset(limit, page)
-    let keyWord = req.query.toxicSearch
-    if (keyWord) {
-      keyWord = req.query.toxicSearch.trim().toLowerCase()
-    }
-    const reg = RegExp(keyWord, 'i')
-    Item.find(req.query.toxicSearch ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
-      const toxicSolven = item.filter(obj => obj.categoryId.name === '毒化物')
-      toxicSolven.map(obj => {
-        if (!obj.fullStock) {
-          obj.fullStock = 0.1
-        }
-        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
-      })
-      //排序由小到大 讓低水位的在前
-      const toxicSolvenSort = toxicSolven.sort(function (a, b) {
-        if (a.percent > b.percent) return 1
-        if (a.percent < b.percent) return -1
-        return 0
-      }).slice(offset, offset + limit)
-      res.render('item/toxic', {
-        toxicSolven: toxicSolvenSort,
-        keyWord,
-        pagination: getPagination(limit, page, toxicSolven.length)
-      })
-    }).catch(err => next(err))
-  },
-  getConsumablesGC: (req, res, next) => {
-    const DEFAULT_LIMIT = 8
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || DEFAULT_LIMIT
-    const offset = getOffset(limit, page)
-    let keyWord = req.query.consumablesGC
-    if (keyWord) {
-      keyWord = req.query.consumablesGC.trim().toLowerCase()
-    }
-    const reg = RegExp(keyWord, 'i')
-    Item.find(req.query.consumablesGC ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
-      const consumablesGC = item.filter(obj => obj.categoryId.name === 'GC耗材')
-      consumablesGC.map(obj => {
-        if (!obj.fullStock) {
-          obj.fullStock = 0.1
-        }
-        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
-      })
-      //排序由小到大 讓低水位的在前
-      const consumablesGCSort = consumablesGC.sort(function (a, b) {
-        if (a.percent > b.percent) return 1
-        if (a.percent < b.percent) return -1
-        return 0
-      }).slice(offset, offset + limit)
-      res.render('item/consumablesGC', {
-        consumablesGC: consumablesGCSort,
-        keyWord,
-        pagination: getPagination(limit, page, consumablesGC.length)
-      })
-    }).catch(err => next(err))
-  },
-  getConsumablesLC: (req, res, next) => {
-    const DEFAULT_LIMIT = 8
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || DEFAULT_LIMIT
-    const offset = getOffset(limit, page)
-    let keyWord = req.query.consumablesLC
-    if (keyWord) {
-      keyWord = req.query.consumablesLC.trim().toLowerCase()
-    }
-    const reg = RegExp(keyWord, 'i')
-    Item.find(req.query.consumablesLC ? { $or: [{ name: reg }, { englishName: reg }, { casNumber: reg }] } : null).populate(['categoryId', 'unitId']).lean().then(item => {
-      const consumablesLC = item.filter(obj => obj.categoryId.name === 'LC耗材')
-      consumablesLC.map(obj => {
-        if (!obj.fullStock) {
-          obj.fullStock = 0.1
-        }
-        obj['percent'] = parseInt((Number(obj.stock) / Number(obj.fullStock)) * 100)
-      }
-      )
-      //排序由小到大 讓低水位的在前
-      const consumablesLCSort = consumablesLC.sort(function (a, b) {
-        if (a.percent > b.percent) return 1
-        if (a.percent < b.percent) return -1
-        return 0
-      }).slice(offset, offset + limit)
-      res.render('item/consumablesLC', {
-        consumablesLC: consumablesLCSort,
-        keyWord,
-        pagination: getPagination(limit, page, consumablesLC.length)
-      })
-    }).catch(err => next(err))
+        //排序由小到大 讓低水位的在前
+        const itemSort = categoryObj.sort(function (a, b) {
+          if (a.percent > b.percent) return 1
+          if (a.percent < b.percent) return -1
+          return 0
+        }).slice(offset, offset + limit)
+        res.render('item/category', {
+          itemSort,
+          categoryId,
+          categories,
+          keyWord,
+          pagination: getPagination(limit, page, categoryObj.length),
+          totalCount: categoryObj.length
+        })
+      }).catch(err => next(err))
   },
   getCreateItem: (req, res, next) => {
     return Promise.all([Category.find().lean(), Unit.find().lean()]).then(([categories, units]) => {

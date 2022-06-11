@@ -7,6 +7,9 @@ module.exports = {
   currentDay: () => dayjs().format('YYYY/MM/DD'),
   currentYear: () => dayjs().year(),
   currentYearMonDate: (a) => dayjs(a).format('YYYY/MM/DD'),
+  ifCondToJson: function (a, b, options) {
+    return a.toJSON() === b ? options.fn(this) : options.inverse(this)
+  },
   ifCond: function (a, b, options) {
     return a === b ? options.fn(this) : options.inverse(this)
   },
