@@ -2,25 +2,36 @@
 
 實驗室溶劑、耗材管理系統
 
+概述:
+統計圖依據分類，統計出日/週/月/年的平均值、最大值、最小值，並繪製成折線圖。 
+毒化物領用會自動發信通知毒化物管理員確認使用狀況。
+
 畫面渲染:
 <ul>
 <li>
 登入頁面/最新動態
     <div >
     <img src="https://user-images.githubusercontent.com/88585009/169865248-9b3a2be2-64ba-40cf-882c-f6b0ef69217b.png" style="width:70%;"alt="登入畫面">
-   <img src="https://user-images.githubusercontent.com/88585009/169865436-d9ca565b-d229-4516-89b4-952c77af1d0d.png" style="width:70%;" alt="最新動態">
+        
+   <img src="https://user-images.githubusercontent.com/88585009/173250410-59bd202d-da81-45a0-b06a-45e1b63462e4.png" style="width:70%;" alt="最新動態">
     </div>
 </li>
     <li>
-一般溶劑頁面
+分類     
     <div >
-    <img src="https://user-images.githubusercontent.com/88585009/169865484-eae2c135-8f76-4ce5-a556-79909d3c3811.png" style="width:70%;"alt="一般溶劑頁面">
+    <img src="https://user-images.githubusercontent.com/88585009/173250420-8a3c4a1a-bec3-4ad4-8e7b-68f0c74dbfca.png" style="width:70%;"alt="一般溶劑頁面">
+    </div>
+</li>
+        <li>
+統計圖
+    <div >
+    <img src="https://user-images.githubusercontent.com/88585009/173250189-2eaa6cec-975e-4c0d-abd4-6042d340712d.png" style="width:70%;"alt="統計圖">
     </div>
 </li>
     <li>
-後台
+後台    
     <div >
-    <img src="https://user-images.githubusercontent.com/88585009/169865617-ff660e52-d709-4b64-9a17-207f66748afb.png" style="width:70%;"alt="後台">
+    <img src="https://user-images.githubusercontent.com/88585009/173250439-e2b8d8d8-3413-433e-b945-73e0903c73fa.png" style="width:70%;"alt="後台">
     </div>
 </li>
     <li>
@@ -82,9 +93,12 @@ mongoose connected!
 功能描述 (features)
 <ul>
 <li>
-登入系統/保持登入
+帳號登入/登出
 </li>
 <li>
-領用/入庫/購買/追蹤存量/確認訂單
+領用/入庫/購買/追蹤存量/確認訂單/自動發信通知
+</li>
+ <li>
+統計圖 提供 日/週/月/年線圖做切換 圖表註釋 最大值/最小值/平均值
 </li>
 </ul>
