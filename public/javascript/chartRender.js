@@ -165,10 +165,15 @@ for (let i = 0; i < categoryObj.length; i++) {
   chartData(categoryObj[i].name, recordsValue.month[i].day, recordsValue.month[i].value, recordsValue.month[i].max, recordsValue.month[i].avg, recordsValue.month[i].min, recordsValue.month[i].date)
 }
 
+for (let i = 0; i < categoryObj.length; i++) {
+  chartData(categoryObj[i].name, recordsValue.year[i].day, recordsValue.year[i].value, recordsValue.year[i].max, recordsValue.year[i].avg, recordsValue.year[i].min, recordsValue.year[i].date)
+}
+
 
 const monthBtn = document.querySelector('#month')
 const weekBtn = document.querySelector('#week')
 const dayBtn = document.querySelector('#day')
+const yearBtn = document.querySelector('#year')
 const categoryBtn = document.querySelector('#categoryId')
 let date = 'day'
 let categoryIndex = 0
@@ -178,6 +183,7 @@ initBtn = () => {
   dayBtn.classList.remove('active')
   monthBtn.classList.remove('active')
   weekBtn.classList.remove('active')
+  yearBtn.classList.remove('active')
 }
 
 dayBtn.addEventListener('click', e => {
@@ -193,6 +199,8 @@ dayBtn.addEventListener('click', e => {
       }week`).hidden = true
     document.querySelector(`#${selectObj.options[i].value
       }month`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }year`).hidden = true
   }
   document.querySelector(`#${selectObj.options[categoryIndex].value
     }day`).hidden = false
@@ -211,9 +219,31 @@ weekBtn.addEventListener('click', e => {
       }week`).hidden = true
     document.querySelector(`#${selectObj.options[i].value
       }month`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }year`).hidden = true
   }
   document.querySelector(`#${selectObj.options[categoryIndex].value
     }week`).hidden = false
+})
+
+yearBtn.addEventListener('click', e => {
+  const target = e.target
+  initBtn()
+  target.classList.add('active')
+  date = target.id
+  const selectObj = target.parentNode.parentNode.children[0].children[0]
+  for (let i = 0; i < selectObj.length; i++) {
+    document.querySelector(`#${selectObj.options[i].value
+      }day`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }week`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }month`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }year`).hidden = true
+  }
+  document.querySelector(`#${selectObj.options[categoryIndex].value
+    }year`).hidden = false
 })
 
 monthBtn.addEventListener('click', e => {
@@ -229,6 +259,8 @@ monthBtn.addEventListener('click', e => {
       }week`).hidden = true
     document.querySelector(`#${selectObj.options[i].value
       }month`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }year`).hidden = true
   }
   document.querySelector(`#${selectObj.options[categoryIndex].value
     }month`).hidden = false
@@ -243,6 +275,8 @@ categoryBtn.addEventListener('change', e => {
       }week`).hidden = true
     document.querySelector(`#${target.options[i].value
       }month`).hidden = true
+    document.querySelector(`#${target.options[i].value
+      }year`).hidden = true
   }
   document.querySelector(`#${target.options[target.selectedIndex].value
     }${date}`).hidden = false

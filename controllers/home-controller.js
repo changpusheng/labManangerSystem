@@ -47,14 +47,17 @@ const homeController = {
           }
           let date = 'YYYY/MM'
           let everyDate = 'YYYY/MM/DD'
+          let year = 'YYYY'
           let finalObj = {}
           let recordDayArr = []
           let recordWeekArr = []
           let recordMonthArr = []
+          let recordYearArr = []
           category.map(obj => {
             let recordDayObj = {}
             let recordWeekObj = {}
             let recordMonthObj = {}
+            let recordYearObj = {}
             //每日資料
             let recordsDay = useMonthCount(records.slice(0, 60), obj.name, everyDate).map(obj => {
               return dayjs(obj.date).format(`${everyDate
@@ -64,12 +67,6 @@ const homeController = {
               return obj.number
             })
 
-            if (!recordsDay.length) {
-              recordsDay = [0.01]
-            }
-            if (!recordsTotalNumberDay.length) {
-              recordsTotalNumberDay = [0.01]
-            }
             recordDayObj['date'] = 'day'
             recordDayObj['category'] = obj.name
             recordDayObj['day'] = recordsDay
@@ -85,12 +82,6 @@ const homeController = {
             let recordsTotalNumberWeek = useWeekhCount(records.slice(0, 120), obj.name, everyDate).map(obj => {
               return obj.value
             })
-            if (!recordsWeek.length) {
-              recordsWeek = [0.01]
-            }
-            if (!recordsTotalNumberWeek.length) {
-              recordsTotalNumberWeek = [0.01]
-            }
             recordWeekObj['date'] = 'week'
             recordWeekObj['category'] = obj.name
             recordWeekObj['day'] = recordsWeek
@@ -107,24 +98,35 @@ const homeController = {
             let recordsTotalNumber = useMonthCount(records.slice(0, 240), obj.name, date).map(obj => {
               return obj.number
             })
-            if (!recordsMonth.length) {
-              recordsMonth = [0.01]
-            }
-            if (!recordsTotalNumber.length) {
-              recordsTotalNumber = [0.01]
-            }
             recordMonthObj['date'] = 'month'
             recordMonthObj['category'] = obj.name
             recordMonthObj['day'] = recordsMonth
             recordMonthObj['value'] = recordsTotalNumber
-            recordMonthObj['max'] = maxValueMonth = Math.max(...recordsTotalNumber)
-            recordMonthObj['min'] = minValueMonth = Math.min(...recordsTotalNumber)
-            recordMonthObj['avg'] = avgCount(recordsTotalNumber, recordsTotalNumber)
+            recordMonthObj['max'] = Math.max(...recordsTotalNumber)
+            recordMonthObj['min'] = Math.min(...recordsTotalNumber)
+            recordMonthObj['avg'] = avgCount(recordsTotalNumber, recordsMonth)
             recordMonthArr.push(recordMonthObj)
+            //每年資料
+            let recordsYear = useMonthCount(records, obj.name, year).map(obj => {
+              return dayjs(obj.date).format(`${year
+                }`)
+            })
+            let recordsYearNumber = useMonthCount(records, obj.name, year).map(obj => {
+              return obj.number
+            })
+            recordYearObj['date'] = 'year'
+            recordYearObj['category'] = obj.name
+            recordYearObj['day'] = recordsYear
+            recordYearObj['value'] = recordsYearNumber
+            recordYearObj['max'] = Math.max(...recordsYearNumber)
+            recordYearObj['min'] = Math.min(...recordsYearNumber)
+            recordYearObj['avg'] = avgCount(recordsYearNumber, recordsYear)
+            recordYearArr.push(recordYearObj)
           })
           finalObj['day'] = recordDayArr
           finalObj['week'] = recordWeekArr
           finalObj['month'] = recordMonthArr
+          finalObj['year'] = recordYearArr
           recordsValue = finalObj
         }
         res.render('home', {

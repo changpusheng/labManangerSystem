@@ -80,12 +80,12 @@
   <div id="recordsValue" style="display: none;">{{recordsValue}}</div>
   <div id="categoryObj" style="display: none;">{{categoryObj}}</div>
 
-  <div class="col-md-8 mt-3">
+  <div class="col-md-6 mt-3">
     <div class="card">
       <div class="card-header">
         折線圖(溶劑使用量)
       </div>
-      <div class="card-body" style="height:500px;">
+      <div class="card-body" style="height:350px;">
         <div id="btnObjsId">
           <div style="display: flex;justify-content:space-between">
             <div>
@@ -100,6 +100,7 @@
               <button class="btn btn-outline-primary btn-sm active day" id="day">日線</button>
               <button class="btn btn-outline-primary btn-sm week" id="week">週線</button>
               <button class="btn btn-outline-primary btn-sm month" id="month">月線</button>
+              <button class="btn btn-outline-primary btn-sm month" id="year">年線</button>
             </div>
           </div>
         </div>
@@ -114,16 +115,19 @@
           {{#each category}}
           <canvas id='{{this.name}}month' hidden></canvas>
           {{/each}}
+          {{#each category}}
+          <canvas id='{{this.name}}year' hidden></canvas>
+          {{/each}}
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-4 mt-3">
+  <div class="col-md-6 mt-3">
     <div class="card">
       <div class="card-header">
         待盤點項目
       </div>
-      <div class="card-body" style="height: 500px;">
+      <div class="card-body" style="height: 350px;">
 
       </div>
     </div>
