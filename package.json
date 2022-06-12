@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "chartRend": "node public/javascript/chartRender.js",
     "itemSeed": "node models/seeds/itemSeeder.js",
     "email": "node public/javascript/email.js",
     "recordSeed": "node models/seeds/recordSeeder.js",

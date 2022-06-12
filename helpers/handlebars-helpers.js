@@ -40,5 +40,8 @@ module.exports = {
     let remainder = (bottleNumber - Math.trunc(bottleNumber)) * vol
     let finalValue = Math.trunc(bottleNumber) + '瓶' + remainder.toFixed(2) + 'L'
     return finalValue
+  },
+  firstIndexName: (a) => {
+    return a[0].name
   }
 }

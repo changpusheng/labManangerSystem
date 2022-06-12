@@ -1,6 +1,7 @@
 const Buy = require('../models/buy')
 const Item = require('../models/item')
 const Record = require('../models/record')
+const Category = require('../models/category')
 const useMonthCount = require('../public/javascript/useCount').useMonthNumber
 const useWeekhCount = require('../public/javascript/useCount').useWeekNumber
 const avgCount = require('../public/javascript/useCount').avgCount
@@ -15,40 +16,12 @@ const homeController = {
       .populate({ path: 'itemId', populate: { path: 'categoryId' } })
       .populate({ path: 'itemId', populate: { path: 'unitId' } }).lean(),
     Item.find().populate(['categoryId', 'unitId']).lean(),
-    Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 })
-    ]).then(([buys, items, records]) => {
+    Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 }),
+    Category.find().lean()
+    ]).then(([buys, items, records, category]) => {
       if (items.length) {
         let acnRecordobjs
-        let recordsMonth
-        let recordsTotalNumber
-        let maxValueMonth
-        let minValueMonth
-        let recordsToxicMonth
-        let recordsToxicTotalNumber
-        let maxValueToxicMonth
-        let minValueToxicMonth
-        let avgNumberMonth
-        let avgTxicNumberMonth
-        let recordsDay
-        let recordsTotalNumberDay
-        let maxValueDay
-        let minValueDay
-        let recordsToxicDay
-        let recordsToxicTotalNumberDay
-        let maxValueToxicDay
-        let minValueToxicDay
-        let avgNumberDay
-        let avgTxicNumberDay
-        let recordsWeek
-        let recordsTotalNumberWeek
-        let maxValueWeek
-        let minValueWeek
-        let recordsToxicWeek
-        let recordsToxicTotalNumberWeek
-        let maxValueToxicWeek
-        let minValueToxicWeek
-        let avgNumberWeek
-        let avgTxicNumberWeek
+        let recordsValue
         //撈出還沒購買或低於安全存量資料
         const itemObjs = items.filter(obj => obj.stock < obj.safeStock && obj.isBuy === false)
         //撈出已經購買但還沒有結案的資料
@@ -60,13 +33,11 @@ const homeController = {
             const acnId = acnCategoryObj[0]._id.toJSON()
             acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 5)
           }
-
           //刪除超過一年的紀錄
           const filteYear = records.filter(obj => {
             let Year = dayjs().year()
             return (Year - dayjs(obj.createAt).year()) > 3
           })
-
           if (filteYear.length) {
             filteYear.map(obj => {
               Record.findById(obj._id).then(item => {
@@ -74,127 +45,95 @@ const homeController = {
               }).catch(err => next(err))
             })
           }
-
           let date = 'YYYY/MM'
           let everyDate = 'YYYY/MM/DD'
+          let finalObj = {}
+          let recordDayArr = []
+          let recordWeekArr = []
+          let recordMonthArr = []
+          category.map(obj => {
+            let recordDayObj = {}
+            let recordWeekObj = {}
+            let recordMonthObj = {}
+            //每日資料
+            let recordsDay = useMonthCount(records.slice(0, 60), obj.name, everyDate).map(obj => {
+              return dayjs(obj.date).format(`${everyDate
+                }`)
+            })
+            let recordsTotalNumberDay = useMonthCount(records.slice(0, 60), obj.name, everyDate).map(obj => {
+              return obj.number
+            })
 
-          //每日資料
-          recordsDay = useMonthCount(records.slice(0, 60), '毒化物', everyDate).map(obj => {
-            return dayjs(obj.date).format(`${everyDate
-              }`)
+            if (!recordsDay.length) {
+              recordsDay = [0.01]
+            }
+            if (!recordsTotalNumberDay.length) {
+              recordsTotalNumberDay = [0.01]
+            }
+            recordDayObj['date'] = 'day'
+            recordDayObj['category'] = obj.name
+            recordDayObj['day'] = recordsDay
+            recordDayObj['value'] = recordsTotalNumberDay
+            recordDayObj['max'] = Math.max(...recordsTotalNumberDay)
+            recordDayObj['min'] = Math.min(...recordsTotalNumberDay)
+            recordDayObj['avg'] = avgCount(recordsTotalNumberDay, recordsDay)
+            recordDayArr.push(recordDayObj)
+            //每週資料
+            let recordsWeek = useWeekhCount(records.slice(0, 120), obj.name, everyDate).map(obj => {
+              return obj.year
+            })
+            let recordsTotalNumberWeek = useWeekhCount(records.slice(0, 120), obj.name, everyDate).map(obj => {
+              return obj.value
+            })
+            if (!recordsWeek.length) {
+              recordsWeek = [0.01]
+            }
+            if (!recordsTotalNumberWeek.length) {
+              recordsTotalNumberWeek = [0.01]
+            }
+            recordWeekObj['date'] = 'week'
+            recordWeekObj['category'] = obj.name
+            recordWeekObj['day'] = recordsWeek
+            recordWeekObj['value'] = recordsTotalNumberWeek
+            recordWeekObj['max'] = Math.max(...recordsTotalNumberWeek)
+            recordWeekObj['min'] = Math.min(...recordsTotalNumberWeek)
+            recordWeekObj['avg'] = avgCount(recordsTotalNumberWeek, recordsWeek)
+            recordWeekArr.push(recordWeekObj)
+            //每月資料
+            let recordsMonth = useMonthCount(records.slice(0, 240), obj.name, date).map(obj => {
+              return dayjs(obj.date).format(`${date
+                }`)
+            })
+            let recordsTotalNumber = useMonthCount(records.slice(0, 240), obj.name, date).map(obj => {
+              return obj.number
+            })
+            if (!recordsMonth.length) {
+              recordsMonth = [0.01]
+            }
+            if (!recordsTotalNumber.length) {
+              recordsTotalNumber = [0.01]
+            }
+            recordMonthObj['date'] = 'month'
+            recordMonthObj['category'] = obj.name
+            recordMonthObj['day'] = recordsMonth
+            recordMonthObj['value'] = recordsTotalNumber
+            recordMonthObj['max'] = maxValueMonth = Math.max(...recordsTotalNumber)
+            recordMonthObj['min'] = minValueMonth = Math.min(...recordsTotalNumber)
+            recordMonthObj['avg'] = avgCount(recordsTotalNumber, recordsTotalNumber)
+            recordMonthArr.push(recordMonthObj)
           })
-          recordsTotalNumberDay = useMonthCount(records.slice(0, 60), '毒化物', everyDate).map(obj => {
-            return obj.number
-          })
-
-          maxValueDay = Math.max(...recordsTotalNumberDay)
-          minValueDay = Math.min(...recordsTotalNumberDay)
-
-          recordsToxicDay = useMonthCount(records.slice(0, 60), '一般溶劑', everyDate).map(obj => {
-            return dayjs(obj.date).format(`${everyDate
-              }`)
-          })
-          recordsToxicTotalNumberDay = useMonthCount(records.slice(0, 60), '一般溶劑', everyDate).map(obj => {
-            return obj.number
-          })
-
-          maxValueToxicDay = Math.max(...recordsToxicTotalNumberDay)
-          minValueToxicDay = Math.min(...recordsToxicTotalNumberDay)
-
-
-          const avgCountDay = avgCount(recordsTotalNumberDay, recordsDay, recordsToxicTotalNumberDay, recordsToxicDay)
-          avgNumberDay = avgCountDay.normal
-          avgTxicNumberDay = avgCountDay.toxic
-
-          //每週資料
-
-          recordsWeek = useWeekhCount(records.slice(0, 120), '毒化物', everyDate).map(obj => {
-            return obj.year
-          })
-
-          recordsTotalNumberWeek = useWeekhCount(records.slice(0, 120), '毒化物', everyDate).map(obj => {
-            return obj.value
-          })
-
-          maxValueWeek = Math.max(...recordsTotalNumberWeek)
-          minValueWeek = Math.min(...recordsTotalNumberWeek)
-
-          recordsToxicWeek = useWeekhCount(records.slice(0, 120), '一般溶劑', everyDate).map(obj => {
-            return obj.year
-          })
-
-          recordsToxicTotalNumberWeek = useWeekhCount(records.slice(0, 120), '一般溶劑', everyDate).map(obj => {
-            return obj.value
-          })
-
-          maxValueToxicWeek = Math.max(...recordsToxicTotalNumberWeek)
-          minValueToxicWeek = Math.min(...recordsToxicTotalNumberWeek)
-
-          const avgCountWeek = avgCount(recordsTotalNumberWeek, recordsWeek, recordsToxicTotalNumberWeek, recordsToxicWeek)
-          avgNumberWeek = avgCountWeek.normal
-          avgTxicNumberWeek = avgCountWeek.toxic
-
-          //每月資料
-          recordsMonth = useMonthCount(records.slice(0, 240), '毒化物', date).map(obj => {
-            return dayjs(obj.date).format(`${date
-              }`)
-          })
-          recordsTotalNumber = useMonthCount(records.slice(0, 240), '毒化物', date).map(obj => {
-            return obj.number
-          })
-
-          maxValueMonth = Math.max(...recordsTotalNumber)
-          minValueMonth = Math.min(...recordsTotalNumber)
-
-          recordsToxicMonth = useMonthCount(records.slice(0, 240), '一般溶劑', date).map(obj => {
-            return dayjs(obj.date).format(`${date
-              }`)
-          })
-          recordsToxicTotalNumber = useMonthCount(records.slice(0, 240), '一般溶劑', date).map(obj => {
-            return obj.number
-          })
-
-          maxValueToxicMonth = Math.max(...recordsToxicTotalNumber)
-          minValueToxicMonth = Math.min(...recordsToxicTotalNumber)
-
-          const avgCountMonth = avgCount(recordsTotalNumber, recordsTotalNumber, recordsToxicTotalNumber, recordsToxicMonth)
-          avgNumberMonth = avgCountMonth.normal
-          avgTxicNumberMonth = avgCountMonth.toxic
+          finalObj['day'] = recordDayArr
+          finalObj['week'] = recordWeekArr
+          finalObj['month'] = recordMonthArr
+          recordsValue = finalObj
         }
         res.render('home', {
           buyIsDone
           , itemObjs
           , acnRecordobjs,
-          recordsMonth: JSON.stringify(recordsMonth),
-          recordsTotalNumber: JSON.stringify(recordsTotalNumber),
-          recordsToxicMonth: JSON.stringify(recordsToxicMonth),
-          recordsToxicTotalNumber: JSON.stringify(recordsToxicTotalNumber),
-          avgNumberMonth,
-          avgTxicNumberMonth,
-          recordsDay: JSON.stringify(recordsDay),
-          recordsTotalNumberDay: JSON.stringify(recordsTotalNumberDay),
-          recordsToxicDay: JSON.stringify(recordsToxicDay),
-          recordsToxicTotalNumberDay: JSON.stringify(recordsToxicTotalNumberDay),
-          avgNumberDay,
-          avgTxicNumberDay,
-          recordsWeek: JSON.stringify(recordsWeek),
-          recordsTotalNumberWeek: JSON.stringify(recordsTotalNumberWeek),
-          recordsToxicWeek: JSON.stringify(recordsToxicWeek),
-          recordsToxicTotalNumberWeek: JSON.stringify(recordsToxicTotalNumberWeek),
-          avgNumberWeek,
-          avgTxicNumberWeek,
-          maxValueMonth,
-          maxValueToxicMonth,
-          maxValueDay,
-          maxValueToxicDay,
-          maxValueWeek,
-          maxValueToxicWeek,
-          minValueMonth,
-          minValueToxicMonth,
-          minValueDay,
-          minValueToxicDay,
-          minValueWeek,
-          minValueToxicWeek
+          category,
+          recordsValue: JSON.stringify(recordsValue),
+          categoryObj: JSON.stringify(category)
         })
       } else {
         res.render('home')

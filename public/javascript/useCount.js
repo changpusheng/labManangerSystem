@@ -10,7 +10,7 @@ function useMonthNumber(records, category, day) {
   const outputDataArr = []
 
   const normalObj = records.filter(obj => {
-    return obj.itemId.categoryId.name !== category
+    return obj.itemId.categoryId.name === category
   })
   normalObj.map(obj => {
     const date = dayjs(obj.createAt).format(`${day
@@ -50,7 +50,7 @@ function useWeekNumber(records, category, day) {
   const chartDateArr = []
   //撈出資料年分
   const normalObj = records.filter(obj => {
-    return obj.itemId.categoryId.name !== category
+    return obj.itemId.categoryId.name === category
   })
 
   normalObj.map(obj => {
@@ -138,18 +138,16 @@ function useWeekNumber(records, category, day) {
 }
 
 
-function avgCount(normalTotalNumber, normalTotalDay, toxicTotalNumber, toxicTotalDay) {
-  //一般溶劑使用平均
-  const obj = {}
+function avgCount(normalTotalNumber, normalTotalDay) {
+  //一般溶劑使用平
   const init = 0
+  let dayValue = normalTotalDay.length
+  if (!dayValue) {
+    dayValue = 1
+  }
   const totalNormalNumber = normalTotalNumber.reduce((pre, curr) => pre + curr, init)
-  const avgNumber = totalNormalNumber / normalTotalDay.length
-  //毒化物使用平均
-  const totalToxicNumber = toxicTotalNumber.reduce((pre, curr) => pre + curr, init)
-  const avgTxicNumber = totalToxicNumber / toxicTotalDay.length
-  obj['normal'] = avgNumber
-  obj['toxic'] = avgTxicNumber
-  return obj
+  const avgNumber = totalNormalNumber / dayValue
+  return avgNumber
 }
 
 

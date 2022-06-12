@@ -1,60 +1,31 @@
 //匯入資料
 //每日
 //一般溶劑
-let recordsTotalNumberDay = document.querySelector('#recordsTotalNumberDay').innerText
-let recordsNumberDay = JSON.parse(recordsTotalNumberDay).slice(-25)
-let recordsDay = document.querySelector('#recordsDay').innerText
-let recordsDayObj = JSON.parse(recordsDay).slice(-25)
-let avgNumberDay = document.querySelector('#avgNumberDay').innerText
-//毒化物
-let recordsToxicTotalNumberDay = document.querySelector('#recordsToxicTotalNumberDay').innerText
-let recordsToxicNumberDay = JSON.parse(recordsToxicTotalNumberDay).slice(-25)
-let recordsToxicDay = document.querySelector('#recordsToxicDay').innerText
-let recordsToxicDayObj = JSON.parse(recordsToxicDay).slice(-25)
-let avgTxicNumberDay = document.querySelector('#avgTxicNumberDay').innerText
-let maxValueDay = document.querySelector('#maxValueDay').innerText
-let maxValueToxicDay = document.querySelector('#maxValueToxicDay').innerText
-let minValueDay = document.querySelector('#minValueDay').innerText
-let minValueToxicDay = document.querySelector('#minValueToxicDay').innerText
 
-//每週
-let recordsTotalNumberWeek = document.querySelector('#recordsTotalNumberWeek').innerText
-let recordsNumberWeek = JSON.parse(recordsTotalNumberWeek).slice(-25)
-let recordsWeek = document.querySelector('#recordsWeek').innerText
-let recordsWeekObj = JSON.parse(recordsWeek).slice(-25)
-let avgNumberWeek = document.querySelector('#avgNumberWeek').innerText
-//毒化物
-let recordsToxicTotalNumberWeek = document.querySelector('#recordsToxicTotalNumberWeek').innerText
-let recordsToxicNumberWeek = JSON.parse(recordsToxicTotalNumberWeek).slice(-25)
-let recordsToxicWeek = document.querySelector('#recordsToxicWeek').innerText
-let recordsToxicWeekObj = JSON.parse(recordsToxicWeek).slice(-25)
-let avgTxicNumberWeek = document.querySelector('#avgTxicNumberWeek').innerText
-let maxValueWeek = document.querySelector('#maxValueWeek').innerText
-let maxValueToxicWeek = document.querySelector('#maxValueToxicWeek').innerText
-let minValueWeek = document.querySelector('#minValueWeek').innerText
-let minValueToxicWeek = document.querySelector('#minValueToxicWeek').innerText
+let recordsValue = JSON.parse(document.querySelector('#recordsValue').innerText)
+let categoryObj = JSON.parse(document.querySelector('#categoryObj').innerText)
 
 
-//每月
-//一般溶劑
-let recordsTotalNumber = document.querySelector('#recordsTotalNumber').innerText
-let recordsTotalNumberObj = JSON.parse(recordsTotalNumber).slice(-25)
-let recordsMonth = document.querySelector('#recordsMonth').innerText
-let recordsMonthObj = JSON.parse(recordsMonth).slice(-25)
-let normalAvgMonth = document.querySelector('#normalAvgMonth').innerText
-//毒化物
-let recordsToxicTotalNumber = document.querySelector('#recordsToxicTotalNumber').innerText
-let recordsToxicTotalNumberObj = JSON.parse(recordsToxicTotalNumber).slice(-25)
-let recordsToxicMonth = document.querySelector('#recordsToxicMonth').innerText
-let recordsToxicMonthObj = JSON.parse(recordsToxicMonth).slice(-25)
-let toxicAvgMonth = document.querySelector('#toxicAvgMonth').innerText
-let maxValueMonth = document.querySelector('#maxValueMonth').innerText
-let maxValueToxicMonth = document.querySelector('#maxValueToxicMonth').innerText
-let minValueMonth = document.querySelector('#minValueMonth').innerText
-let minValueToxicMonth = document.querySelector('#minValueToxicMonth').innerText
+function chartData(displayPosition, labelData, ValueData, maxValue, avg, minValue, date) {
 
+  const ctxNormalDay = document.querySelector(`#${displayPosition
+    }${date}`).getContext("2d");
 
-function chartData(Day, data, maxValue, avg, minValue) {
+  const lineChartDataDay = {
+    labels: labelData, //顯示區間名稱
+    datasets: [{
+      label: `${displayPosition}-${date
+        }`, // tootip 出現的名稱
+      lineTension: 0.3, // 曲線的彎度，設0 表示直線
+      backgroundColor: "#ea464d",
+      borderColor: "#ea464d",
+      borderWidth: 1,
+      data: ValueData, // 資料
+      fill: false, // 是否填滿色彩
+    }
+    ]
+  }
+
   const avgLine = {
     display: true,
     type: 'line',
@@ -143,9 +114,9 @@ function chartData(Day, data, maxValue, avg, minValue) {
     }
   }
 
-  const chartObj = new Chart(Day, {  //先建立一個 chart
+  const chartObj = new Chart(ctxNormalDay, {  //先建立一個 chart
     type: 'line', // 型態
-    data: data,
+    data: lineChartDataDay,
     options: {
       responsive: true,
       legend: { //是否要顯示圖示
@@ -182,111 +153,101 @@ function chartData(Day, data, maxValue, avg, minValue) {
   return chartObj
 }
 
-//每日
-const lineChartDataDay = {
-  labels: recordsDayObj, //顯示區間名稱
-  datasets: [{
-    label: '一般溶劑(單位:瓶/日)-每日', // tootip 出現的名稱
-    lineTension: 0.3, // 曲線的彎度，設0 表示直線
-    backgroundColor: "#ea464d",
-    borderColor: "#ea464d",
-    borderWidth: 1,
-    data: recordsNumberDay, // 資料
-    fill: false, // 是否填滿色彩
+for (let i = 0; i < categoryObj.length; i++) {
+  chartData(categoryObj[i].name, recordsValue.day[i].day, recordsValue.day[i].value, recordsValue.day[i].max, recordsValue.day[i].avg, recordsValue.day[i].min, recordsValue.day[i].date)
+}
+
+for (let i = 0; i < categoryObj.length; i++) {
+  chartData(categoryObj[i].name, recordsValue.week[i].day, recordsValue.week[i].value, recordsValue.week[i].max, recordsValue.week[i].avg, recordsValue.week[i].min, recordsValue.week[i].date)
+}
+
+for (let i = 0; i < categoryObj.length; i++) {
+  chartData(categoryObj[i].name, recordsValue.month[i].day, recordsValue.month[i].value, recordsValue.month[i].max, recordsValue.month[i].avg, recordsValue.month[i].min, recordsValue.month[i].date)
+}
+
+
+const monthBtn = document.querySelector('#month')
+const weekBtn = document.querySelector('#week')
+const dayBtn = document.querySelector('#day')
+const categoryBtn = document.querySelector('#categoryId')
+let date = 'day'
+let categoryIndex = 0
+
+
+initBtn = () => {
+  dayBtn.classList.remove('active')
+  monthBtn.classList.remove('active')
+  weekBtn.classList.remove('active')
+}
+
+dayBtn.addEventListener('click', e => {
+  const target = e.target
+  initBtn()
+  target.classList.add('active')
+  date = target.id
+  const selectObj = target.parentNode.parentNode.children[0].children[0]
+  for (let i = 0; i < selectObj.length; i++) {
+    document.querySelector(`#${selectObj.options[i].value
+      }day`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }week`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }month`).hidden = true
   }
-  ]
-}
+  document.querySelector(`#${selectObj.options[categoryIndex].value
+    }day`).hidden = false
+})
 
-const toxicDataDay = {
-  labels: recordsToxicDayObj,//顯示區間名稱
-  datasets: [{
-    label: '毒化物(單位:KG/日)-每日', // tootip 出現的名稱
-    lineTension: 0.3, // 曲線的彎度，設0 表示直線
-    backgroundColor: "#29b288",
-    borderColor: "#29b288",
-    borderWidth: 1,
-    data: recordsToxicNumberDay, // 資料
-    fill: false, // 是否填滿色彩
-  }]
-}
-
-const ctxNormalDay = document.querySelector("#myChartNormalDay").getContext("2d");
-const ctxToxicDay = document.querySelector("#myChartToxicDay").getContext("2d");
-
-
-chartData(ctxNormalDay, lineChartDataDay, maxValueDay, avgNumberDay, minValueDay)
-chartData(ctxToxicDay, toxicDataDay, maxValueToxicDay, avgTxicNumberDay, minValueToxicDay)
-
-//每週
-
-
-const ctxNormalWeek = document.querySelector("#myChartNormalWeek").getContext("2d");
-const ctxToxicWeek = document.querySelector("#myChartToxicWeek").getContext("2d");
-
-const lineChartDataWeek = {
-  labels: recordsWeekObj, //顯示區間名稱
-  datasets: [{
-    label: '一般溶劑(單位:瓶/週)-每週', // tootip 出現的名稱
-    lineTension: 0.3, // 曲線的彎度，設0 表示直線
-    backgroundColor: "#ea464d",
-    borderColor: "#ea464d",
-    borderWidth: 1,
-    data: recordsNumberWeek, // 資料
-    fill: false, // 是否填滿色彩
+weekBtn.addEventListener('click', e => {
+  const target = e.target
+  initBtn()
+  target.classList.add('active')
+  date = target.id
+  const selectObj = target.parentNode.parentNode.children[0].children[0]
+  for (let i = 0; i < selectObj.length; i++) {
+    document.querySelector(`#${selectObj.options[i].value
+      }day`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }week`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }month`).hidden = true
   }
-  ]
-}
+  document.querySelector(`#${selectObj.options[categoryIndex].value
+    }week`).hidden = false
+})
 
-const toxicDataWeek = {
-  labels: recordsToxicWeekObj,//顯示區間名稱
-  datasets: [{
-    label: '毒化物(單位:KG/週)-每週', // tootip 出現的名稱
-    lineTension: 0.3, // 曲線的彎度，設0 表示直線
-    backgroundColor: "#29b288",
-    borderColor: "#29b288",
-    borderWidth: 1,
-    data: recordsToxicNumberWeek, // 資料
-    fill: false, // 是否填滿色彩
-  }]
-}
-
-chartData(ctxNormalWeek, lineChartDataWeek, maxValueWeek, avgNumberWeek, minValueWeek)
-chartData(ctxToxicWeek, toxicDataWeek, maxValueToxicWeek, avgTxicNumberWeek, minValueToxicWeek)
-
-//每月
-const lineChartData = {
-  labels: recordsMonthObj, //顯示區間名稱
-  datasets: [{
-    label: '一般溶劑(單位:瓶/月)-每月', // tootip 出現的名稱
-    lineTension: 0.3, // 曲線的彎度，設0 表示直線
-    backgroundColor: "#ea464d",
-    borderColor: "#ea464d",
-    borderWidth: 1,
-    data: recordsTotalNumberObj, // 資料
-    fill: false, // 是否填滿色彩
+monthBtn.addEventListener('click', e => {
+  const target = e.target
+  initBtn()
+  target.classList.add('active')
+  date = target.id
+  const selectObj = target.parentNode.parentNode.children[0].children[0]
+  for (let i = 0; i < selectObj.length; i++) {
+    document.querySelector(`#${selectObj.options[i].value
+      }day`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }week`).hidden = true
+    document.querySelector(`#${selectObj.options[i].value
+      }month`).hidden = true
   }
-  ]
-}
+  document.querySelector(`#${selectObj.options[categoryIndex].value
+    }month`).hidden = false
+})
 
-const toxicData = {
-  labels: recordsToxicMonthObj,//顯示區間名稱
-  datasets: [{
-    label: '毒化物(單位:KG/月)-每月', // tootip 出現的名稱
-    lineTension: 0.3, // 曲線的彎度，設0 表示直線
-    backgroundColor: "#29b288",
-    borderColor: "#29b288",
-    borderWidth: 1,
-    data: recordsToxicTotalNumberObj, // 資料
-    fill: false, // 是否填滿色彩
-  }]
-}
-
-const ctxNormal = document.querySelector("#myChartNormalMonth").getContext("2d");
-const ctxToxic = document.querySelector("#myChartToxicMonth").getContext("2d");
-
-chartData(ctxNormal, lineChartData, maxValueMonth, normalAvgMonth, minValueMonth)
-chartData(ctxToxic, toxicData, maxValueToxicMonth, toxicAvgMonth, minValueToxicMonth)
-
+categoryBtn.addEventListener('change', e => {
+  const target = e.target
+  for (let i = 0; i < categoryObj.length; i++) {
+    document.querySelector(`#${target.options[i].value
+      }day`).hidden = true
+    document.querySelector(`#${target.options[i].value
+      }week`).hidden = true
+    document.querySelector(`#${target.options[i].value
+      }month`).hidden = true
+  }
+  document.querySelector(`#${target.options[target.selectedIndex].value
+    }${date}`).hidden = false
+  categoryIndex = target.selectedIndex
+})
 
 
 
