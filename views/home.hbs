@@ -1,188 +1,189 @@
-{{>home-tab route ='home' }}
-<hr>
-<div class="row mt-3">
-  <div class="col-md-5">
-    <div class="card">
-      <div class="card-header ">
-        低於安全存量並且還沒請購的品項共{{itemObjs.length}}筆
-      </div>
-      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
-        {{#if itemObjs.length}}
-        <div>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">品名</th>
-                <th scope="col">庫存</th>
-                <th scope="col">功能</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each itemObjs}}
-              <tr>
-                <td>{{this.name}}</td>
-                <td>{{toFixed this.stock 3}}{{this.unitId.name}}</td>
-                <td><a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-success">請購</a></td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-          <hr>
+<div class="home-page">
+  {{>home-tab route ='home' }}
+  <hr>
+  <div class="row mt-3">
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header ">
+          低於安全存量品項共{{itemObjs.length}}筆
         </div>
-        {{else}}
-        <div class="input-group-text justify-content-center fs-5 fw-bold">低於安全存量項目:無
-        </div>
-        {{/if}}
-      </div>
-    </div>
-  </div>
-  <div class="col-md-7">
-    <div class="card">
-      <div class="card-header">
-        未結案共{{buyIsDone.length}}筆
-      </div>
-      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
-        {{#if buyIsDone.length}}
-        <div>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">小量化學編號</th>
-                <th scope="col">請購時間</th>
-                <th scope="col">品名</th>
-                <th scope="col">購買數量</th>
-                <th scope="col">請購人</th>
-                <th scope="col">功能</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each buyIsDone}}
-              <tr>
-                <td>{{this.commit}}</td>
-                <td>{{currentYearMonDate this.createAt}}</td>
-                <td>{{this.itemId.name}}</td>
-                <td>{{this.number}}{{this.itemId.unitId.name}}</td>
-                <td>{{this.userId.name}}</td>
-                <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">待結案</a></td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-          <hr>
-        </div>
-        {{else}}
-        <div class="input-group-text justify-content-center fs-5 fw-bold">未結案項目:無</div>
-        {{/if}}
-      </div>
-    </div>
-  </div>
-  {{!-- 每天 --}}
-  <div id="recordsValue" style="display: none;">{{recordsValue}}</div>
-  <div id="categoryObj" style="display: none;">{{categoryObj}}</div>
-
-  <div class="col-md-6 mt-3">
-    <div class="card">
-      <div class="card-header">
-        折線圖(溶劑使用量)
-      </div>
-      <div class="card-body" style="height:350px;">
-        <div id="btnObjsId">
-          <div style="display: flex;justify-content:space-between">
-            <div>
-              <select id="categoryId" class="form-control-sm" name="categoryId">
-                {{#each category}}
-                <option value="{{this.name}}">{{this.name}}
-                </option>
+        <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+          {{#if itemObjs.length}}
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">品名</th>
+                  <th scope="col">庫存</th>
+                  <th scope="col">功能</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each itemObjs}}
+                <tr>
+                  <td>{{this.name}}</td>
+                  <td>{{toFixed this.stock 3}}{{this.unitId.name}}</td>
+                  <td><a href="/item/shopping-object/{{this._id}}" class="btn btn-outline-success">請購</a></td>
+                </tr>
                 {{/each}}
-              </select>
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-sm active day" id="day">日線</button>
-              <button class="btn btn-outline-primary btn-sm week" id="week">週線</button>
-              <button class="btn btn-outline-primary btn-sm month" id="month">月線</button>
-              <button class="btn btn-outline-primary btn-sm month" id="year">年線</button>
+              </tbody>
+            </table>
+            <hr>
+          </div>
+          {{else}}
+          <div class="input-group-text justify-content-center fs-5 fw-bold">低於安全存量項目:無
+          </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-header">
+          未結案共{{buyIsDone.length}}筆
+        </div>
+        <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+          {{#if buyIsDone.length}}
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">小量化學編號</th>
+                  <th scope="col">請購時間</th>
+                  <th scope="col">品名</th>
+                  <th scope="col">購買數量</th>
+                  <th scope="col">請購人</th>
+                  <th scope="col">功能</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each buyIsDone}}
+                <tr>
+                  <td>{{this.commit}}</td>
+                  <td>{{currentYearMonDate this.createAt}}</td>
+                  <td>{{this.itemId.name}}</td>
+                  <td>{{this.number}}{{this.itemId.unitId.name}}</td>
+                  <td>{{this.userId.name}}</td>
+                  <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">待結案</a></td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <hr>
+          </div>
+          {{else}}
+          <div class="input-group-text justify-content-center fs-5 fw-bold">未結案項目:無</div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div id="recordsValue" style="display: none;">{{recordsValue}}</div>
+    <div id="categoryObj" style="display: none;">{{categoryObj}}</div>
+
+    <div class="col-md-6 mt-3">
+      <div class="card">
+        <div class="card-header">
+          折線圖(溶劑使用量)
+        </div>
+        <div class="card-body chart" id="chart-container" style="height:22rem;">
+          <div id="btnObjsId">
+            <div style="display: flex;justify-content:space-between">
+              <div>
+                <select id="categoryId" class="form-control-sm" name="categoryId">
+                  {{#each category}}
+                  <option value="{{this.name}}">{{this.name}}
+                  </option>
+                  {{/each}}
+                </select>
+              </div>
+              <div>
+                <button class="btn btn-outline-primary btn-sm active day" id="day">日線</button>
+                <button class="btn btn-outline-primary btn-sm week" id="week">週線</button>
+                <button class="btn btn-outline-primary btn-sm month" id="month">月線</button>
+                <button class="btn btn-outline-primary btn-sm month" id="year">年線</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div style="width: 100%;">
-          <canvas id='{{firstIndexName category}}day'></canvas>
-          {{#each category}}
-          <canvas id='{{this.name}}day' hidden></canvas>
-          {{/each}}
-          {{#each category}}
-          <canvas id='{{this.name}}week' hidden></canvas>
-          {{/each}}
-          {{#each category}}
-          <canvas id='{{this.name}}month' hidden></canvas>
-          {{/each}}
-          {{#each category}}
-          <canvas id='{{this.name}}year' hidden></canvas>
-          {{/each}}
+          <div style="width:100%;">
+            <canvas id='{{firstIndexName category}}day'></canvas>
+            {{#each category}}
+            <canvas id='{{this.name}}day' hidden></canvas>
+            {{/each}}
+            {{#each category}}
+            <canvas id='{{this.name}}week' hidden></canvas>
+            {{/each}}
+            {{#each category}}
+            <canvas id='{{this.name}}month' hidden></canvas>
+            {{/each}}
+            {{#each category}}
+            <canvas id='{{this.name}}year' hidden></canvas>
+            {{/each}}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-6 mt-3">
-    <div class="card">
-      <div class="card-header">
-        待盤點項目
-      </div>
-      <div class="card-body" style="height: 350px;">
+    <div class="col-md-6 mt-3">
+      <div class="card">
+        <div class="card-header">
+          待盤點項目
+        </div>
+        <div class="card-body" style="height:22rem;">
 
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-12 mt-3">
-    <div class="card">
-      <div class="card-header">
-        毒化物領用記錄(近5筆)(依時間排序:第一筆為最新日期))
-      </div>
-      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
-        {{#if acnRecordobjs.length}}
-        <div>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">時間</th>
-                <th scope="col">品名</th>
-                <th scope="col">領用量(kg)</th>
-                <th scope="col">入庫量(kg)</th>
-                <th scope="col">剩餘庫存量(kg)</th>
-                <th scope="col">瓶裝數量</th>
-                <th scope="col">使用人</th>
-                <th scope="col">確認</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each acnRecordobjs}}
-              <tr>
-                <th scope="row">{{currentYearMonDate this.createAt}}</th>
-                <td>{{this.itemId.name}}</td>
-                <td>{{toFixed this.outNumber 3}}</td>
-                <td>{{toFixed this.inputNumber 3}}</td>
-                <td>{{toFixed this.stockNumber 3}}</td>
-                <td>{{bottleNumber this.stockNumber 3 0.787 4}}</td>
-                <td>{{this.userId.name}}</td>
-                <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
-                  <td><button type="submit" {{#if this.isCheck}}class="btn btn-outline-success" disabled {{else}}
-                      class="btn btn-outline-primary"
-                      onclick="return confirm(`單號{{toLastNumber this._id}},剩餘庫存{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}},瓶裝數量{{bottleNumber this.stockNumber 3 0.787 4}}`)"
-                      {{/if}}>
-                      {{#if this.isCheck}}
-                      已確認
-                      {{else}}
-                      待確認
-                      {{/if}}</button></td>
-                </form>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-          <hr>
+    <div class="col-md-12 mt-3">
+      <div class="card">
+        <div class="card-header">
+          毒化物領用記錄(近5筆)(依時間排序:第一筆為最新日期))
         </div>
-        {{else}}
-        <div class="input-group-text justify-content-center fs-5 fw-bold">無ACN使用紀錄</div>
-        {{/if}}
+        <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+          {{#if acnRecordobjs.length}}
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">時間</th>
+                  <th scope="col">品名</th>
+                  <th scope="col">領用量(kg)</th>
+                  <th scope="col">入庫量(kg)</th>
+                  <th scope="col">剩餘庫存量(kg)</th>
+                  <th scope="col">瓶裝數量</th>
+                  <th scope="col">使用人</th>
+                  <th scope="col">確認</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each acnRecordobjs}}
+                <tr>
+                  <th scope="row">{{currentYearMonDate this.createAt}}</th>
+                  <td>{{this.itemId.name}}</td>
+                  <td>{{toFixed this.outNumber 3}}</td>
+                  <td>{{toFixed this.inputNumber 3}}</td>
+                  <td>{{toFixed this.stockNumber 3}}</td>
+                  <td>{{bottleNumber this.stockNumber 3 0.787 4}}</td>
+                  <td>{{this.userId.name}}</td>
+                  <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
+                    <td><button type="submit" {{#if this.isCheck}}class="btn btn-outline-success" disabled {{else}}
+                        class="btn btn-outline-primary"
+                        onclick="return confirm(`單號{{toLastNumber this._id}},剩餘庫存{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}},瓶裝數量{{bottleNumber this.stockNumber 3 0.787 4}}`)"
+                        {{/if}}>
+                        {{#if this.isCheck}}
+                        已確認
+                        {{else}}
+                        待確認
+                        {{/if}}</button></td>
+                  </form>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <hr>
+          </div>
+          {{else}}
+          <div class="input-group-text justify-content-center fs-5 fw-bold">無ACN使用紀錄</div>
+          {{/if}}
+        </div>
       </div>
     </div>
   </div>

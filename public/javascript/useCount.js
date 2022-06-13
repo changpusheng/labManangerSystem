@@ -48,7 +48,7 @@ function useMonthNumber(records, category, day) {
 
 function useWeekNumber(records, category, day) {
   const chartDateArr = []
-  //撈出資料年分
+
   const normalObj = records.filter(obj => {
     return obj.itemId.categoryId.name === category
   })
@@ -67,7 +67,7 @@ function useWeekNumber(records, category, day) {
   const weekOfYear = []
   for (let i = 0; i < chartDateFilter.length; i++) {
     const maxWeekYear = {}
-    const date = dayjs(chartDateFilter[i]).endOf('year').format('YYYY/MM/20')
+    const date = dayjs(chartDateFilter[i]).endOf('year').format('YYYY/MM/DD')
     const itemFilter = normalObj.filter(obj => {
       return dayjs(obj.createAt).format(`${day
         }`) === chartDateFilter[i]
@@ -77,9 +77,7 @@ function useWeekNumber(records, category, day) {
     const outNumberTotalValue = itemMap.reduce((pre, curr) => pre + curr, init)
 
     let maxWeek = dayjs(chartDateFilter[i]).week()
-    if (maxWeek === 1) {
-      maxWeek = dayjs(date).week() + 1
-    }
+
     maxWeekYear['date'] = chartDateFilter[i]
     maxWeekYear['week'] = maxWeek
     maxWeekYear['number'] = outNumberTotalValue
@@ -121,7 +119,7 @@ function useWeekNumber(records, category, day) {
       })
       const init = 0
       const value = filter.reduce((pre, curr) => pre + curr, init)
-      let yearWeek = `${yearFilter[i]}第${weekOnly[j] + '週'}`
+      let yearWeek = `第${weekOnly[j] + '週'}`
       weekYearFilterObj['year'] = yearWeek
       weekYearFilterObj['value'] = value
       weekYearFilterArr.push(weekYearFilterObj)

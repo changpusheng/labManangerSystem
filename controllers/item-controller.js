@@ -265,7 +265,7 @@ const itemController = {
         return item
       }).then(obj => {
         Item.findById(obj.itemId._id.toJSON()).populate('unitId').lean().then(item => {
-          req.flash('success_messages', `成功領取${item.name}${obj.outNumber
+          req.flash('success_messages', `成功領取-${item.name}${obj.outNumber
             }${item.unitId.name}`)
           res.redirect('/')
         })

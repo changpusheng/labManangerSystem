@@ -33,10 +33,10 @@ const homeController = {
             const acnId = acnCategoryObj[0]._id.toJSON()
             acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 5)
           }
-          //刪除超過一年的紀錄
+          //刪除超過設定年限的紀錄
           const filteYear = records.filter(obj => {
             let Year = dayjs().year()
-            return (Year - dayjs(obj.createAt).year()) > 3
+            return (Year - dayjs(obj.createAt).year()) > 2
           })
           if (filteYear.length) {
             filteYear.map(obj => {
@@ -107,11 +107,11 @@ const homeController = {
             recordMonthObj['avg'] = avgCount(recordsTotalNumber, recordsMonth)
             recordMonthArr.push(recordMonthObj)
             //每年資料
-            let recordsYear = useMonthCount(records, obj.name, year).map(obj => {
+            let recordsYear = useMonthCount(records.slice(0, 360), obj.name, year).map(obj => {
               return dayjs(obj.date).format(`${year
                 }`)
             })
-            let recordsYearNumber = useMonthCount(records, obj.name, year).map(obj => {
+            let recordsYearNumber = useMonthCount(records.slice(0, 360), obj.name, year).map(obj => {
               return obj.number
             })
             recordYearObj['date'] = 'year'

@@ -1,0 +1,10 @@
+@media  (min-width: 750px) and (max-width:1200px){
+  .home-page .row >*{
+    flex-shrink: 0;
+    width: 100%;
+    font-size: x-small;
+  }
+  #chart-container{
+    width: 600px;
+  }
+}
