@@ -44,22 +44,55 @@
 環境建置與需求 (prerequisites)
 <ul>
 <li>
-    "express": "^4.17.2"
+    "bcryptjs": "^2.4.3",
     </li>
-    <li>
-    "express-handlebars": "^6.0.2"
-     </li>
-    <li>
-    "method-override": "^3.0.0"
-     </li>
-    <li>
-    "mongoose": "^6.2.1"
-     </li>
-    <li>
-    "nodemon": "^2.0.15"
-</li>
 <li>
-  "express-session": "^1.17.2"
+    "chart.js": "^3.8.0",
+    </li>
+<li>
+    "chartjs-plugin-annotation": "^1.4.0",
+    </li>
+<li>
+    "connect-flash": "^0.1.1",
+    </li>
+<li>
+    "dayjs": "^1.11.3",
+    </li>
+<li>
+    "dotenv": "^16.0.1",
+    </li>
+<li>
+    "express": "^4.18.1",
+    </li>
+<li>
+    "express-handlebars": "^6.0.6",
+    </li>
+<li>
+    "express-session": "^1.17.3",
+    </li>
+<li>
+    "method-override": "^3.0.0",
+    </li>
+<li>
+    "mongoose": "^6.3.6",
+    </li>
+<li>
+    "node-schedule": "^2.1.0",
+    </li>
+<li>
+    "nodemailer": "^6.7.5",
+    </li>
+<li>
+    "nodemon": "^2.0.16",
+    </li>
+<li>
+    "passport": "^0.5.3",
+    </li>
+<li>
+    "passport-local": "^1.0.0",
+    </li>
+<li>
+    "xlsx": "^0.18.5"
 </li>
  <li>
 資料庫使用:mongodb
@@ -78,7 +111,7 @@ $git cd  labManagerSystem/
 $npm init -y
 </li>
 <li>
-$npm install i
+$npm run package
 </li>
 <li>
 $npm run dev
@@ -88,6 +121,8 @@ $npm run dev
 This server is running on http://localhost:3000.
 mongoose connected!
 代表伺服器和資料庫連線成功!!
+ 更改文件.env.example 的內容，輸入管理員預設帳號密碼
+  $npm run seed 利用種子創建
 </li>
 </ul>
 功能描述 (features)
