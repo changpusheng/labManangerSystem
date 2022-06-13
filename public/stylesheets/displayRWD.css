@@ -1,4 +1,4 @@
-@media  (min-width: 750px) and (max-width:1200px){
+@media  (min-width: 750px) and (max-width:1280px){
   .home-page .row >*{
     flex-shrink: 0;
     width: 100%;

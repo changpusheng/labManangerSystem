@@ -69,10 +69,9 @@
                 <tbody>
                   {{#each records}}
                   <tr>
-                    <td style="{{#percentMax this.inputNumber 0}} color:green;{{else}} {{#percentMax this.outNumber 0}} color:red;{{else}} color: blue; {{/percentMax}} {{/percentMax}}
+                    <td style="{{#percentMax this.inputNumber 0}} color:green;{{else}} {{#percentMax this.outNumber 0}} color:blue;{{else}} color: blue; {{/percentMax}} {{/percentMax}}
                       font-weight:900">
-                      {{#if
-                      this.isCount}}盤點{{/if}}{{#percentMax this.outNumber 0}}領用{{/percentMax}}
+                      {{#percentMax this.outNumber 0}}領用{{/percentMax}}
                       {{#percentMax this.inputNumber 0}}入庫{{/percentMax}}</td>
                     <td>{{toLastNumber this._id}}</td>
                     <td>{{this.createAt}}</td>
