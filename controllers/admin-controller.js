@@ -145,12 +145,13 @@ const adminCroller = {
       return record.remove()
     }).then(record => {
       Buy.create({
-        number: 0,
+        number: record.number,
         commit: record.commit,
         createAt: dayjs().format(),
-        note: '刪除訂單',
+        note: `${req.user
+          .name}已經刪除訂單`,
         itemId: record.itemId._id,
-        userId: req.user._id,
+        userId: record.userId._id,
         isDone: true
       }).catch(err => next(err))
     }).then(() => {
