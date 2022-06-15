@@ -2,7 +2,7 @@
   {{>home-tab route ='home' }}
   <hr>
   <div class="row mt-3">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="card">
         <div class="card-header ">
           低於安全存量品項共{{itemObjs.length}}筆
@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
       <div class="card">
         <div class="card-header">
           未結案共{{buyIsDone.length}}筆
@@ -53,7 +53,8 @@
                   <th scope="col">品名</th>
                   <th scope="col">購買數量</th>
                   <th scope="col">請購人</th>
-                  <th scope="col">功能</th>
+                  <th scope="col">#</th>
+                  <th scope="col">#</th>
                 </tr>
               </thead>
               <tbody>
@@ -65,6 +66,14 @@
                   <td>{{this.number}}{{this.itemId.unitId.name}}</td>
                   <td>{{this.userId.name}}</td>
                   <td><a href="/item/objectsave/{{this.itemId._id}}" class="btn btn-outline-primary">待結案</a></td>
+                  <td>
+                    <form action="/admin/itemBuyRecord/{{this._id}}?_method=Delete" method="POST">
+                      <button class="btn btn-outline-danger" type="submit"
+                        onclick="return confirm('確定要刪除{{this.name}}嗎?')">
+                        刪除
+                      </button>
+                    </form>
+                  </td>
                 </tr>
                 {{/each}}
               </tbody>

@@ -47,7 +47,7 @@
               <table class="table align-middle">
                 <thead class="thead-dark">
                   <tr>
-                    <th scope="col">編號</th>
+                    <th scope="col">小量化學編號</th>
                     <th scope="col">日期</th>
                     <th scope="col">分類</th>
                     <th scope="col">品名</th>
@@ -64,7 +64,7 @@
                 <tbody>
                   {{#each buys}}
                   <tr>
-                    <td>{{toLastNumber this._id}}</td>
+                    <td>{{ this.commit}}</td>
                     <td>{{this.createAt}}</td>
                     <td>[{{this.itemId.categoryId.name}}]</td>
                     <td>{{this.itemId.name}}</td>

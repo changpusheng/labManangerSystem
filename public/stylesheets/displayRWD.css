@@ -2,7 +2,7 @@
   .home-page .row >*{
     flex-shrink: 0;
     width: 100%;
-    font-size: x-small;
+    font-size: large;
   }
   #chart-container{
     width: 600px;

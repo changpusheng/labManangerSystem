@@ -55,11 +55,12 @@ const recordContriller = {
         if (keyWord) {
           keyWord = req.query.itemBuyRecord.trim().toLowerCase()
           const recordFileter = buys.filter(obj => {
+            const commit = dimStringSearch(obj.commit, keyWord)
             const categoryObj = dimStringSearch(obj.itemId.categoryId.name, keyWord)
             const createAtObj = dimStringSearch(obj.createAt, keyWord)
             const itemNameObj = dimStringSearch(obj.itemId.name, keyWord)
             const userObj = dimStringSearch(obj.userId.name, keyWord)
-            return categoryObj || createAtObj || itemNameObj || userObj
+            return categoryObj || createAtObj || itemNameObj || userObj || commit
           })
           filterObj = recordFileter.slice(offset, offset + limit)
           getPaginationfn = getPagination(limit, page, buys.length)

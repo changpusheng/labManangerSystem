@@ -138,9 +138,21 @@ const adminCroller = {
     }).catch(err => next(err))
   },
   deleteItemBuyRecord: (req, res, next) => {
-    Buy.findById(req.params.id).then(record => {
+    Buy.findById(req.params.id).populate('itemId').then(record => {
       if (!record) throw new Error('紀錄不存在')
-      record.remove()
+      record.itemId.isBuy = false
+      record.itemId.save()
+      return record.remove()
+    }).then(record => {
+      Buy.create({
+        number: 0,
+        commit: record.commit,
+        createAt: dayjs().format(),
+        note: '刪除訂單',
+        itemId: record.itemId._id,
+        userId: req.user._id,
+        isDone: true
+      }).catch(err => next(err))
     }).then(() => {
       req.flash('success_messages', '刪除成功')
       res.redirect('/record/itemBuyRecord')
