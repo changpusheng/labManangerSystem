@@ -10,6 +10,7 @@ router.get('/objectget/:id', itemController.getObjectGet)
 router.post('/objectsave/:id', itemController.postObjectSave)
 router.get('/objectsave/:id', itemController.getObjectSave)
 router.post('/create', itemController.postCreateItem)
+router.get('/amount-check', itemController.checkRecord)
 router.get('/category', itemController.getCategory)
 router.get('/create', itemController.getCreateItem)
 

@@ -49,6 +49,10 @@ const itemSchema = new Schema({
     ref: 'Unit',
     index: true,
     required: true
+  },
+  amountCheck: {
+    type: Boolean,
+    default: false
   }
 })
 

@@ -284,7 +284,10 @@ const itemController = {
       }
     }).then(() => {
       res.redirect('/')
-    })
+    }).catch(err => next(err))
+  },
+  checkRecord: (req, res, next) =>{
+    res.render('item/amount-check')
   }
 }
 

@@ -93,12 +93,12 @@
     <div id="recordsValue" style="display: none;">{{recordsValue}}</div>
     <div id="categoryObj" style="display: none;">{{categoryObj}}</div>
 
-    <div class="col-md-6 mt-3">
+    <div class="col-md-8 mt-3">
       <div class="card">
         <div class="card-header">
           折線圖(溶劑使用量)
         </div>
-        <div class="card-body chart" id="chart-container" style="height:22rem;">
+        <div class="card-body chart" id="chart-container" style="height:30rem;">
           <div id="btnObjsId">
             <div style="display: flex;justify-content:space-between">
               <div>
@@ -135,13 +135,32 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6 mt-3">
+    <div class="col-md-4 mt-3">
       <div class="card">
         <div class="card-header">
           待盤點項目
         </div>
-        <div class="card-body" style="height:22rem;">
-
+        <div class="card-body" style="height:30rem;">
+          {{#if checkItems.length}}
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">品名</th>
+                <th scope="col">功能按鈕</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each checkItems}}
+              <tr>
+                <td scope="row">{{this.name}}</td>
+                <td scope="row">盤點</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <div class="input-group-text justify-content-center fs-5 fw-bold">無需要盤點項目 </div>
+          {{/if}}
         </div>
       </div>
     </div>

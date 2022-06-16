@@ -17,8 +17,9 @@ const homeController = {
       .populate({ path: 'itemId', populate: { path: 'unitId' } }).lean(),
     Item.find().populate(['categoryId', 'unitId']).lean(),
     Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 }),
-    Category.find().lean()
-    ]).then(([buys, items, records, category]) => {
+    Category.find().lean(),
+    Item.find({ amountCheck: true }).lean()
+    ]).then(([buys, items, records, category, checkItems]) => {
       if (items.length) {
         let acnRecordobjs
         let recordsValue
@@ -135,7 +136,8 @@ const homeController = {
           , acnRecordobjs,
           category,
           recordsValue: JSON.stringify(recordsValue),
-          categoryObj: JSON.stringify(category)
+          categoryObj: JSON.stringify(category),
+          checkItems
         })
       } else {
         res.render('home')
