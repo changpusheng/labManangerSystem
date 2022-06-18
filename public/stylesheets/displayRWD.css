@@ -7,4 +7,9 @@
   #chart-container{
     width: 600px;
   }
+   .check-container .row >*{
+    flex-shrink: 0;
+    width: 100%;
+    font-size: large;
+  }
 }

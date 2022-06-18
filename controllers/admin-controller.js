@@ -5,6 +5,7 @@ const Unit = require('../models/unit')
 const Record = require('../models/record')
 const Item = require('../models/item')
 const Buy = require('../models/buy')
+const Config = require('../models/config')
 const dayjs = require('dayjs')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
 const { getOffset, getPagination } = require('../helpers/page-helper')
@@ -230,6 +231,11 @@ const adminCroller = {
     }).then(() => {
       req.flash('success_messages', '刪除成功')
       res.redirect('/admin/itemList')
+    }).catch(err => next(err))
+  },
+  getConfig: (req, res, next) => {
+    Config.find().lean().then(items => {
+      res.render('admin/config', { items })
     }).catch(err => next(err))
   }
 }

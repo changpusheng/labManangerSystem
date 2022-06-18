@@ -3,6 +3,7 @@ const Category = require('../models/category')
 const Unit = require('../models/unit')
 const Record = require('../models/record')
 const Buy = require('../models/buy')
+const Check = require('../models/check')
 const dayjs = require('dayjs')
 const sentEmail = require('../public/javascript/email')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
@@ -286,8 +287,40 @@ const itemController = {
       res.redirect('/')
     }).catch(err => next(err))
   },
-  checkRecord: (req, res, next) =>{
-    res.render('item/amount-check')
+  getCheckRecord: (req, res, next) => {
+    Promise.all([Item.find({ amountCheck: false }).populate('categoryId').lean(),
+    req.params.id ? Item.findById(req.params.id).populate('categoryId').lean() : null,
+    Check.find().populate(['itemId', 'userId']).lean().sort({ createAt: -1 })])
+      .then(([checkItems, checkItem, checkObj]) => {
+        const checkObjFilter = checkObj.filter(obj => {
+          return dayjs(obj.createAt).hour() < 18
+        })
+        res.render('item/amount-check', {
+          checkItems,
+          checkItem,
+          checkObj: checkObjFilter
+        })
+      }).catch(err => next(err))
+  },
+  putCheckRecord: (req, res, next) => {
+    Item.findById(req.params.id).populate('categoryId').then(item => {
+      let beforeNumber = item.stock
+      const { afterNumber } = req.body
+      if (afterNumber < 0) throw new Error('數量不能是負的')
+      item.stock = afterNumber
+      item.amountCheck = true
+      item.save()
+      Check.create({
+        amountBefore: beforeNumber,
+        amountAfter: afterNumber,
+        userId: req.user._id,
+        itemId: req.params.id,
+        createAt: dayjs().format()
+      }).then(() => {
+        req.flash('success_messages', `${item.name}盤點完成`)
+        res.redirect('/item/amount-check')
+      }).catch(err => next(err))
+    })
   }
 }
 

@@ -11,22 +11,28 @@ dayjs.extend(weekOfYear)
 
 const homeController = {
   gethome: (req, res, next) => {
-    return Promise.all([Buy.find()
+    return Promise.all([Buy.find({
+      isDone
+        : false
+    })
       .populate(['itemId', 'userId'])
       .populate({ path: 'itemId', populate: { path: 'categoryId' } })
       .populate({ path: 'itemId', populate: { path: 'unitId' } }).lean(),
-    Item.find().populate(['categoryId', 'unitId']).lean(),
+    Item.find({ isBuy: false }).populate(['categoryId', 'unitId']).lean(),
     Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 }),
     Category.find().lean(),
-    Item.find({ amountCheck: true }).lean()
+    Item.find({ amountCheck: false }).populate('categoryId').lean()
     ]).then(([buys, items, records, category, checkItems]) => {
+      const checkItemsFilter = checkItems.filter(obj => {
+        return obj.categoryId.name === '一般溶劑' || obj.categoryId.name === '毒化物'
+      })
       if (items.length) {
         let acnRecordobjs
         let recordsValue
         //撈出還沒購買或低於安全存量資料
-        const itemObjs = items.filter(obj => obj.stock < obj.safeStock && obj.isBuy === false)
+        const itemObjs = items.filter(obj => obj.stock < obj.safeStock)
         //撈出已經購買但還沒有結案的資料
-        const buyIsDone = buys.filter(obj => obj.isDone === false && obj.itemId.isBuy === true)
+        const buyIsDone = buys.filter(obj => obj.itemId.isBuy === true)
         if (records.length) {
           const acnCategoryObj = items.filter(obj => obj.categoryId.name === '毒化物' && obj.englishName === 'ACN')
           //撈出毒化物ACN前5筆使用資料
@@ -137,10 +143,12 @@ const homeController = {
           category,
           recordsValue: JSON.stringify(recordsValue),
           categoryObj: JSON.stringify(category),
-          checkItems
+          checkItems: checkItemsFilter
         })
       } else {
-        res.render('home')
+        res.render('home', {
+          checkItems: checkItemsFilter
+        })
       }
     }).catch(err => next(err))
   }

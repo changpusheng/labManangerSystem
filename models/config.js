@@ -4,7 +4,7 @@ const configSchema = new Schema({
   name: {
     type: String,
     required: true
-  }, configData: {
+  }, data: {
     type: Number,
     required: true
   }

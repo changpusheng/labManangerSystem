@@ -1,0 +1,51 @@
+<div class="container">
+  {{>admin-tab route = 'config'}}
+  <br />
+
+  <div class="row mt-2">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <div class="d-flex align-items-center pt-1 pb-1 my-3 text-white-50 bg-purple">
+          {{#if item}}
+          <form class="row" action="/admin/config/{{item._id}}?_method=PUT" method="POST">
+            <div class="col-auto">
+              <input class="form-control" type="text" placeholder="name" name="name" value="{{item.name}}">
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-warning" type="submit">更改參數</button>
+              <a class="btn btn-link link-secondary" href="/admin/config">or Create New</a>
+            </div>
+          </form>
+          {{else}}
+          <form class="row" action="/admin/config" method="POST">
+            <div class="col-auto">
+              <input class="form-control" type="text" placeholder="Category Name" name="name" required>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-outline-success" type="submit">新增參數</button>
+            </div>
+          </form>
+          {{/if}}
+        </div>
+        <table class="table align-middle">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">名稱</th>
+              <th scope="col">參數</th>
+              <th scope="col">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each items}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td>{{this.data}}</td>
+              <td><a href="/admin/config/{{this._id}}" class="btn btn-outline-primary">編輯</a></td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
