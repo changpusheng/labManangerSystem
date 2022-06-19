@@ -4,6 +4,10 @@ const categorySchema = new Schema({
   name: {
     type: String,
     required: true
+  },
+  follow: {
+    type: Boolean,
+    default: false
   }
 })
 

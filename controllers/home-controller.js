@@ -2,6 +2,7 @@ const Buy = require('../models/buy')
 const Item = require('../models/item')
 const Record = require('../models/record')
 const Category = require('../models/category')
+const Check = require('../models/check')
 const useMonthCount = require('../public/javascript/useCount').useMonthNumber
 const useWeekhCount = require('../public/javascript/useCount').useWeekNumber
 const avgCount = require('../public/javascript/useCount').avgCount
@@ -21,8 +22,9 @@ const homeController = {
     Item.find({ isBuy: false }).populate(['categoryId', 'unitId']).lean(),
     Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 }),
     Category.find().lean(),
-    Item.find({ amountCheck: false }).populate('categoryId').lean()
-    ]).then(([buys, items, records, category, checkItems]) => {
+    Item.find({ amountCheck: false }).populate('categoryId').lean(),
+    Check.find().populate('itemId')
+    ]).then(([buys, items, records, category, checkItems, checkTime]) => {
       const checkItemsFilter = checkItems.filter(obj => {
         return obj.categoryId.name === '一般溶劑' || obj.categoryId.name === '毒化物'
       })

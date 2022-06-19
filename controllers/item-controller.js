@@ -10,6 +10,7 @@ const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 const { getOffset, getPagination } = require('../helpers/page-helper')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
 
+
 const itemController = {
   getCategory: (req, res, next) => {
     const categoryId = req.query.categoryId || ''
@@ -306,7 +307,7 @@ const itemController = {
     Item.findById(req.params.id).populate('categoryId').then(item => {
       let beforeNumber = item.stock
       const { afterNumber } = req.body
-      if (afterNumber < 0) throw new Error('數量不能是負的')
+      if (afterNumber < 0) throw new Error('數量需為正數')
       item.stock = afterNumber
       item.amountCheck = true
       item.save()
@@ -315,7 +316,8 @@ const itemController = {
         amountAfter: afterNumber,
         userId: req.user._id,
         itemId: req.params.id,
-        createAt: dayjs().format()
+        createAt: dayjs().format(),
+        nextTime: dayjs().add(14, 'day').format()
       }).then(() => {
         req.flash('success_messages', `${item.name}盤點完成`)
         res.redirect('/item/amount-check')

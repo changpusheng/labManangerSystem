@@ -74,6 +74,7 @@
             <thead>
               <tr>
                 <th scope="col">日期</th>
+                <th scope="col">下次盤點日期</th>
                 <th scope="col">品名</th>
                 <th scope="col">盤點前</th>
                 <th scope="col">盤點後</th>
@@ -84,6 +85,7 @@
               {{#each checkObj}}
               <tr>
                 <td scope="row">{{currentYearMonDate this.createAt}}</td>
+                <td scope="row">{{currentYearMonDate this.nextTime}}</td>
                 <td scope="row">{{this.itemId.name}}</td>
                 <td scope="row">{{this.amountBefore}}</td>
                 <td scope="row">{{this.amountAfter}}</td>

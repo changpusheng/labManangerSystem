@@ -25,6 +25,10 @@ const checkSchema = new Schema({
   createAt: {
     type: String,
     required: true
+  },
+  nextTime: {
+    type: String,
+    required: true
   }
 })
 
