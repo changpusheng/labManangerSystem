@@ -294,7 +294,7 @@ const itemController = {
     Check.find().populate(['itemId', 'userId']).lean().sort({ createAt: -1 })])
       .then(([checkItems, checkItem, checkObj]) => {
         const checkObjFilter = checkObj.filter(obj => {
-          return dayjs(obj.createAt).hour() < 18
+          return dayjs(obj.createAt).format('YYYY/MM/DD') === dayjs().format('YYYY/MM/DD')
         })
         res.render('item/amount-check', {
           checkItems,

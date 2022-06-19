@@ -10,7 +10,7 @@ const scheduleEvent = {
       const dateFilter = obj.filter(items => {
         const sampleDate = dayjs(items.nextTime).format('YYYY/MM/DD')
         return dayjs(items.nextTime).format('YYYY/MM/DD') === dayjs().format('YYYY/MM/DD') ||
-          dayjs(currDate).date() - dayjs(sampleDate).date() > 7
+          dayjs(currDate).date() - dayjs(sampleDate).date() > 14
       })
       //資料保存一年
       const lastYear = obj.filter(items => {

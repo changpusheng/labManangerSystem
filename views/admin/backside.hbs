@@ -12,7 +12,7 @@
               <th scope="col">Acount</th>
               <th scope="col">Email</th>
               <th scope="col">Role</th>
-              <th scope="col">#</th>
+              <th scope="col">權限切換</th>
               <th scope="col">#</th>
             </tr>
           </thead>
@@ -26,10 +26,12 @@
                 {{#if this.isAdmin}}管理員{{else}}一般使用者{{/if}}
               </td>
               <td>
-                <form action="/admin/users/{{this._id}}?_method=PATCH" method="POST">
-                  <button class="btn btn-outline-primary" type="submit">
-                    {{#if this.isAdmin}}設定為使用者{{else}}設定為管理員{{/if}}
-                  </button>
+                <form action="/admin/users/{{this._id}}?_method=PATCH" method="POST" id="{{this.name}}">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="admin"
+                      onclick="document.getElementById(`{{this.name}}`).submit();" {{#if this.isAdmin}}checked{{/if}}>
+                    <label class="form-check-label" for="admin"></label>
+                  </div>
                 </form>
               </td>
               <td>
