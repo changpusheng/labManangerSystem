@@ -11,8 +11,7 @@
               <th scope="col">Name</th>
               <th scope="col">Acount</th>
               <th scope="col">Email</th>
-              <th scope="col">Role</th>
-              <th scope="col">權限切換</th>
+              <th scope="col">管理者</th>
               <th scope="col">#</th>
             </tr>
           </thead>
@@ -22,9 +21,6 @@
               <td>{{this.name}}</td>
               <td>{{this.account}}</td>
               <td>{{this.email}}</td>
-              <td>
-                {{#if this.isAdmin}}管理員{{else}}一般使用者{{/if}}
-              </td>
               <td>
                 <form action="/admin/users/{{this._id}}?_method=PATCH" method="POST" id="{{this.name}}">
                   <div class="form-check form-switch">
