@@ -22,12 +22,9 @@ const homeController = {
     Item.find({ isBuy: false }).populate(['categoryId', 'unitId']).lean(),
     Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 }),
     Category.find().lean(),
-    Item.find({ amountCheck: false }).populate('categoryId').lean(),
+    Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate('categoryId').lean(),
     Check.find().populate('itemId')
     ]).then(([buys, items, records, category, checkItems, checkTime]) => {
-      const checkItemsFilter = checkItems.filter(obj => {
-        return obj.categoryId.name === '一般溶劑' || obj.categoryId.name === '毒化物'
-      })
       if (items.length) {
         let acnRecordobjs
         let recordsValue
@@ -145,11 +142,11 @@ const homeController = {
           category,
           recordsValue: JSON.stringify(recordsValue),
           categoryObj: JSON.stringify(category),
-          checkItems: checkItemsFilter
+          checkItems
         })
       } else {
         res.render('home', {
-          checkItems: checkItemsFilter
+          checkItems
         })
       }
     }).catch(err => next(err))

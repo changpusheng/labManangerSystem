@@ -4,7 +4,18 @@
     border border-2 border-warning
      {{/percentAlert}}{{/ifCond}}">
     <div class="card-body text-center">
-      <h5 class="card-title fw-bold ">{{this.name}} <h6>[{{this.categoryId.name}}]</h6>
+      <h5 class="card-title fw-bold ">
+        <div>
+          <form action="/item/category/{{this._id}}?_method=PATCH" method="POST" id="{{this.name}}">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="admin"
+                onclick="document.getElementById(`{{this.name}}`).submit();" {{#if this.follow}}checked{{/if}}>
+              <label class="form-check-label" for="admin"></label>
+            </div>
+          </form>
+          {{this.name}}
+        </div>
+        <h6>[{{this.categoryId.name}}]</h6>
         <h6>casNo:{{this.casNumber}}</h6>
         <h6>[{{this.englishName}}]</h6>
       </h5>

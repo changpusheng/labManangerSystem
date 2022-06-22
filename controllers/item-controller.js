@@ -289,15 +289,18 @@ const itemController = {
     }).catch(err => next(err))
   },
   getCheckRecord: (req, res, next) => {
-    Promise.all([Item.find({ amountCheck: false }).populate('categoryId').lean(),
+    Promise.all([Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate('categoryId').lean(),
     req.params.id ? Item.findById(req.params.id).populate('categoryId').lean() : null,
     Check.find().populate(['itemId', 'userId']).lean().sort({ createAt: -1 })])
       .then(([checkItems, checkItem, checkObj]) => {
+        const checkItemsFilter = checkItems.filter(objs => {
+          return objs.categoryId.follow = true
+        })
         const checkObjFilter = checkObj.filter(obj => {
           return dayjs(obj.createAt).format('YYYY/MM/DD') === dayjs().format('YYYY/MM/DD')
         })
         res.render('item/amount-check', {
-          checkItems,
+          checkItems: checkItemsFilter,
           checkItem,
           checkObj: checkObjFilter
         })
@@ -307,13 +310,13 @@ const itemController = {
     Item.findById(req.params.id).populate('categoryId').then(item => {
       let beforeNumber = item.stock
       const { afterNumber } = req.body
-      if (afterNumber < 0) throw new Error('數量需為正數')
-      item.stock = afterNumber
+      if (Number(afterNumber) < 0) throw new Error('數量需為正數')
+      item.stock = Number(afterNumber)
       item.amountCheck = true
       item.save()
       Check.create({
         amountBefore: beforeNumber,
-        amountAfter: afterNumber,
+        amountAfter: Number(afterNumber),
         userId: req.user._id,
         itemId: req.params.id,
         createAt: dayjs().format(),
@@ -323,6 +326,16 @@ const itemController = {
         res.redirect('/item/amount-check')
       }).catch(err => next(err))
     })
+  },
+  patchCategory: (req, res, next) => {
+    Item.findById(req.params.id).then(item => {
+      if (!item) throw new Error('物件ID不存在')
+      item.follow ? item.follow = false : item.follow = true
+      item.save()
+    }).then(() => {
+      req.flash('sucess_messages', '變更成功')
+      res.redirect('/item/category')
+    }).catch(err => next(err))
   }
 }
 

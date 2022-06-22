@@ -53,6 +53,10 @@ const itemSchema = new Schema({
   amountCheck: {
     type: Boolean,
     default: false
+  },
+  follow: {
+    type: Boolean,
+    default: false
   }
 })
 
