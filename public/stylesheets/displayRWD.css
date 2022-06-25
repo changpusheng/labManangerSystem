@@ -5,7 +5,7 @@
     font-size: large;
   }
   #chart-container{
-    width: 600px;
+    width: 500px;
   }
    .check-container .row >*{
     flex-shrink: 0;

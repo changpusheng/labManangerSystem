@@ -10,7 +10,7 @@
         <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
           {{#if itemObjs.length}}
           <div>
-            <table class="table">
+            <table class="table" style="font-size:smaller; font-weight:800">
               <thead>
                 <tr>
                   <th scope="col">品名</th>
@@ -45,7 +45,7 @@
         <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
           {{#if buyIsDone.length}}
           <div>
-            <table class="table">
+            <table class="table" style="font-size:smaller; font-weight:800">
               <thead>
                 <tr>
                   <th scope="col">小量化學編號</th>
@@ -93,12 +93,12 @@
     <div id="recordsValue" style="display: none;">{{recordsValue}}</div>
     <div id="categoryObj" style="display: none;">{{categoryObj}}</div>
 
-    <div class="col-md-8 mt-3">
+    <div class="col-md-4 mt-3">
       <div class="card">
         <div class="card-header">
           折線圖(溶劑使用量)
         </div>
-        <div class="card-body chart" id="chart-container" style="height:30rem;">
+        <div class="card-body chart" id="chart-container" style="height:300px;">
           <div id="btnObjsId">
             <div style="display: flex;justify-content:space-between">
               <div>
@@ -135,17 +135,18 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4 mt-3">
+    <div class="col-md-3 mt-3">
       <div class="card">
         <div class="card-header">
           待盤點項目
         </div>
-        <div class="card-body" style="overflow-y:auto;height:30rem;display:block;">
+        <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
           {{#if checkItems.length}}
-          <table class="table">
+          <table class="table" style="font-size:smaller; font-weight:800">
             <thead>
               <tr>
                 <th scope="col">品名</th>
+                <th scope="col">當前數量</th>
                 <th scope="col">功能按鈕</th>
               </tr>
             </thead>
@@ -153,6 +154,7 @@
               {{#each checkItems}}
               <tr>
                 <td scope="row">{{this.name}}</td>
+                <td scope="row">{{this.stock}}</td>
                 <td scope="row">
                   <a href="/item/amount-check/{{this._id}}" class="btn btn-outline-primary">盤點</button>
                 </td>
@@ -166,7 +168,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12 mt-3">
+    <div class="col-md-5 mt-3">
       <div class="card">
         <div class="card-header">
           毒化物領用記錄(近5筆)(依時間排序:第一筆為最新日期))
@@ -174,7 +176,7 @@
         <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
           {{#if acnRecordobjs.length}}
           <div>
-            <table class="table">
+            <table class="table " style="font-size:x-small; font-weight:800;white-space: nowrap;">
               <thead>
                 <tr>
                   <th scope="col">時間</th>
@@ -183,8 +185,7 @@
                   <th scope="col">入庫量(kg)</th>
                   <th scope="col">剩餘庫存量(kg)</th>
                   <th scope="col">瓶裝數量</th>
-                  <th scope="col">使用人</th>
-                  <th scope="col">確認</th>
+                  <th scope="col">領用人</th>
                 </tr>
               </thead>
               <tbody>
@@ -197,7 +198,7 @@
                   <td>{{toFixed this.stockNumber 3}}</td>
                   <td>{{bottleNumber this.stockNumber 3 0.787 4}}</td>
                   <td>{{this.userId.name}}</td>
-                  <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
+                  {{!-- <form action="/item/toxic-isCheck/{{this._id}}" method="POST">
                     <td><button type="submit" {{#if this.isCheck}}class="btn btn-outline-success" disabled {{else}}
                         class="btn btn-outline-primary"
                         onclick="return confirm(`單號{{toLastNumber this._id}},剩餘庫存{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}},瓶裝數量{{bottleNumber this.stockNumber 3 0.787 4}}`)"
@@ -207,7 +208,7 @@
                         {{else}}
                         待確認
                         {{/if}}</button></td>
-                  </form>
+                  </form> --}}
                 </tr>
                 {{/each}}
               </tbody>

@@ -3,38 +3,46 @@
   <hr>
   <div class="row mt-3">
     <div class="col-md-6 mt-3">
+
+      {{#if checkItem}}
+
+      <div class="card mb-3">
+        <div class="card-header">
+          點選的項目
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">品名</th>
+              <th scope="col">當前數量</th>
+              <th scope="col">盤點數量</th>
+              <th scope="col">#</th>
+              <th scope="col">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="color: blue;font-weight:900;">
+              <form action="/item/amount-check/{{checkItem._id}}?_method=PUT" method="POST">
+                <td scope="row">{{checkItem.name}}</td>
+                <td scope="row">{{checkItem.stock}}</td>
+                <td scope="row">
+                  <input type="text" name="afterNumber" min="0" value="{{checkItem.stock}}" style="width: 80px;"
+                    required>
+                </td>
+                <td scope="row"><button type="submit" class="btn btn-outline-primary">送出</button></td>
+                <td scope="row"><a href="javascript:history.back()" class="btn btn-outline-danger">取消</a></td>
+              </form>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {{/if}}
       <div class="card">
         <div class="card-header">
           待盤點項目
         </div>
         <div class="card-body" style="overflow-y:auto;height:30rem;display:block;">
-          {{#if checkItem}}
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">品名</th>
-                <th scope="col">當前數量</th>
-                <th scope="col">盤點數量</th>
-                <th scope="col">#</th>
-                <th scope="col">#</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <form action="/item/amount-check/{{checkItem._id}}?_method=PUT" method="POST">
-                  <td scope="row">{{checkItem.name}}</td>
-                  <td scope="row">{{checkItem.stock}}</td>
-                  <td scope="row">
-                    <input type="text" name="afterNumber" min="0" value="{{checkItem.stock}}" style="width: 80px;"
-                      required>
-                  </td>
-                  <td scope="row"><button type="submit" class="btn btn-outline-primary">送出</button></td>
-                  <td scope="row"><a href="javascript:history.back()" class="btn btn-outline-danger">取消</a></td>
-                </form>
-              </tr>
-            </tbody>
-          </table>
-          {{else}}
           {{#if checkItems.length}}
           <table class="table">
             <thead>
@@ -49,8 +57,8 @@
               {{#each checkItems}}
               <tr>
                 <td scope="row">{{this.name}}</td>
-                <td scope="row">{{this.stock}}</td>
-                <td scope="row">{{this.stock}}</td>
+                <td scope="row">{{toFixed this.stock 3}}{{this.unitId.name}}</td>
+                <td scope="row">{{toFixed this.stock 3}}{{this.unitId.name}}</td>
                 <td scope="row"><a href="/item/amount-check/{{this._id}}" class="btn btn-outline-primary">盤點</a></td>
               </tr>
               {{/each}}
@@ -58,7 +66,6 @@
           </table>
           {{else}}
           <div class="input-group-text justify-content-center fs-5 fw-bold">無盤點項目 </div>
-          {{/if}}
           {{/if}}
         </div>
       </div>
@@ -87,8 +94,8 @@
                 <td scope="row">{{currentYearMonDate this.createAt}}</td>
                 <td scope="row">{{currentYearMonDate this.nextTime}}</td>
                 <td scope="row">{{this.itemId.name}}</td>
-                <td scope="row">{{this.amountBefore}}</td>
-                <td scope="row">{{this.amountAfter}}</td>
+                <td scope="row">{{toFixed this.amountBefore 3}}{{this.itemId.unitId.name}}</td>
+                <td scope="row">{{toFixed this.amountAfter 3}}{{this.itemId.unitId.name}}</td>
                 <td scope="row">{{this.userId.name}}</td>
               </tr>
               {{/each}}

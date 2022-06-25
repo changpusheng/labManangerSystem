@@ -289,13 +289,14 @@ const itemController = {
     }).catch(err => next(err))
   },
   getCheckRecord: (req, res, next) => {
-    Promise.all([Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate('categoryId').lean(),
-    req.params.id ? Item.findById(req.params.id).populate('categoryId').lean() : null,
-    Check.find().populate(['itemId', 'userId']).lean().sort({ createAt: -1 })])
+    Promise.all([Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate(['categoryId', 'unitId']).lean(),
+    req.params.id ? Item.findById(req.params.id).populate(['categoryId', 'unitId']).lean() : null,
+    Check.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).lean().sort({ createAt: -1 })])
       .then(([checkItems, checkItem, checkObj]) => {
         const checkItemsFilter = checkItems.filter(objs => {
           return objs.categoryId.follow = true
         })
+        //篩選出當天的日期紀錄
         const checkObjFilter = checkObj.filter(obj => {
           return dayjs(obj.createAt).format('YYYY/MM/DD') === dayjs().format('YYYY/MM/DD')
         })

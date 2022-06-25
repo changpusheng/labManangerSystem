@@ -6,6 +6,7 @@ const Record = require('../models/record')
 const Item = require('../models/item')
 const Buy = require('../models/buy')
 const Config = require('../models/config')
+const Instrument = require('../models/instrument')
 const dayjs = require('dayjs')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
 const { getOffset, getPagination } = require('../helpers/page-helper')
@@ -231,6 +232,54 @@ const adminCroller = {
   getConfig: (req, res, next) => {
     Config.find().lean().then(items => {
       res.render('admin/config', { items })
+    }).catch(err => next(err))
+  },
+  getInstrument: (req, res, next) => {
+    return Promise.all([Instrument.find().lean(),
+    req.params.id ? Instrument.findById(req.params.id).lean() : null
+    ]).then(([instruments, instrument]) => {
+      return res.render('admin/instrument', {
+        instruments,
+        instrument
+      })
+    }).catch(err => next(err))
+  },
+  postInstrument: (req, res, next) => {
+    const { name } = req.body
+    if (!name) throw new Error('請輸入設備名稱')
+    Instrument.findOne({ name: name.toUpperCase() }).then(name => {
+      if (name) throw new Error('已經有該設備名稱')
+    }).then(() => {
+      return Instrument.create({ name: name.toUpperCase() })
+        .then(() => {
+          req.flash('success_messages', '新增設備成功')
+          res.redirect('/admin/instrument')
+        }).catch(err => next(err))
+    }).catch(err => next(err))
+  },
+  putInstrument: (req, res, next) => {
+    const { name } = req.body
+    if (!name) throw new Error('請輸入設備名稱')
+    return Instrument.findById(req.params.id).then(inst => {
+      if (!inst) throw new Error(" 設備不存在!")
+      inst.name = name
+      return inst.save()
+    }).then(() => res.redirect('/admin/instrument')).catch(err => next(err))
+  },
+  deleteInstrument: (req, res, next) => {
+    return Instrument.findById(req.params.id).then(inst => {
+      if (!inst) throw new Error("設備不存在!")
+      return inst.remove()
+    }).then(() => res.redirect('/admin/instrument')).catch(err => next(err))
+  },
+  patchInstrument: (req, res, next) => {
+    Instrument.findById(req.params.id).then(inst => {
+      if (!inst) throw new Error("User didn't exist!")
+      inst.follow ? inst.follow = false : inst.follow = true
+      inst.save()
+    }).then(() => {
+      req.flash('success_messages', '變更成功')
+      res.redirect('/admin/instrument')
     }).catch(err => next(err))
   }
 }
