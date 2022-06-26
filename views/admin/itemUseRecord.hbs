@@ -55,6 +55,7 @@
                     <th scope="col">日期</th>
                     <th scope="col">分類</th>
                     <th scope="col">品名</th>
+                    <th scope="col">縮寫</th>
                     <th scope="col">領用量</th>
                     <th scope="col">入庫量</th>
                     <th scope="col">剩餘庫存量</th>
@@ -77,6 +78,7 @@
                     <td>{{this.createAt}}</td>
                     <td>[{{this.itemId.categoryId.name}}]</td>
                     <td>{{this.itemId.name}}</td>
+                    <td>{{this.itemId.englishName}}</td>
                     <td>{{toFixed this.outNumber 3}}{{this.itemId.unitId.name}}</td>
                     <td>{{toFixed this.inputNumber 3}}{{this.itemId.unitId.name}}</td>
                     <td>{{toFixed this.stockNumber 3}}{{this.itemId.unitId.name}}</td>

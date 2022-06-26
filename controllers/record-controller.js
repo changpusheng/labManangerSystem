@@ -28,8 +28,9 @@ const recordContriller = {
             const categoryObj = dimStringSearch(obj.itemId.categoryId.name, keyWord)
             const createAtObj = dimStringSearch(obj.createAt, keyWord)
             const itemNameObj = dimStringSearch(obj.itemId.name, keyWord)
+            const englishNameObj = dimStringSearch(obj.itemId.englishName, keyWord)
             const userObj = dimStringSearch(obj.userId.name, keyWord)
-            return categoryObj || createAtObj || itemNameObj || userObj
+            return categoryObj || createAtObj || itemNameObj || userObj || englishNameObj
           })
           filterObj = recordFileter.slice(offset, offset + limit)
           getPaginationfn = getPagination(limit, page, filterObj.length)
