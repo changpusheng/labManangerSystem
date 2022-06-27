@@ -2,6 +2,13 @@
   {{>home-tab route='amount-check'}}
   <hr>
   <div class="row mt-3">
+    <form action="/item/amount-check" method="GET">
+      <div class="input-group  " style="width: 400px;">
+        <input type="text" class="form-control" name="c" placeholder="關鍵字搜尋(日期、品名、使用人)"
+          aria-label="Recipient's username" aria-describedby="button-addon2" value="{{keyWord}}">
+        <button class="btn btn-outline-primary" type="submit" id="button-addon2">搜尋</button>
+      </div>
+    </form>
     <div class="col-md-6 mt-3">
 
       {{#if checkItem}}

@@ -235,12 +235,33 @@ const adminCroller = {
     }).catch(err => next(err))
   },
   getInstrument: (req, res, next) => {
+    const DEFAULT_LIMIT = 5
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
     return Promise.all([Instrument.find().lean(),
     req.params.id ? Instrument.findById(req.params.id).lean() : null
     ]).then(([instruments, instrument]) => {
+      let keyWord = req.query.instrument
+      let filterObj
+      let getPaginationfn
+      if (keyWord) {
+        keyWord = req.query.instrument.trim().toLowerCase()
+        const recordFileter = instruments.filter(obj => {
+          const instrumentNameObj = dimStringSearch(obj.name, keyWord)
+          return instrumentNameObj
+        })
+        filterObj = recordFileter.slice(offset, offset + limit)
+        getPaginationfn = getPagination(limit, page, recordFileter.length)
+      } else {
+        filterObj = instruments.slice(offset, offset + limit)
+        getPaginationfn = getPagination(limit, page, instruments.length)
+      }
       return res.render('admin/instrument', {
-        instruments,
-        instrument
+        instruments: filterObj,
+        instrument,
+        pagination: getPaginationfn,
+        keyWord
       })
     }).catch(err => next(err))
   },
