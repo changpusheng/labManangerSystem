@@ -37,7 +37,7 @@ const homeController = {
           //撈出毒化物ACN前5筆使用資料
           if (acnCategoryObj.length) {
             const acnId = acnCategoryObj[0]._id.toJSON()
-            acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 5)
+            acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 10)
           }
           //刪除超過設定年限的紀錄
           const filteYear = records.filter(obj => {

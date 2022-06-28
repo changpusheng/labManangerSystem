@@ -297,16 +297,15 @@ const itemController = {
           return objs.categoryId.follow = true
         })
         //篩選出當天的日期紀錄
-        let keyWord = req.query.amountCheck
-        console.log(keyWord)
+        let keyWord = req.query.search
+        if (keyWord === '') throw new Error('請輸入關鍵字')
         let checkObjFilter
         if (keyWord) {
-          keyWord = req.query.amountCheck.trim().toLowerCase()
+          keyWord = req.query.search.trim().toLowerCase()
           checkObjFilter = checkObj.filter(obj => {
-            const createDate = dimStringSearch(obj.createAt, keyWord)
+            const createDate = dimStringSearch(dayjs(obj.createAt).format('YYYY/MM/DD'), keyWord)
             const name = dimStringSearch(obj.itemId.name, keyWord)
-            const operator = dimStringSearch(obj.operator, keyWord)
-            return createDate || name || operator
+            return createDate || name
           })
         } else {
           checkObjFilter = checkObj.filter(obj => {

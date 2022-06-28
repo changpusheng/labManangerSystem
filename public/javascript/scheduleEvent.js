@@ -9,6 +9,7 @@ const scheduleEvent = {
       const currDate = dayjs().format('YYYY/MM/DD')
       const dateFilter = obj.filter(items => {
         const sampleDate = dayjs(items.nextTime).format('YYYY/MM/DD')
+        //當前日期等於下次盤點日期或是兩者相差14天amountCheck = false 系統撈出需要盤點的項目
         return dayjs(items.nextTime).format('YYYY/MM/DD') === dayjs().format('YYYY/MM/DD') ||
           dayjs(currDate).date() - dayjs(sampleDate).date() > 14
       })
