@@ -3,6 +3,7 @@ const Item = require('../models/item')
 const Record = require('../models/record')
 const Category = require('../models/category')
 const Check = require('../models/check')
+const Instrument = require('../models/instrument')
 const useMonthCount = require('../public/javascript/useCount').useMonthNumber
 const useWeekhCount = require('../public/javascript/useCount').useWeekNumber
 const avgCount = require('../public/javascript/useCount').avgCount
@@ -23,8 +24,9 @@ const homeController = {
     Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 }),
     Category.find().lean(),
     Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate('categoryId').lean(),
-    Check.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).lean().sort({ createAt: -1 })
-    ]).then(([buys, items, records, category, checkItems, checkTime]) => {
+    Check.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).lean().sort({ createAt: -1 }),
+    Instrument.find({ follow: true }).lean()
+    ]).then(([buys, items, records, category, checkItems, checkTime, instruments]) => {
       if (items.length) {
         let acnRecordobjs
         let recordsValue
@@ -142,11 +144,13 @@ const homeController = {
           category,
           recordsValue: JSON.stringify(recordsValue),
           categoryObj: JSON.stringify(category),
-          checkItems
+          checkItems,
+          instruments
         })
       } else {
         res.render('home', {
-          checkItems
+          checkItems,
+          instruments
         })
       }
     }).catch(err => next(err))

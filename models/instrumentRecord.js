@@ -1,44 +1,30 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const instrumentRecordSchema = new Schema({
-  name: {
+  instrumentId: {
     type: Schema.Types.ObjectId,
     ref: 'Instrument',
     required: true,
     index: true,
     required: true
   },
-  operator: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     index: true,
     required: true
-  },
-  checkman: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    index: true,
-    required: true
-  },
-  isUse: {
-    type: Boolean,
-    default: false
-  },
-  isPass: {
-    type: Boolean,
-    default: false
   },
   createAt: {
     type: String,
     required: true
   },
-  nextTime: {
-    type: String,
-    required: true
+  isOpen: {
+    type: Boolean,
+    default: false
   },
-  note: {
-    type: String,
-    required: false
+  isClose: {
+    type: Boolean,
+    default: false
   }
 })
 

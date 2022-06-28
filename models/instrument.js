@@ -8,6 +8,14 @@ const instrumentSchema = new Schema({
   follow: {
     type: Boolean,
     default: false
+  },
+  checkState: {
+    type: Boolean,
+    default: false
+  },
+  isOpen: {
+    type: Boolean,
+    default: false
   }
 })
 

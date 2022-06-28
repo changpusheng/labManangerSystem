@@ -21,8 +21,16 @@
               {{#each instruments}}
               <tr>
                 <td scope="row">{{this.name}}</td>
-                <td scope="row"><a href="/item/amount-check/{{this._id}}" class="btn btn-outline-primary">開機</a></td>
-                <td scope="row"><a href="/item/amount-check/{{this._id}}" class="btn btn-outline-primary">未開機</a></td>
+                <td scope="row">
+                  <form action="/instrument/open/{{this._id}}" method="POST">
+                    <button type="submit" class="btn btn-outline-primary">開機</button>
+                  </form>
+                </td>
+                <td scope="row">
+                  <form action="/instrument/close/{{this._id}}" method="POST">
+                    <button type="submit" class="btn btn-outline-danger">未開機</button>
+                  </form>
+                </td>
               </tr>
               {{/each}}
             </tbody>
@@ -36,30 +44,25 @@
     <div class="col-md-7 mt-3">
       <div class="card">
         <div class="card-header">
-          完成確認項目
+          {{currentDay}}確認項目
         </div>
         <div class="card-body" style="overflow-y:auto;height:30rem;display:block;">
-          {{#if checkObj.length}}
+          {{#if records.length}}
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">當前確認日期</th>
-                <th scope="col">下次確認日期</th>
+                <th scope="col">確認日期</th>
                 <th scope="col">儀器編號</th>
                 <th scope="col">是否開機</th>
-                <th scope="col">是否合格</th>
-                <th scope="col">操作人員</th>
                 <th scope="col">確認人員</th>
-                <th scope="col">備註</th>
               </tr>
             </thead>
             <tbody>
-              {{#each checkObj}}
+              {{#each records}}
               <tr>
                 <td scope="row">{{currentYearMonDate this.createAt}}</td>
-                <td scope="row">{{currentYearMonDate this.nextTime}}</td>
-                <td scope="row">{{this.itemId.name}}</td>
-                <td scope="row">{{toFixed this.amountBefore 3}}{{this.itemId.unitId.name}}</td>
+                <td scope="row">{{this.instrumentId.name}}</td>
+                <td scope="row">{{#if this.isOpen}}是{{/if}}{{#if this.isClose}}否{{/if}}</td>
                 <td scope="row">{{this.userId.name}}</td>
               </tr>
               {{/each}}
