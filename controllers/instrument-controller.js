@@ -1,6 +1,7 @@
 const Instrument = require('../models/instrument')
 const InstrumentRecord = require('../models/instrumentRecord')
 const dayjs = require('dayjs')
+const dimStringSearch = require('../public/javascript/dimStringSearch')
 
 const instrumentContriller = {
   getInstrument: (req, res, next) => {
@@ -9,8 +10,24 @@ const instrumentContriller = {
     }).lean(),
     InstrumentRecord.find().populate(['instrumentId', 'userId']).lean()
     ]).then(([instruments, records]) => {
+      let keyWord = req.query.search
+      if (keyWord === '') throw new Error('請輸入關鍵字')
+      let checkObjFilter
+      if (keyWord) {
+        keyWord = req.query.search.trim().toLowerCase()
+        checkObjFilter = records.filter(obj => {
+          const createDate = dimStringSearch(dayjs(obj.createAt).format('YYYY/MM/DD'), keyWord)
+          const name = dimStringSearch(obj.instrumentId.name, keyWord)
+          return createDate || name
+        })
+      } else {
+        checkObjFilter = records.filter(obj => {
+          return dayjs(obj.createAt).format('YYYY/MM/DD') === dayjs().format('YYYY/MM/DD')
+        })
+      }
       res.render('instrument/instrument', {
-        instruments, records
+        instruments, records, keyWord,
+        checkObjFilter
       })
     }).catch(err => next(err))
   },

@@ -50,7 +50,7 @@
               {{/ifCond}}
               <div class="form-check d-flex justify-content-center">
                 <input class="form-check-input" type="radio" name="getNumber" id="getobjectAll"
-                  value="{{toFixed item.stock 3}}">
+                  value="{{ item.stock }}">
                 <label class="form-check-label ms-2" for="getobjectAll">
                   領取剩餘數量{{toFixed item.stock 3}}{{item.unitId.name}}
                 </label>

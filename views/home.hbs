@@ -176,6 +176,7 @@
         </div>
       </div>
     </div>
+
     <div class="col-md-2 mt-3">
       <div class="card">
         <div class="card-header">
@@ -194,7 +195,7 @@
               {{#each checkItems}}
               <tr>
                 <td scope="row">{{this.name}}</td>
-                <td scope="row">{{this.stock}}</td>
+                <td scope="row">{{toFixed this.stock 3}}</td>
               </tr>
               {{/each}}
             </tbody>

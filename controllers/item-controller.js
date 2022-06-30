@@ -9,6 +9,7 @@ const sentEmail = require('../public/javascript/email')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 const { getOffset, getPagination } = require('../helpers/page-helper')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
+const xlsx = require('../public/javascript/xlsx')
 
 
 const itemController = {
@@ -259,6 +260,7 @@ const itemController = {
         Item.findById(req.params.id).populate('categoryId').lean().then(obj => {
           if (obj.categoryId.name === '毒化物') {
             const titleContent = `${req.user.name}領用${item.outNumber}kg,ACN剩餘庫存${item.stockNumber.toFixed(3)}kg(無內文)`
+            xlsx(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name)
             sentEmail(titleContent)
             item.isInform = true
             item.save()

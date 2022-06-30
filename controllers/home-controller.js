@@ -9,6 +9,7 @@ const useWeekhCount = require('../public/javascript/useCount').useWeekNumber
 const avgCount = require('../public/javascript/useCount').avgCount
 const dayjs = require('dayjs')
 const weekOfYear = require('dayjs/plugin/weekOfYear')
+
 dayjs.extend(weekOfYear)
 
 const homeController = {
@@ -25,7 +26,7 @@ const homeController = {
     Category.find().lean(),
     Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate('categoryId').lean(),
     Check.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).lean().sort({ createAt: -1 }),
-    Instrument.find({ follow: true }).lean()
+    Instrument.find({ $and: [{ follow: true }, { checkState: true }] }).lean()
     ]).then(([buys, items, records, category, checkItems, checkTime, instruments]) => {
       if (items.length) {
         let acnRecordobjs
@@ -36,7 +37,7 @@ const homeController = {
         const buyIsDone = buys.filter(obj => obj.itemId.isBuy === true)
         if (records.length) {
           const acnCategoryObj = items.filter(obj => obj.categoryId.name === '毒化物' && obj.englishName === 'ACN')
-          //撈出毒化物ACN前5筆使用資料
+          //撈出毒化物ACN前10筆使用資料
           if (acnCategoryObj.length) {
             const acnId = acnCategoryObj[0]._id.toJSON()
             acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 10)
@@ -149,6 +150,7 @@ const homeController = {
         })
       } else {
         res.render('home', {
+          category,
           checkItems,
           instruments
         })
