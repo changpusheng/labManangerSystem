@@ -1,3 +1,5 @@
 node_modules
 *.env
 *.xlsx
+*.xls
+*.csv

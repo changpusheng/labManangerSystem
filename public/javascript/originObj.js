@@ -1,6 +1,6 @@
 const xlsx = require('xlsx')
 const dayjs = require('dayjs')
-const currentDate = dayjs().format('YYYYMM')
+
 
 function originObj(start, end) {
   //讀取EXCEL
@@ -32,12 +32,6 @@ function originObj(start, end) {
   }
 
   const objarr = []
-  // const acnData = {}
-  // acnData['領用時間'] = time
-  // acnData['溶劑名稱'] = title
-  // acnData['使用量'] = use
-  // acnData['剩餘數量'] = stock
-  // acnData['領用人'] = user
 
   for (let i = 23; i < arr.length; i++) {
     const obj = {}
@@ -68,14 +62,32 @@ function originObj(start, end) {
     i += 22
     objarr.push(obj)
   }
-  // objarr.push(acnData)
-  const filterFailObj = objarr.filter(objs => {
-    return objs.判定 === '不合格'
-  })
+  const s = '2021/05/01'
+  const e = '2022/7/01'
 
-  const filterPassObj = objarr.filter(objs => {
-    return objs.判定 === '合格'
-  })
+  function filterItems(a) {
+    const filterObj = objarr.filter(objs => {
+      return objs.判定 === a
+    }).filter(objs => {
+      return dayjs(objs.完成日期).format('YYYY') >= dayjs(s).format('YYYY') && dayjs(objs.完成日期).format('YYYY') <= dayjs(e).format('YYYY')
+    }).filter(objs => {
+      if (dayjs(s).format('YYYY') === dayjs(e).format('YYYY')) {
+        return dayjs(objs.完成日期).month() >= dayjs(s).month() && dayjs(objs.完成日期).month() <= dayjs(e).month()
+      } else if (dayjs(s).format('YYYY') < dayjs(e).format('YYYY')) {
+        if (dayjs(objs.完成日期).format('YYYY') === dayjs(s).format('YYYY')) {
+          return dayjs(objs.完成日期).month() >= dayjs(s).month() && dayjs(objs.完成日期).month() <= 11
+        } else if (dayjs(objs.完成日期).format('YYYY') === dayjs(e).format('YYYY')) {
+          return dayjs(objs.完成日期).month() >= 0 && dayjs(objs.完成日期).month() <= dayjs(e).month()
+        } else {
+          return dayjs(objs.完成日期).month() >= 0 && dayjs(objs.完成日期).month() <= 11
+        }
+      }
+    })
+    return filterObj
+  }
+
+  const filterPassObj = filterItems('合格')
+  const filterFailObj = filterItems('不合格')
 
 
   // 將資料轉成workSheet
@@ -96,16 +108,12 @@ function originObj(start, end) {
   let failBook = {
     SheetNames: ['原料不合格品'],
     Sheets: {
-      // 'arrayWorkSheet': arrayWorkSheet,
-      // 'jsonWorkSheet': jsonWorkSheet,
       '原料不合格品': failSheet,
     }
   }
   let passBook = {
     SheetNames: ['原料合格品'],
     Sheets: {
-      // 'arrayWorkSheet': arrayWorkSheet,
-      // 'jsonWorkSheet': jsonWorkSheet,
       '原料合格品': passSheet,
     }
   }
