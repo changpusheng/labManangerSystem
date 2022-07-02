@@ -1,5 +1,133 @@
 <div class="check-container">
   {{>home-tab route='labelPrint'}}
+  {{>label-tab route='origin'}}
   <hr>
-  <h1>標籤列印</h1>
+  <form action="/labelPrint" method="GET">
+    <div style="display: flex;">
+      <div class="input-group mb-3" style="width: 250px;">
+        <span class="input-group-text" id="startDate">開始日期</span>
+        <input type="date" class="form-control" aria-label="startDate" aria-describedby="startDate" name="startDate"
+          value="{{startDate}}" required>
+      </div>
+      <div class="input-group mb-3 ms-3" style="width: 250px;">
+        <span class="input-group-text" id="endDate">結束日期</span>
+        <input type="date" class="form-control" aria-label="endDate" aria-describedby="endDate" name="endDate"
+          value="{{endDate}}" required>
+      </div>
+      <div class="input-group mb-3 ms-3" style="width: 200px;">
+        <span class="input-group-text" id="search">品號</span>
+        <input type="text" class="form-control" name="search" placeholder="輸入品號" aria-label="Recipient's username"
+          aria-describedby="button-addon2" value="{{search}}">
+      </div>
+      {{#if search}}
+      <div class="input-group mb-3 ms-3" style="width: 200px;">
+        <span class="input-group-text" id="lot">批號</span>
+        <input type="text" class="form-control" name="lot" placeholder="輸入批號" aria-label="Recipient's username"
+          aria-describedby="button-addon2" value="{{lot}}">
+      </div>
+      {{/if}}
+
+
+      <button type="submit" class="btn btn-outline-primary mb-3 ms-3">搜尋</button>
+
+      {{#if passItems}}
+      <input type="text" name="output" style="display:none" value="{{#if passItems}}1{{else}}0{{/if}}">
+      <button type="submit" class="btn btn-outline-primary mb-3 ms-3">匯出檔案</button>
+      {{/if}}
+    </div>
+  </form>
+  <div style="display: flex;">
+    <h6> 上次結束日期為:<h6 style="color: blue;">{{obj}}</h6>
+    </h6>
+  </div>
+  <div class="row ">
+    <div class="col-md-12 ">
+      <div class="card">
+        <div class="card-header">
+          <div style="display: flex;">
+            <h6>合格品</h6>
+            <h6 style="color: blue;">搜尋到{{passItems.length}} 項(搜尋日期範圍:{{startDate}}~{{endDate}})</h6>
+          </div>
+        </div>
+        <div class="card-body" style="overflow-y:auto;height:20rem;display:block;">
+          {{#if passItems.length}}
+          <table class="table ">
+            <thead>
+              <tr>
+                <th scope="col">入廠日期</th>
+                <th scope="col">品號</th>
+                <th scope="col">批號</th>
+                <th scope="col">品名</th>
+                <th scope="col">完成日期</th>
+                <th scope="col">供應商</th>
+                <th scope="col">是否取樣</th>
+                <th scope="col">判定</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each passItems}}
+              <tr>
+                <td scope="row">{{this.入廠日期}}</td>
+                <td scope="row">{{this.品號}}</td>
+                <td scope="row">{{this.批號}}</td>
+                <td scope="row">{{this.品名}}</td>
+                <td scope="row">{{this.完成日期}}</td>
+                <td scope="row">{{this.供應商簡稱}}</td>
+                <td scope="row">{{this.是否取樣}}</td>
+                <td scope="row">{{this.判定}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <div class="input-group-text justify-content-center fs-5 fw-bold">無 </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mt-3">
+      <div class="card">
+        <div class="card-header">
+          <div style="display: flex;">
+            <h6>不合格品</h6>
+            <h6 style="color: blue;">搜尋到{{failItems.length}} 項(搜尋日期範圍:{{startDate}}~{{endDate}})</h6>
+          </div>
+        </div>
+        <div class="card-body" style="overflow-y:auto;height:20rem;display:block;">
+          {{#if failItems.length}}
+          <table class="table ">
+            <thead>
+              <tr>
+                <th scope="col">入廠日期</th>
+                <th scope="col">品號</th>
+                <th scope="col">批號</th>
+                <th scope="col">品名</th>
+                <th scope="col">完成日期</th>
+                <th scope="col">供應商</th>
+                <th scope="col">是否取樣</th>
+                <th scope="col">判定</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each failItems}}
+              <tr>
+                <td scope="row">{{this.入廠日期}}</td>
+                <td scope="row">{{this.品號}}</td>
+                <td scope="row">{{this.批號}}</td>
+                <td scope="row">{{this.品名}}</td>
+                <td scope="row">{{this.完成日期}}</td>
+                <td scope="row">{{this.供應商簡稱}}</td>
+                <td scope="row">{{this.是否取樣}}</td>
+                <td scope="row">{{this.判定}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <div class="input-group-text justify-content-center fs-5 fw-bold">無 </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

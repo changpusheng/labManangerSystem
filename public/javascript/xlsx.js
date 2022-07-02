@@ -4,7 +4,6 @@ const currentDate = dayjs().format('YYYYMM')
 const fs = require('fs')
 
 function xlsxfn(time, title, use, stock, user) {
-  
   fs.access(`./public/xlsx/${currentDate}.xlsx`, function (err) {
     if (err === null) {
       //讀取EXCEL
@@ -14,7 +13,6 @@ function xlsxfn(time, title, use, stock, user) {
       // 獲取第一個workSheet
       let sheet3 = workbook.Sheets[sheetNames[0]];
       // console.log(sheet1);
-
       let range = xlsx.utils.decode_range(sheet3['!ref']);
       const arr = []
       //迴圈獲取單元格值
@@ -35,7 +33,6 @@ function xlsxfn(time, title, use, stock, user) {
         }
         // console.log(row_value);
       }
-
       const objarr = []
       const acnData = {}
       acnData['領用時間'] = time
@@ -55,8 +52,6 @@ function xlsxfn(time, title, use, stock, user) {
         objarr.push(obj)
       }
       objarr.push(acnData)
-
-
       // 將資料轉成workSheet
       // let arrayWorkSheet = xlsx.utils.aoa_to_sheet(arrayData);
       let acnDataSheet = xlsx.utils.json_to_sheet(objarr);
@@ -70,16 +65,11 @@ function xlsxfn(time, title, use, stock, user) {
           'inputData': acnDataSheet,
         }
       };
-
       // 將workBook寫入檔案
       return xlsx.writeFile(workBook, `./public/xlsx/${currentDate
         }.xlsx`);
-
-
-
     } else if (err.code === "ENOENT") {
       //    檔案和目錄不存在的情況下；
-
       const objarr = []
       const acnData = {}
       acnData['領用時間'] = time
@@ -88,7 +78,6 @@ function xlsxfn(time, title, use, stock, user) {
       acnData['剩餘數量'] = stock
       acnData['領用人'] = user
       objarr.push(acnData)
-
       let acnDataSheet = xlsx.utils.json_to_sheet(objarr);
       let workBook = {
         SheetNames: ['inputData'],
@@ -96,7 +85,6 @@ function xlsxfn(time, title, use, stock, user) {
           'inputData': acnDataSheet,
         }
       };
-
       // 將workBook寫入檔案
       return xlsx.writeFile(workBook, `./public/xlsx/${currentDate
         }.xlsx`);
