@@ -50,7 +50,7 @@ const instrumentContriller = {
   postCloseInstrument: (req, res, next) => {
     Instrument.findById(req.params.id).then(instrument => {
       instrument.checkState = true
-      instrument.isOpen = false
+      instrument.isClose = true
       return instrument.save()
     }).then(obj => {
       InstrumentRecord.create({
@@ -58,6 +58,22 @@ const instrumentContriller = {
         userId: req.user._id,
         createAt: dayjs().format(),
         isClose: true
+      })
+    }).then(() => {
+      res.redirect('/instrument')
+    }).catch(err => next(err))
+  },
+  postFixInstrument: (req, res, next) => {
+    Instrument.findById(req.params.id).then(instrument => {
+      instrument.checkState = true
+      instrument.isFix = true
+      return instrument.save()
+    }).then(obj => {
+      InstrumentRecord.create({
+        instrumentId: obj._id,
+        userId: req.user._id,
+        createAt: dayjs().format(),
+        isFix: true
       })
     }).then(() => {
       res.redirect('/instrument')

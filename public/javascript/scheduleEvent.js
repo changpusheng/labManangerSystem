@@ -2,7 +2,6 @@ const Check = require('../../models/check')
 const Item = require('../../models/item')
 const dayjs = require('dayjs')
 
-
 const scheduleEvent = {
   checkSchedule: () => {
     Check.find().lean().then(obj => {
@@ -33,6 +32,9 @@ const scheduleEvent = {
         }).catch(err => console.log(err))
       })
     })
+  },
+  instrumentSchedule:() =>{
+    
   }
 }
 

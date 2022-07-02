@@ -108,16 +108,19 @@
               {{#each instruments}}
               <tr>
                 <td scope="row">{{this.name}}</td>
-                <td scope="row">{{#if this.isOpen}}
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked
-                      disabled>
-                    <label class="form-check-label" for="flexSwitchCheckCheckedDisabled"></label>
-                  </div>{{else}}
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDisabled" disabled>
-                    <label class="form-check-label" for="flexSwitchCheckDisabled"></label>
-                  </div>
+                <td scope="row">
+                  {{#if this.checkState}}
+                  {{#if this.isOpen}}
+                  未關機
+                  {{/if}}
+                  {{#if this.isClose}}
+                  開機校正
+                  {{/if}}
+                  {{#if this.isFix}}
+                  儀器報修
+                  {{/if}}
+                  {{else}}
+                  待確認
                   {{/if}}
                 </td>
               </tr>

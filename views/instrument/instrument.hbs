@@ -22,6 +22,7 @@
                 <th scope="col">品名</th>
                 <th scope="col">#</th>
                 <th scope="col">#</th>
+                <th scope="col">#</th>
               </tr>
             </thead>
             <tbody>
@@ -30,12 +31,17 @@
                 <td scope="row">{{this.name}}</td>
                 <td scope="row">
                   <form action="/instrument/open/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-primary">開機</button>
+                    <button type="submit" class="btn btn-outline-primary">未關機</button>
                   </form>
                 </td>
                 <td scope="row">
                   <form action="/instrument/close/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-danger">未開機</button>
+                    <button type="submit" class="btn btn-outline-danger">開機校正</button>
+                  </form>
+                </td>
+                <td scope="row">
+                  <form action="/instrument/fix/{{this._id}}" method="POST">
+                    <button type="submit" class="btn btn-outline-danger">儀器報修</button>
                   </form>
                 </td>
               </tr>
@@ -62,7 +68,7 @@
               <tr>
                 <th scope="col">確認日期</th>
                 <th scope="col">儀器編號</th>
-                <th scope="col">是否開機</th>
+                <th scope="col">機況</th>
                 <th scope="col">確認人員</th>
               </tr>
             </thead>
@@ -71,7 +77,8 @@
               <tr>
                 <td scope="row">{{currentYearMonDate this.createAt}}</td>
                 <td scope="row">{{this.instrumentId.name}}</td>
-                <td scope="row">{{#if this.isOpen}}是{{/if}}{{#if this.isClose}}否{{/if}}</td>
+                <td scope="row">{{#if this.isOpen}}未關機{{/if}}{{#if this.isClose}}開機校正{{/if}}{{#if
+                  this.isFix}}儀器報修{{/if}}</td>
                 <td scope="row">{{this.userId.name}}</td>
               </tr>
               {{/each}}

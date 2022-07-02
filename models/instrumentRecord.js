@@ -25,6 +25,10 @@ const instrumentRecordSchema = new Schema({
   isClose: {
     type: Boolean,
     default: false
+  },
+  isFix: {
+    type: Boolean,
+    default: false
   }
 })
 

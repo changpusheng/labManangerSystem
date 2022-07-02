@@ -26,7 +26,7 @@ const homeController = {
     Category.find().lean(),
     Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate('categoryId').lean(),
     Check.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).lean().sort({ createAt: -1 }),
-    Instrument.find({ $and: [{ follow: true }, { checkState: true }] }).lean()
+    Instrument.find({ $and: [{ follow: true }] }).lean()
     ]).then(([buys, items, records, category, checkItems, checkTime, instruments]) => {
       if (items.length) {
         let acnRecordobjs

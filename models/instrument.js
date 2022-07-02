@@ -16,6 +16,14 @@ const instrumentSchema = new Schema({
   isOpen: {
     type: Boolean,
     default: false
+  },
+  isClose: {
+    type: Boolean,
+    default: false
+  },
+  isFix: {
+    type: Boolean,
+    default: false
   }
 })
 
