@@ -9,7 +9,7 @@ const configSchema = new Schema({
     required: true
   }, other: {
     type: String,
-    required: true
+    required: false
   }
 })
 

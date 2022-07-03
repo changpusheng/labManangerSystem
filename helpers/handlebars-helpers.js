@@ -37,8 +37,8 @@ module.exports = {
   },
   bottleNumber: (value, number, density, vol) => {
     let bottleNumber = value.toFixed(number) / density / vol
-    let remainder = (bottleNumber - Math.trunc(bottleNumber)) * density
-    let finalValue = Math.trunc(bottleNumber) + '瓶' + remainder.toFixed(2) + 'kg'
+    let remainder = (bottleNumber - Math.trunc(bottleNumber)) * 1000
+    let finalValue = Math.trunc(bottleNumber) + '瓶' + Math.round(remainder) + 'ml'
     return finalValue
   },
   firstIndexName: (a) => {

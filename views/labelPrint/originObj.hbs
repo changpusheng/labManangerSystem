@@ -1,3 +1,9 @@
+{{#if output}}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  匯出檔案完成,標籤印表機型號:TSM.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
 <div class="check-container">
   {{>home-tab route='labelPrint'}}
   {{>label-tab route='origin'}}
@@ -26,18 +32,33 @@
           aria-describedby="button-addon2" value="{{lot}}">
       </div>
       {{/if}}
+      <button type="submit" id="searchBtn" class="btn btn-outline-primary mb-3 ms-3">搜尋</button>
 
+      <input type="text" id="outputController" name="output" style="display: none;">
 
-      <button type="submit" class="btn btn-outline-primary mb-3 ms-3">搜尋</button>
+      {{#ifCond output 0}}
+      <button type="submit" id="outputBtn" class="btn btn-outline-primary mb-3 ms-3">匯出檔案</button>
+      {{/ifCond}}
 
-      {{#if passItems}}
-      <input type="text" name="output" style="display:none" value="{{#if passItems}}1{{else}}0{{/if}}">
-      <button type="submit" class="btn btn-outline-primary mb-3 ms-3">匯出檔案</button>
-      {{/if}}
+      <script>
+        const outputBtn = document.querySelector('#outputBtn')
+        const searchBtn = document.querySelector('#searchBtn')
+        const outputController = document.querySelector('#outputController')
+        outputBtn.addEventListener('click', () => {
+          return outputController.value = 1
+        })
+        searchBtn.addEventListener('click', () => {
+          return outputController.value = 0
+        })
+      </script>
+
     </div>
   </form>
+
+
   <div style="display: flex;">
-    <h6> 上次結束日期為:<h6 style="color: blue;">{{obj}}</h6>
+    <h6> 上次結束日期為:
+      <h6 style="color: blue;">{{obj}}</h6>
     </h6>
   </div>
   <div class="row ">
@@ -106,6 +127,7 @@
                 <th scope="col">供應商</th>
                 <th scope="col">是否取樣</th>
                 <th scope="col">判定</th>
+                <th scope="col">異常原因</th>
               </tr>
             </thead>
             <tbody>
@@ -119,6 +141,7 @@
                 <td scope="row">{{this.供應商簡稱}}</td>
                 <td scope="row">{{this.是否取樣}}</td>
                 <td scope="row">{{this.判定}}</td>
+                <td scope="row">{{this.異常原因}}</td>
               </tr>
               {{/each}}
             </tbody>

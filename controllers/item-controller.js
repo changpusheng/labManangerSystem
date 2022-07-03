@@ -10,7 +10,7 @@ const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 const { getOffset, getPagination } = require('../helpers/page-helper')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
 const xlsx = require('../public/javascript/xlsx')
-
+const { bottleNumber } = require('../helpers/handlebars-helpers')
 
 const itemController = {
   getCategory: (req, res, next) => {
@@ -260,7 +260,9 @@ const itemController = {
         Item.findById(req.params.id).populate('categoryId').lean().then(obj => {
           if (obj.categoryId.name === '毒化物') {
             const titleContent = `${req.user.name}領用${item.outNumber}kg,ACN剩餘庫存${item.stockNumber.toFixed(3)}kg(無內文)`
-            xlsx(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name)
+            //0.787為ACN密度
+            const total = bottleNumber(item.stockNumber, 3, 0.787, 4)
+            xlsx(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name, total)
             sentEmail(titleContent)
             item.isInform = true
             item.save()

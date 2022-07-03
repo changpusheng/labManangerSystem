@@ -3,7 +3,7 @@ const dayjs = require('dayjs')
 const currentDate = dayjs().format('YYYYMM')
 const fs = require('fs')
 
-function xlsxfn(time, title, use, stock, user) {
+function xlsxfn(time, title, use, stock, user, total) {
   fs.access(`./public/xlsx/${currentDate}.xlsx`, function (err) {
     if (err === null) {
       //讀取EXCEL
@@ -39,16 +39,19 @@ function xlsxfn(time, title, use, stock, user) {
       acnData['溶劑名稱'] = title
       acnData['使用量'] = use
       acnData['剩餘數量'] = stock
+      acnData['瓶裝數'] = total
       acnData['領用人'] = user
 
-      for (let i = 5; i < arr.length; i++) {
+
+      for (let i = 6; i < arr.length; i++) {
         const obj = {}
         obj['領用時間'] = arr[i]
         obj['溶劑名稱'] = arr[i + 1]
         obj['使用量'] = arr[i + 2]
         obj['剩餘數量'] = arr[i + 3]
-        obj['領用人'] = arr[i + 4]
-        i += 4
+        obj['瓶裝數'] = arr[i + 4]
+        obj['領用人'] = arr[i + 5]
+        i += 5
         objarr.push(obj)
       }
       objarr.push(acnData)
@@ -76,6 +79,7 @@ function xlsxfn(time, title, use, stock, user) {
       acnData['溶劑名稱'] = title
       acnData['使用量'] = use
       acnData['剩餘數量'] = stock
+      acnData['瓶裝數'] = total
       acnData['領用人'] = user
       objarr.push(acnData)
       let acnDataSheet = xlsx.utils.json_to_sheet(objarr);

@@ -1,6 +1,7 @@
 const xlsx = require('xlsx')
 const dayjs = require('dayjs')
 const dimStringSearch = require('../javascript/dimStringSearch')
+const fs = require('fs');
 
 if (process.env.NODE.ENV !== 'production') {
   require('dotenv').config()
@@ -51,7 +52,7 @@ const originObj = {
       obj['批號'] = arr[i + 4]
       obj['品名'] = arr[i + 5]
       obj['數量'] = arr[i + 6]
-      obj['單 位'] = arr[i + 7]
+      obj['單位'] = arr[i + 7]
       obj['供應商簡稱'] = arr[i + 8]
       obj['取樣數'] = arr[i + 9]
       obj['等級'] = arr[i + 10]
@@ -135,6 +136,19 @@ const originObj = {
   },
 
   outputDate: (pass, fail) => {
+
+    const init = [{
+      '試訂': '-', '入廠日期': '-', '交貨通知序號'
+        : '-', '品號': '-', '批號': '-', '品名': '-', '數量': '-', '單位': '-', '供應商簡稱': '-', '取樣數': '-', '等級': '-',
+      '包裝數': '-', '包裝單位': '-', '工作分配': '-', '完成日期': '-', '判定': '-', '是否取樣': '-',
+      'COA': '-', '異常原因': '-', '外觀': '-', '純度': '-', '比重': '-', '水分': '-'
+    }]
+    if (!pass.length) {
+      pass = init
+    }
+    if (!fail.length) {
+      fail = init
+    }
     // 將資料轉成workSheet
     // let acnDataSheet = xlsx.utils.json_to_sheet(objarr);
     let failSheet = xlsx.utils.json_to_sheet(fail);
@@ -158,7 +172,6 @@ const originObj = {
     xlsx.writeFile(passBook, `${passUrl}`);
   }
 }
-
 
 
 module.exports = originObj
