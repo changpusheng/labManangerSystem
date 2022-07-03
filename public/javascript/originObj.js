@@ -2,10 +2,18 @@ const xlsx = require('xlsx')
 const dayjs = require('dayjs')
 const dimStringSearch = require('../javascript/dimStringSearch')
 
+if (process.env.NODE.ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const url = process.env.originObjXlsxUrl
+const passUrl = process.env.originPass
+const failUrl = process.env.originFail
+
 const originObj = {
   readData: (start, end, search, lot) => {
     //讀取EXCEL
-    let workbook = xlsx.readFile(`./public/xlsx/原料篩選.xlsx`)
+    let workbook = xlsx.readFile(url)
     let sheetNames = workbook.SheetNames;
     // 獲取第一個workSheet
     let sheet3 = workbook.Sheets[sheetNames[0]];
@@ -71,25 +79,35 @@ const originObj = {
       }).filter(objs => {
         return objs.判定 === a
       }).filter(objs => {
+        //篩選出年份內的物件
         return dayjs(objs.完成日期).format('YYYY') >= dayjs(s).format('YYYY') && dayjs(objs.完成日期).format('YYYY') <= dayjs(e).format('YYYY')
       }).filter(objs => {
+        //篩選同年份
         if (dayjs(s).format('YYYY') === dayjs(e).format('YYYY')) {
           return dayjs(objs.完成日期).month() >= dayjs(s).month() && dayjs(objs.完成日期).month() <= dayjs(e).month()
-        } else if (dayjs(s).format('YYYY') < dayjs(e).format('YYYY')) {
+        } else {
+          //篩選不同年份
           if (dayjs(objs.完成日期).format('YYYY') === dayjs(s).format('YYYY')) {
             return dayjs(objs.完成日期).month() >= dayjs(s).month() && dayjs(objs.完成日期).month() <= 11
           } else if (dayjs(objs.完成日期).format('YYYY') === dayjs(e).format('YYYY')) {
             return dayjs(objs.完成日期).month() >= 0 && dayjs(objs.完成日期).month() <= dayjs(e).month()
           } else {
+            //如果物件年份不等於搜尋開始日期也不等於結束日期，搜尋出1~12月
             return dayjs(objs.完成日期).month() >= 0 && dayjs(objs.完成日期).month() <= 11
           }
         }
       }).filter(objs => {
+        //如果是搜尋同年同月，篩選出開始日期到結束日期物件
+        if (dayjs(s).format('YYYY/MM') === dayjs(e).format('YYYY/MM')) {
+          return dayjs(objs.完成日期).date() >= dayjs(s).date() && dayjs(objs.完成日期).date() <= dayjs(e).date()
+        }
+        //如果不同年份，個別篩出開始日期與結束日期物件
         if (dayjs(objs.完成日期).format('YYYY/MM') === dayjs(s).format('YYYY/MM')) {
           return dayjs(objs.完成日期).date() >= dayjs(s).date() && dayjs(objs.完成日期).date() <= dayjs(s).endOf('month').format('YYYY/MM/DD').slice(8, 10)
         } else if (dayjs(objs.完成日期).format('YYYY/MM') === dayjs(e).format('YYYY/MM')) {
           return dayjs(objs.完成日期).date() >= 0 && dayjs(objs.完成日期).date() <= dayjs(e).date()
         } else {
+          //如果物件年份月份不等於搜尋開始日期也不等於結束日期，搜尋出1~31天
           return dayjs(objs.完成日期).date() >= 0 && dayjs(objs.完成日期).date() <= 31
         }
       }).filter(objs => {
@@ -135,8 +153,9 @@ const originObj = {
       }
     }
     // 將workBook寫入檔案
-    xlsx.writeFile(failBook, `./public/xlsx/原料不合格品.csv`);
-    xlsx.writeFile(passBook, `./public/xlsx/原料合格品.csv`);
+
+    xlsx.writeFile(failBook, `${failUrl}`);
+    xlsx.writeFile(passBook, `${passUrl}`);
   }
 }
 

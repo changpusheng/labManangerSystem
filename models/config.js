@@ -7,6 +7,9 @@ const configSchema = new Schema({
   }, data: {
     type: String,
     required: true
+  }, other: {
+    type: String,
+    required: true
   }
 })
 
