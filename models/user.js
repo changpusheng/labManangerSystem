@@ -5,7 +5,7 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-   email: {
+  email: {
     type: String,
     required: true
   },
@@ -18,6 +18,10 @@ const userSchema = new Schema({
     required: true
   },
   isAdmin: {
+    type: Boolean,
+    default: false
+  },
+  isToxicManager: {
     type: Boolean,
     default: false
   }

@@ -11,10 +11,8 @@ const { getUser } = require('./helpers/auth-helpers')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const scheduleEvent = require('./public/javascript/scheduleEvent')
 const schedule = require('node-schedule')
-const configDataOutput = require('./public/javascript/configDataOutput')
 
 require('./models/mongoose')
-
 
 if (process.env.NODE.ENV !== 'production') {
   require('dotenv').config()
@@ -42,25 +40,12 @@ app.use((req, res, next) => {
 })
 
 
-const Config = require('./models/config')
-let data
-const configData = async () => {
-  await Config.find().lean().then(obj => {
-    const filterObj = obj.filter(objs => {
-      return objs.name === '系統執行腳本時間(分)'
-    })
-    return data = filterObj
-  }).catch(err => console.log(err))
-  return data
-}
-console.log(configData())
-
 //排定行程
 let rule = new schedule.RecurrenceRule();
 //每週1~5的12:10分執行
 rule.dayOfWeek = [1, 2, 3, 4, 5];
-rule.hour = 12
-rule.minute = 15
+rule.hour = 5
+rule.minute = 17
 rule.second = 00;
 let job = schedule.scheduleJob(rule, scheduleEvent.checkSchedule, scheduleEvent.instrumentSchedule);
 

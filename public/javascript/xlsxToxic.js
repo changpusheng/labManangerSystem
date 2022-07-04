@@ -95,8 +95,6 @@ function xlsxfn(time, title, use, stock, user, total) {
     }
   })
 
-
-
 }
 
 

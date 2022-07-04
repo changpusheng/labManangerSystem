@@ -11,6 +11,7 @@
               <th scope="col">Name</th>
               <th scope="col">Acount</th>
               <th scope="col">Email</th>
+              <th scope="col">毒化物管理者</th>
               <th scope="col">管理者</th>
               <th scope="col">#</th>
             </tr>
@@ -21,6 +22,16 @@
               <td>{{this.name}}</td>
               <td>{{this.account}}</td>
               <td>{{this.email}}</td>
+              <td>
+                <form action="/admin/toxicManager/{{this._id}}?_method=PATCH" method="POST" id="{{this.name}}">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="toxic"
+                      onclick="document.getElementById(`{{this.name}}`).submit();" {{#if
+                      this.isToxicManager}}checked{{/if}}>
+                    <label class="form-check-label" for="admin"></label>
+                  </div>
+                </form>
+              </td>
               <td>
                 <form action="/admin/users/{{this._id}}?_method=PATCH" method="POST" id="{{this.name}}">
                   <div class="form-check form-switch">

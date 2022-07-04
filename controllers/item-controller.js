@@ -4,6 +4,7 @@ const Unit = require('../models/unit')
 const Record = require('../models/record')
 const Buy = require('../models/buy')
 const Check = require('../models/check')
+const User = require('../models/user')
 const dayjs = require('dayjs')
 const sentEmail = require('../public/javascript/email')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
@@ -274,14 +275,20 @@ const itemController = {
         stockNumber: Number(stock) - Number(getNumber),
         userId: req.user._id
       }).then(item => {
-        Item.findById(req.params.id).populate('categoryId').lean().then(obj => {
+        Promise.all([Item.findById(req.params.id).populate('categoryId').lean(),
+        User.find({ isToxicManager: true }).lean()
+        ]).then(([obj, users]) => {
           if (obj.categoryId.name === '毒化物') {
+            const toxicUser = users.map(obj => {
+              return obj.email
+            })
+            console.log(toxicUser)
             const titleContent = `${req.user.name}領用${item.outNumber}kg,ACN剩餘庫存${item.stockNumber.toFixed(3)}kg(無內文)`
             //0.787為ACN密度
             const bottleFactors = obj.factors / 4
             const total = bottleNumber(item.stockNumber, 3, bottleFactors, 4)
             xlsxToxic(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name, total)
-            sentEmail(titleContent, process.env.email_user_receiver)
+            sentEmail(titleContent, toxicUser)
             item.isInform = true
             item.save()
           }

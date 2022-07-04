@@ -5,6 +5,7 @@ const adminCroller = require('../../controllers/admin-controller')
 
 router.delete('/itemUseRecord/:id', adminCroller.deleteItemUseRecord)
 router.delete('/itemBuyRecord/:id', adminCroller.deleteItemBuyRecord)
+router.patch('/toxicManager/:id', adminCroller.patchToxicManager)
 router.patch('/users/:id', adminCroller.patchUser)
 router.patch('/instrument/:id', adminCroller.patchInstrument)
 router.delete('/itemList/:id', adminCroller.deleteitemList)
