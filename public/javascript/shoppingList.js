@@ -11,7 +11,6 @@ function list(data) {
     <th scope="col">訂單時間</th>
     <th scope="col">請購人</th>
     <th scope="col">狀態</th>
-    <th scope="col">行動</th>
   </tr>
    </thead>
     <tbody>
@@ -24,9 +23,6 @@ function list(data) {
     <td>${obj.createAt}</td>
     <td>${obj.userId.name}</td>
      <td>未結案</td>
-     <td> <a type="button" class="btn btn-outline-success ms-3"
-        href="/item/normalSolven">通知</a>
-        </td>
     </tr>
     `
     product += container

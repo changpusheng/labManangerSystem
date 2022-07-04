@@ -11,6 +11,10 @@ const { getOffset, getPagination } = require('../helpers/page-helper')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
 const xlsxToxic = require('../public/javascript/xlsxToxic')
 const { bottleNumber } = require('../helpers/handlebars-helpers')
+if (process.env.NODE.ENV !== 'production') {
+  require('dotenv').config()
+}
+
 
 const itemController = {
   getCategory: (req, res, next) => {
@@ -164,7 +168,7 @@ const itemController = {
     let note = '無單號'
     let buyId
     let stock
-    return Promise.all([Item.findById(req.params.id).populate('unitId'), Buy.find().populate(['itemId', 'userId'])])
+    return Promise.all([Item.findById(req.params.id).populate('unitId'), Buy.find().populate(['itemId', 'userId']).populate({ path: 'userId', populate: { path: 'email' } })])
       .then(([item, buy]) => {
         if (!item) throw new Error("item didn't exist!")
         if (!buy) throw new Error("Buyitem didn't exist!")
@@ -223,7 +227,20 @@ const itemController = {
           note,
           stockNumber: Number(stock) + saveNumberValue,
           buyId
-        }).then(() => {
+        }).then(async item => {
+          const arr = []
+          arr.push(item)
+          await Record.findById(arr[0]._id).populate(['itemId', 'userId', 'buyId']).populate({ path: 'itemId', populate: { path: 'name' } }).populate({ path: 'userId', populate: { path: 'email' } }).populate({ path: 'buyId', populate: { path: 'userId' } }).lean().then(
+            obj => {
+              if (obj) {
+                const titleContent = `${obj.userId.name}入庫${obj.itemId.name}數量:${obj.inputNumber}瓶，訂單編號${obj.buyId.commit}，請驗收(無內文)`
+                sentEmail(titleContent, obj.buyId.userId.email)
+              }
+              return obj
+            }
+          ).then(obj => {
+            req.flash('success_messages', `自動發信通知${obj.buyId.userId.name}驗收`)
+          })
           req.flash('success_messages', '入庫成功')
           res.redirect('/')
         }).catch(err => next(err))
@@ -258,14 +275,13 @@ const itemController = {
         userId: req.user._id
       }).then(item => {
         Item.findById(req.params.id).populate('categoryId').lean().then(obj => {
-          console.log(obj)
           if (obj.categoryId.name === '毒化物') {
             const titleContent = `${req.user.name}領用${item.outNumber}kg,ACN剩餘庫存${item.stockNumber.toFixed(3)}kg(無內文)`
             //0.787為ACN密度
             const bottleFactors = obj.factors / 4
             const total = bottleNumber(item.stockNumber, 3, bottleFactors, 4)
             xlsxToxic(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name, total)
-            sentEmail(titleContent)
+            sentEmail(titleContent, process.env.email_user_receiver)
             item.isInform = true
             item.save()
           }

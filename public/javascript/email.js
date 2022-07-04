@@ -24,10 +24,14 @@ if (process.env.NODE.ENV !== 'production') {
 
 //Gmailhost
 
-function sendEmail(title, html) {
+function sendEmail(title, receiver, html) {
 
   if (!title) { title = '沒有主旨' }
   if (!html) { html = '沒有內文' }
+  if (!receiver) {
+    receiver = process.env.email_user
+    html = '收件者信箱出錯'
+  }
 
   let transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
@@ -41,7 +45,7 @@ function sendEmail(title, html) {
 
   mailOption = {
     from: process.env.email_user,
-    to: 'sdf753741789@gmail.com', //收件者
+    to: `${receiver}`, //收件者
     subject: `${title}`, // 主旨
     html: `<div>${html}</div>` // html 內文
   }

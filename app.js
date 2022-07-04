@@ -42,14 +42,28 @@ app.use((req, res, next) => {
 })
 
 
-  //排定行程
-  let rule = new schedule.RecurrenceRule();
-  //每週1~5的12:10分執行
-  rule.dayOfWeek = [1, 2, 3, 4, 5];
-  rule.hour = 22
-  rule.minute = 45
-  rule.second = 00;
-  let job = schedule.scheduleJob(rule, scheduleEvent.checkSchedule, scheduleEvent.instrumentSchedule);
+const Config = require('./models/config')
+let data
+const configData = async () => {
+  await Config.find().lean().then(obj => {
+    const filterObj = obj.filter(objs => {
+      return objs.name === '系統執行腳本時間(分)'
+    })
+    return data = filterObj
+  }).catch(err => console.log(err))
+  return data
+}
+console.log(configData())
+
+//排定行程
+let rule = new schedule.RecurrenceRule();
+//每週1~5的12:10分執行
+rule.dayOfWeek = [1, 2, 3, 4, 5];
+rule.hour = 12
+rule.minute = 15
+rule.second = 00;
+let job = schedule.scheduleJob(rule, scheduleEvent.checkSchedule, scheduleEvent.instrumentSchedule);
+
 app.use(router)
 
 
