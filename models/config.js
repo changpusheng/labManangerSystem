@@ -4,10 +4,11 @@ const configSchema = new Schema({
   name: {
     type: String,
     required: true
-  }, data: {
+  },
+  data: {
     type: String,
     required: true
-  }, other: {
+  }, note: {
     type: String,
     required: false
   }

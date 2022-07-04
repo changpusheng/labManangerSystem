@@ -3,6 +3,7 @@ const dayjs = require('dayjs')
 const dimStringSearch = require('../javascript/dimStringSearch')
 const fs = require('fs');
 
+
 if (process.env.NODE.ENV !== 'production') {
   require('dotenv').config()
 }
@@ -151,6 +152,9 @@ const originObj = {
     }
     // 將資料轉成workSheet
     // let acnDataSheet = xlsx.utils.json_to_sheet(objarr);
+
+    //排序
+
     let failSheet = xlsx.utils.json_to_sheet(fail);
     let passSheet = xlsx.utils.json_to_sheet(pass);
 
@@ -170,6 +174,7 @@ const originObj = {
 
     xlsx.writeFile(failBook, `${failUrl}`);
     xlsx.writeFile(passBook, `${passUrl}`);
+
   }
 }
 

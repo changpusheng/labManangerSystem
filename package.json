@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "xlsxTest": "node public/javascript/xlsx.js",
+    "xlsxTest": "nodemon public/javascript/scheduleEvent.js",
     "itemSeed": "node models/seeds/itemSeeder.js",
     "email": "node public/javascript/email.js",
     "recordSeed": "node models/seeds/recordSeeder.js",

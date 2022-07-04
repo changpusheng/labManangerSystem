@@ -9,7 +9,7 @@ const sentEmail = require('../public/javascript/email')
 const { currentYearMonDate } = require('../helpers/handlebars-helpers')
 const { getOffset, getPagination } = require('../helpers/page-helper')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
-const xlsx = require('../public/javascript/xlsx')
+const xlsxToxic = require('../public/javascript/xlsxToxic')
 const { bottleNumber } = require('../helpers/handlebars-helpers')
 
 const itemController = {
@@ -258,11 +258,13 @@ const itemController = {
         userId: req.user._id
       }).then(item => {
         Item.findById(req.params.id).populate('categoryId').lean().then(obj => {
+          console.log(obj)
           if (obj.categoryId.name === '毒化物') {
             const titleContent = `${req.user.name}領用${item.outNumber}kg,ACN剩餘庫存${item.stockNumber.toFixed(3)}kg(無內文)`
             //0.787為ACN密度
-            const total = bottleNumber(item.stockNumber, 3, 0.787, 4)
-            xlsx(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name, total)
+            const bottleFactors = obj.factors / 4
+            const total = bottleNumber(item.stockNumber, 3, bottleFactors, 4)
+            xlsxToxic(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name, total)
             sentEmail(titleContent)
             item.isInform = true
             item.save()
@@ -338,7 +340,7 @@ const itemController = {
         userId: req.user._id,
         itemId: req.params.id,
         createAt: dayjs().format(),
-        nextTime: dayjs().add(14, 'day').format()
+        nextTime: dayjs().add(7, 'day').format()
       }).then(() => {
         req.flash('success_messages', `${item.name}盤點完成`)
         res.redirect('/item/amount-check')

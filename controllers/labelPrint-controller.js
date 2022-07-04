@@ -22,11 +22,11 @@ const labelPrintContriller = {
       passItems = originObjLabelPrintXlsx.readData(start, end, search, lot).filterPassObj
       failItems = originObjLabelPrintXlsx.readData(start, end, search, lot).filterFailObj
     }
-    Config.findOne({ name: 'originSearchDate' }).then(obj => {
+    Config.findOne({ name: '原料標籤日期' }).then(obj => {
       lastTime = obj.data
       if (!obj) {
         return Config.create({
-          name: 'originSearchDate',
+          name: '原料標籤日期',
           data: dayjs().format('YYYY/MM/DD')
         })
       } else {

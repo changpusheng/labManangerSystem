@@ -2,7 +2,6 @@ const Buy = require('../models/buy')
 const Item = require('../models/item')
 const Record = require('../models/record')
 const Category = require('../models/category')
-const Check = require('../models/check')
 const Instrument = require('../models/instrument')
 const useMonthCount = require('../public/javascript/useCount').useMonthNumber
 const useWeekhCount = require('../public/javascript/useCount').useWeekNumber
@@ -25,9 +24,8 @@ const homeController = {
     Record.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).populate({ path: 'itemId', populate: { path: 'categoryId' } }).lean().sort({ 'createAt': -1 }),
     Category.find().lean(),
     Item.find({ $and: [{ amountCheck: false }, { follow: true }] }).populate('categoryId').lean(),
-    Check.find().populate(['itemId', 'userId']).populate({ path: 'itemId', populate: { path: 'unitId' } }).lean().sort({ createAt: -1 }),
     Instrument.find({ $and: [{ follow: true }] }).lean()
-    ]).then(([buys, items, records, category, checkItems, checkTime, instruments]) => {
+    ]).then(([buys, items, records, category, checkItems, instruments]) => {
       if (items.length) {
         let acnRecordobjs
         let recordsValue
@@ -36,7 +34,7 @@ const homeController = {
         //撈出已經購買但還沒有結案的資料
         const buyIsDone = buys.filter(obj => obj.itemId.isBuy === true)
         if (records.length) {
-          const acnCategoryObj = items.filter(obj => obj.categoryId.name === '毒化物' && obj.englishName === 'ACN')
+          const acnCategoryObj = items.filter(obj =>  obj.englishName === 'ACN')
           //撈出毒化物ACN前10筆使用資料
           if (acnCategoryObj.length) {
             const acnId = acnCategoryObj[0]._id.toJSON()

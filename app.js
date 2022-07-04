@@ -11,6 +11,7 @@ const { getUser } = require('./helpers/auth-helpers')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const scheduleEvent = require('./public/javascript/scheduleEvent')
 const schedule = require('node-schedule')
+const configDataOutput = require('./public/javascript/configDataOutput')
 
 require('./models/mongoose')
 
@@ -40,15 +41,15 @@ app.use((req, res, next) => {
   next()
 })
 
-//排定行程
-let rule = new schedule.RecurrenceRule();
-//每週1,3,5的12:10分執行
-rule.dayOfWeek = [1, 3, 5];
-rule.hour = 12;
-rule.minute = 10;
-rule.second = 0;
-let job = schedule.scheduleJob(rule, scheduleEvent.checkSchedule);
 
+  //排定行程
+  let rule = new schedule.RecurrenceRule();
+  //每週1~5的12:10分執行
+  rule.dayOfWeek = [1, 2, 3, 4, 5];
+  rule.hour = 22
+  rule.minute = 45
+  rule.second = 00;
+  let job = schedule.scheduleJob(rule, scheduleEvent.checkSchedule, scheduleEvent.instrumentSchedule);
 app.use(router)
 
 

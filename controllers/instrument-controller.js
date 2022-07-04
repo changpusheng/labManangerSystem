@@ -8,7 +8,7 @@ const instrumentContriller = {
     Promise.all([Instrument.find({
       $and: [{ follow: true }, { checkState: false }]
     }).lean(),
-    InstrumentRecord.find().populate(['instrumentId', 'userId']).lean()
+    InstrumentRecord.find().populate(['instrumentId', 'userId']).lean().sort({ createAt: -1 })
     ]).then(([instruments, records]) => {
       let keyWord = req.query.search
       if (keyWord === '') throw new Error('請輸入關鍵字')
@@ -35,6 +35,8 @@ const instrumentContriller = {
     Instrument.findById(req.params.id).then(instrument => {
       instrument.checkState = true
       instrument.isOpen = true
+      instrument.isClose = false
+      instrument.isFix = false
       return instrument.save()
     }).then(obj => {
       InstrumentRecord.create({
@@ -51,6 +53,8 @@ const instrumentContriller = {
     Instrument.findById(req.params.id).then(instrument => {
       instrument.checkState = true
       instrument.isClose = true
+      instrument.isOpen = false
+      instrument.isFix = false
       return instrument.save()
     }).then(obj => {
       InstrumentRecord.create({
@@ -67,6 +71,8 @@ const instrumentContriller = {
     Instrument.findById(req.params.id).then(instrument => {
       instrument.checkState = true
       instrument.isFix = true
+      instrument.isClose = false
+      instrument.isOpen = false
       return instrument.save()
     }).then(obj => {
       InstrumentRecord.create({

@@ -230,10 +230,36 @@ const adminCroller = {
     }).catch(err => next(err))
   },
   getConfig: (req, res, next) => {
-    Config.find().lean().then(items => {
-      res.render('admin/config', { items })
-    }).catch(err => next(err))
+    Promise.all([
+      Config.find().lean(),
+      req.params.id ? Config.findById(req.params.id).lean() : null
+    ])
+      .then(([items, item]) => {
+        res.render('admin/config', { items, item })
+      }).catch(err => next(err))
   },
+  putConfig: (req, res, next) => {
+    const { data, name, note } = req.body
+    if (!name) throw new Error('請輸入檔名')
+    if (!data) throw new Error('請輸入日期')
+    return Config.findById(req.params.id).then(config => {
+      if (!config) throw new Error("config doesn't exist!")
+      config.name = name
+      config.data = data
+      config.note = note
+      return config.save()
+    }).then(() => res.redirect('/admin/config')).catch(err => next(err))
+  },
+  postConfig: (req, res, next) => {
+    const { data, name, note } = req.body
+    if (!name) throw new Error('請輸入檔名')
+    if (!data) throw new Error('請輸入日期')
+    return Config.create({
+      name,
+      data, note
+    }).then(() => res.redirect('/admin/config')).catch(err => next(err))
+  }
+  ,
   getInstrument: (req, res, next) => {
     const DEFAULT_LIMIT = 5
     const page = Number(req.query.page) || 1

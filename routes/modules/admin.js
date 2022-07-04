@@ -20,6 +20,9 @@ router.post('/signup', adminCroller.postSignup)
 router.get('/backside', adminCroller.getBackSide)
 router.get('/itemList', adminCroller.getItemList)
 router.get('/categories', adminCroller.getCategories)
+router.put('/config/:id', adminCroller.putConfig)
+router.get('/config/:id', adminCroller.getConfig)
+router.post('/config', adminCroller.postConfig)
 router.get('/config', adminCroller.getConfig)
 router.post('/categories', adminCroller.postCategory)
 router.get('/instrument/:id', adminCroller.getInstrument)
@@ -28,7 +31,5 @@ router.post('/instrument', adminCroller.postInstrument)
 router.get('/instrument', adminCroller.getInstrument)
 router.get('/units', adminCroller.getUnits)
 router.post('/units', adminCroller.postUnit)
-
-
 
 module.exports = router

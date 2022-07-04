@@ -112,12 +112,14 @@
                   {{#if this.checkState}}
                   {{#if this.isOpen}}
                   未關機
-                  {{/if}}
+                  {{else}}
                   {{#if this.isClose}}
                   開機校正
-                  {{/if}}
+                  {{else}}
                   {{#if this.isFix}}
                   儀器報修
+                  {{/if}}
+                  {{/if}}
                   {{/if}}
                   {{else}}
                   待確認
