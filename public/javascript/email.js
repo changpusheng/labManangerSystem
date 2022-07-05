@@ -4,22 +4,7 @@ if (process.env.NODE.ENV !== 'production') {
   require('dotenv').config()
 }
 
-//公司host
-// let transporter = nodemailer.createTransport({
-//   host: process.env.MAIL_3FQC,
-//   port: 25,
-//   auth: {
-//     user: process.env.FQC_user,
-//     pass: process.env.FQC_password
-//   }
-// });
 
-// mailOption = {
-//   from: process.env.FQC_user,
-//   to: 'pusheng@ecic.com.tw', //收件者
-//   subject: 'Hey~', // 主旨
-//   html: '<b>Test mail </b>' // html 內文
-// }
 
 
 //Gmailhost
@@ -33,22 +18,39 @@ function sendEmail(title, receiver, html) {
     html = '收件者信箱出錯'
   }
 
+//公司host
   let transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.email_user,
-      pass: process.env.email_password
-    }
+  host: process.env.MAIL_3FQC,
+  port: 25,
+  auth: {
+    user: process.env.FQC_user,
+    pass: process.env.FQC_password
+  }
   });
 
   mailOption = {
-    from: process.env.email_user,
-    to: `${receiver}`, //收件者
-    subject: `${title}`, // 主旨
-    html: `<div>${html}</div>` // html 內文
+  from: process.env.FQC_user,
+  to: `${receiver}`, //收件者
+  subject: `${title}`, // 主旨
+  html: `<div>${html}</div>`// html 內文
   }
+
+  // let transporter = nodemailer.createTransport({
+  //   host: process.env.MAIL_HOST,
+  //   port: 465,
+  //   secure: true,
+  //   auth: {
+  //     user: process.env.email_user,
+  //     pass: process.env.email_password
+  //   }
+  // });
+
+  // mailOption = {
+  //   from: process.env.email_user,
+  //   to: `${receiver}`, //收件者
+  //   subject: `${title}`, // 主旨
+  //   html: `<div>${html}</div>` // html 內文
+  // }
 
 
   transporter.sendMail(mailOption, function (error, info) {//寄信方法
