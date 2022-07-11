@@ -169,7 +169,7 @@ const itemController = {
     let note = '無單號'
     let buyId
     let stock
-    return Promise.all([Item.findById(req.params.id).populate('unitId'), Buy.find().populate(['itemId', 'userId']).populate({ path: 'userId', populate: { path: 'email' } })])
+    return Promise.all([Item.findById(req.params.id).populate(['categoryId', 'unitId']), Buy.find().populate(['itemId', 'userId']).populate({ path: 'userId', populate: { path: 'email' } })])
       .then(([item, buy]) => {
         if (!item) throw new Error("item didn't exist!")
         if (!buy) throw new Error("Buyitem didn't exist!")
@@ -206,10 +206,13 @@ const itemController = {
         item.stock += Number(saveNumberValue)
         item.isBuy = false
         item.fullStock = item.stock
-        if (!buyItemId[0]) {
-          req.flash('success_messages', '無購買單號')
+        if (item.englishName === 'ACN') {
+          const bottleFactors = item.factors / 4
+          const total = bottleNumber(item.stock, 3, bottleFactors, 4)
+          xlsxToxic(dayjs().format('YYYY/MM/DD'), item.name, 0, item.stock.toFixed(3), req.user.name, total, Number(saveNumberValue))
         }
         return item.save()
+
       }).then(item => {
         if (!item) throw new Error("item didn't exist!")
         const { saveNumber, otherNumber, note
@@ -278,7 +281,8 @@ const itemController = {
         Promise.all([Item.findById(req.params.id).populate('categoryId').lean(),
         User.find({ isToxicManager: true }).lean()
         ]).then(([obj, users]) => {
-          if (obj.categoryId.name === '毒化物') {
+          console.log(obj)
+          if (obj.englishName === 'ACN') {
             const toxicUser = users.map(obj => {
               return obj.email
             })
@@ -286,7 +290,7 @@ const itemController = {
             //0.787為ACN密度
             const bottleFactors = obj.factors / 4
             const total = bottleNumber(item.stockNumber, 3, bottleFactors, 4)
-            xlsxToxic(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name, total)
+            xlsxToxic(dayjs().format('YYYY/MM/DD'), obj.name, item.outNumber, item.stockNumber.toFixed(3), req.user.name, total, 0)
             sentEmail(titleContent, toxicUser)
             item.isInform = true
             item.save()
@@ -328,12 +332,17 @@ const itemController = {
         let keyWord = req.query.search
         if (keyWord === '') throw new Error('請輸入關鍵字')
         let checkObjFilter
+        let checkItemFilter
         if (keyWord) {
           keyWord = req.query.search.trim().toLowerCase()
           checkObjFilter = checkObj.filter(obj => {
             const createDate = dimStringSearch(dayjs(obj.createAt).format('YYYY/MM/DD'), keyWord)
             const name = dimStringSearch(obj.itemId.name, keyWord)
             return createDate || name
+          })
+          checkItemFilter = checkItems.filter(obj => {
+            const name = dimStringSearch(obj.name, keyWord)
+            return name
           })
         } else {
           checkObjFilter = checkObj.filter(obj => {
@@ -344,7 +353,8 @@ const itemController = {
           checkItems: checkItemsFilter,
           checkItem,
           checkObj: checkObjFilter,
-          keyWord
+          keyWord,
+          checkItemFilter
         })
       }).catch(err => next(err))
   },

@@ -26,26 +26,55 @@
               </tr>
             </thead>
             <tbody>
+              {{#if instrumentFilter}}
+              {{#each instrumentFilter}}
+              <tr>
+                <td scope="row">{{this.name}}</td>
+                <td scope="row">
+                  <form action="/instrument/open/{{this._id}}" method="POST">
+                    <button type="submit" class="btn btn-outline-primary"
+                      onclick="return confirm(`確定{{this.name}}未關機嗎?`)">未關機</button>
+                  </form>
+                </td>
+                <td scope="row">
+                  <form action="/instrument/close/{{this._id}}" method="POST">
+                    <button type="submit" class="btn btn-outline-danger"
+                      onclick="return confirm(`確定{{this.name}}開機校正合格嗎?`)">開機校正合格</button>
+                  </form>
+                </td>
+                <td scope="row">
+                  <form action="/instrument/fix/{{this._id}}" method="POST">
+                    <button type="submit" class="btn btn-outline-danger"
+                      onclick="return confirm(`確定{{this.name}}儀器報修嗎?`)">儀器報修</button>
+                  </form>
+                </td>
+              </tr>
+              {{/each}}
+              {{else}}
               {{#each instruments}}
               <tr>
                 <td scope="row">{{this.name}}</td>
                 <td scope="row">
                   <form action="/instrument/open/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-primary" onclick="return confirm(`確定{{this.name}}未關機嗎?`)">未關機</button>
+                    <button type="submit" class="btn btn-outline-primary"
+                      onclick="return confirm(`確定{{this.name}}未關機嗎?`)">未關機</button>
                   </form>
                 </td>
                 <td scope="row">
                   <form action="/instrument/close/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm(`確定{{this.name}}開機校正合格嗎?`)">開機校正合格</button>
+                    <button type="submit" class="btn btn-outline-danger"
+                      onclick="return confirm(`確定{{this.name}}開機校正合格嗎?`)">開機校正合格</button>
                   </form>
                 </td>
                 <td scope="row">
                   <form action="/instrument/fix/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm(`確定{{this.name}}儀器報修嗎?`)">儀器報修</button>
+                    <button type="submit" class="btn btn-outline-danger"
+                      onclick="return confirm(`確定{{this.name}}儀器報修嗎?`)">儀器報修</button>
                   </form>
                 </td>
               </tr>
               {{/each}}
+              {{/if}}
             </tbody>
           </table>
           {{else}}

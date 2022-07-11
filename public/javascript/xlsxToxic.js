@@ -9,7 +9,7 @@ if (process.env.NODE.ENV !== 'production') {
 
 const acnUrl = process.env.acnUrl
 
-function xlsxfn(time, title, use, stock, user, total) {
+function xlsxfn(time, title, use, stock, user, total, input) {
   fs.access(`${acnUrl}${currentDate}.xlsx`, function (err) {
     if (err === null) {
       //讀取EXCEL
@@ -43,21 +43,23 @@ function xlsxfn(time, title, use, stock, user, total) {
       const acnData = {}
       acnData['領用時間'] = time
       acnData['溶劑名稱'] = title
+      acnData['入庫數量'] = input
       acnData['使用量'] = use
       acnData['剩餘數量'] = stock
       acnData['瓶裝數'] = total
       acnData['領用人'] = user
 
 
-      for (let i = 6; i < arr.length; i++) {
+      for (let i = 7; i < arr.length; i++) {
         const obj = {}
         obj['領用時間'] = arr[i]
         obj['溶劑名稱'] = arr[i + 1]
-        obj['使用量'] = arr[i + 2]
-        obj['剩餘數量'] = arr[i + 3]
-        obj['瓶裝數'] = arr[i + 4]
-        obj['領用人'] = arr[i + 5]
-        i += 5
+        obj['入庫數量'] = arr[i + 2]
+        obj['使用量'] = arr[i + 3]
+        obj['剩餘數量'] = arr[i + 4]
+        obj['瓶裝數'] = arr[i + 5]
+        obj['領用人'] = arr[i + 6]
+        i += 6
         objarr.push(obj)
       }
       objarr.push(acnData)
@@ -83,6 +85,7 @@ function xlsxfn(time, title, use, stock, user, total) {
       const acnData = {}
       acnData['領用時間'] = time
       acnData['溶劑名稱'] = title
+      acnData['入庫數量'] = input
       acnData['使用量'] = use
       acnData['剩餘數量'] = stock
       acnData['瓶裝數'] = total

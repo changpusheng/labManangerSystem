@@ -29,12 +29,13 @@
             <tr style="color: blue;font-weight:900;">
               <form action="/item/amount-check/{{checkItem._id}}?_method=PUT" method="POST">
                 <td scope="row">{{checkItem.name}}</td>
-                <td scope="row">{{checkItem.stock}}</td>
+                <td scope="row">{{toFixed checkItem.stock 3}}</td>
                 <td scope="row">
-                  <input type="text" name="afterNumber" min="0" value="{{checkItem.stock}}" style="width: 80px;"
-                    required>
+                  <input type="text" name="afterNumber" min="0" value="{{toFixed checkItem.stock 3}}"
+                    style="width: 80px;" required>
                 </td>
-                <td scope="row"><button type="submit" class="btn btn-outline-primary">送出</button></td>
+                <td scope="row"><button type="submit" class="btn btn-outline-primary"
+                    onclick="return confirm(`確定{{checkItem.name}}數量為{{toFixed checkItem.stock 3}}嗎?`)">送出</button></td>
                 <td scope="row"><a href="javascript:history.back()" class="btn btn-outline-danger">取消</a></td>
               </form>
             </tr>
@@ -59,6 +60,16 @@
               </tr>
             </thead>
             <tbody>
+              {{#if checkItemFilter}}
+              {{#each checkItemFilter}}
+              <tr>
+                <td scope="row">{{this.name}}</td>
+                <td scope="row">{{toFixed this.stock 3}}{{this.unitId.name}}</td>
+                <td scope="row">{{toFixed this.stock 3}}{{this.unitId.name}}</td>
+                <td scope="row"><a href="/item/amount-check/{{this._id}}" class="btn btn-outline-primary">盤點</a></td>
+              </tr>
+              {{/each}}
+              {{else}}
               {{#each checkItems}}
               <tr>
                 <td scope="row">{{this.name}}</td>
@@ -67,6 +78,7 @@
                 <td scope="row"><a href="/item/amount-check/{{this._id}}" class="btn btn-outline-primary">盤點</a></td>
               </tr>
               {{/each}}
+              {{/if}}
             </tbody>
           </table>
           {{else}}
