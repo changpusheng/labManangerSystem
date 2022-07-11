@@ -111,18 +111,18 @@
                 <td scope="row">
                   {{#if this.checkState}}
                   {{#if this.isOpen}}
-                  未關機
+                  <div style="color: blue;">未關機</div>
                   {{else}}
                   {{#if this.isClose}}
-                  開機校正
+                  <div style="color: green;">開機校正合格</div>
                   {{else}}
                   {{#if this.isFix}}
-                  儀器報修
+                  <div style="color: red;">儀器報修</div>
                   {{/if}}
                   {{/if}}
                   {{/if}}
                   {{else}}
-                  待確認
+                  <div style="color: rgba(196, 66, 14, 0.342);">待確認</div>
                   {{/if}}
                 </td>
               </tr>

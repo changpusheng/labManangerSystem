@@ -282,7 +282,6 @@ const itemController = {
             const toxicUser = users.map(obj => {
               return obj.email
             })
-            console.log(toxicUser)
             const titleContent = `${req.user.name}領用${item.outNumber}kg,ACN剩餘庫存${item.stockNumber.toFixed(3)}kg(無內文)`
             //0.787為ACN密度
             const bottleFactors = obj.factors / 4

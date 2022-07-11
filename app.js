@@ -44,8 +44,8 @@ app.use((req, res, next) => {
 let rule = new schedule.RecurrenceRule();
 //每週1~5的12:10分執行
 rule.dayOfWeek = [1, 2, 3, 4, 5];
-rule.hour = 12
-rule.minute = 10
+rule.hour = 09
+rule.minute = 30
 rule.second = 00;
 let job = schedule.scheduleJob(rule, scheduleEvent.checkSchedule, scheduleEvent.instrumentSchedule);
 

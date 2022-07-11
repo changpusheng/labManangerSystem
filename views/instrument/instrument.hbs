@@ -31,17 +31,17 @@
                 <td scope="row">{{this.name}}</td>
                 <td scope="row">
                   <form action="/instrument/open/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-primary">未關機</button>
+                    <button type="submit" class="btn btn-outline-primary" onclick="return confirm(`確定{{this.name}}未關機嗎?`)">未關機</button>
                   </form>
                 </td>
                 <td scope="row">
                   <form action="/instrument/close/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-danger">開機校正</button>
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm(`確定{{this.name}}開機校正合格嗎?`)">開機校正合格</button>
                   </form>
                 </td>
                 <td scope="row">
                   <form action="/instrument/fix/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-danger">儀器報修</button>
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm(`確定{{this.name}}儀器報修嗎?`)">儀器報修</button>
                   </form>
                 </td>
               </tr>
@@ -77,7 +77,7 @@
               <tr>
                 <td scope="row">{{currentYearMonDate this.createAt}}</td>
                 <td scope="row">{{this.instrumentId.name}}</td>
-                <td scope="row">{{#if this.isOpen}}未關機{{/if}}{{#if this.isClose}}開機校正{{/if}}{{#if
+                <td scope="row">{{#if this.isOpen}}未關機{{/if}}{{#if this.isClose}}開機校正合格{{/if}}{{#if
                   this.isFix}}儀器報修{{/if}}</td>
                 <td scope="row">{{this.userId.name}}</td>
               </tr>

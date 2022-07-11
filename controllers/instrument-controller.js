@@ -7,7 +7,7 @@ const instrumentContriller = {
   getInstrument: (req, res, next) => {
     Promise.all([Instrument.find({
       $and: [{ follow: true }, { checkState: false }]
-    }).lean(),
+    }).lean().sort({ 'name': 1 }),
     InstrumentRecord.find().populate(['instrumentId', 'userId']).lean().sort({ createAt: -1 })
     ]).then(([instruments, records]) => {
       let keyWord = req.query.search

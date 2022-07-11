@@ -3,11 +3,17 @@ const dayjs = require('dayjs')
 const currentDate = dayjs().format('YYYYMM')
 const fs = require('fs')
 
+if (process.env.NODE.ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const acnUrl = process.env.acnUrl
+
 function xlsxfn(time, title, use, stock, user, total) {
-  fs.access(`./public/xlsx/${currentDate}.xlsx`, function (err) {
+  fs.access(`${acnUrl}${currentDate}.xlsx`, function (err) {
     if (err === null) {
       //讀取EXCEL
-      let workbook = xlsx.readFile(`./public/xlsx/${currentDate
+      let workbook = xlsx.readFile(`${acnUrl}${currentDate
         }.xlsx`)
       let sheetNames = workbook.SheetNames;
       // 獲取第一個workSheet
@@ -69,7 +75,7 @@ function xlsxfn(time, title, use, stock, user, total) {
         }
       };
       // 將workBook寫入檔案
-      return xlsx.writeFile(workBook, `./public/xlsx/${currentDate
+      return xlsx.writeFile(workBook, `${acnUrl}${currentDate
         }.xlsx`);
     } else if (err.code === "ENOENT") {
       //    檔案和目錄不存在的情況下；
@@ -90,7 +96,7 @@ function xlsxfn(time, title, use, stock, user, total) {
         }
       };
       // 將workBook寫入檔案
-      return xlsx.writeFile(workBook, `./public/xlsx/${currentDate
+      return xlsx.writeFile(workBook, `${acnUrl}${currentDate
         }.xlsx`);
     }
   })
