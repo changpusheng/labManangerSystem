@@ -3,8 +3,8 @@
   <hr>
   <div class="row mt-3">
     <form action="/instrument" method="GET">
-      <div class="input-group  " style="width: 400px;">
-        <input type="text" class="form-control" name="search" placeholder="關鍵字搜尋(日期ex:2022/06/03、儀器編號)"
+      <div class="input-group  " style="width: 450px;">
+        <input type="text" class="form-control" name="search" placeholder="關鍵字搜尋(日期ex:2022/06/03、儀器編號後三碼)"
           aria-label="Recipient's username" aria-describedby="button-addon2" value="{{keyWord}}">
         <button class="btn btn-outline-primary" type="submit" id="button-addon2">搜尋</button>
       </div>
@@ -38,7 +38,7 @@
                 </td>
                 <td scope="row">
                   <form action="/instrument/close/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-danger"
+                    <button type="submit" class="btn btn-outline-success"
                       onclick="return confirm(`確定{{this.name}}開機校正合格嗎?`)">開機校正合格</button>
                   </form>
                 </td>
@@ -62,7 +62,7 @@
                 </td>
                 <td scope="row">
                   <form action="/instrument/close/{{this._id}}" method="POST">
-                    <button type="submit" class="btn btn-outline-danger"
+                    <button type="submit" class="btn btn-outline-success"
                       onclick="return confirm(`確定{{this.name}}開機校正合格嗎?`)">開機校正合格</button>
                   </form>
                 </td>

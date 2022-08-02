@@ -16,7 +16,7 @@ function sendEmail(title, receiver, html) {
     html = '收件者信箱出錯'
   }
 
-//公司host
+  //公司host
   // let transporter = nodemailer.createTransport({
   // host: process.env.MAIL_3FQC,
   // port: 25,
@@ -33,7 +33,7 @@ function sendEmail(title, receiver, html) {
   // html: `<div>${html}</div>`// html 內文
   // }
 
-  
+
   let transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: 465,

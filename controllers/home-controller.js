@@ -34,11 +34,10 @@ const homeController = {
         //撈出已經購買但還沒有結案的資料
         const buyIsDone = buys.filter(obj => obj.itemId.isBuy === true)
         if (records.length) {
-          const acnCategoryObj = items.filter(obj =>  obj.englishName === 'ACN')
+          const acnCategoryObj = records.filter(obj =>  obj.itemId.englishName === 'ACN')
           //撈出毒化物ACN前10筆使用資料
           if (acnCategoryObj.length) {
-            const acnId = acnCategoryObj[0]._id.toJSON()
-            acnRecordobjs = records.filter(obj => obj.itemId._id.toJSON() === acnId).slice(0, 10)
+            acnRecordobjs = acnCategoryObj.slice(0, 10)
           }
           //刪除超過設定年限的紀錄
           const filteYear = records.filter(obj => {

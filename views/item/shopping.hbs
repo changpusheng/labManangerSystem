@@ -37,11 +37,13 @@
         </blockquote>
         <form action="/item/shopping-object/{{item._id}}" method="POST">
           <blockquote class="blockquote ">
+            <h6 style="color: red;">根據單位填入購買數量</h6>
+            <h6 style="color: red;">ex:ACN 1瓶*3.148 = 3.148kg</h6>
             <div>
               <div class="input-group mb-3">
-                <span class="input-group-text" id="shoppingNumber">購買數量{{item.unitId.name}}</span>
+                <span class="input-group-text" id="shoppingNumber">購買數量 單位:{{item.unitId.name}}</span>
                 <input type="text" class="form-control" aria-label="Sizing example input"
-                  aria-describedby="shoppingNumber" name="number" min="0" placeholder="輸入購買數量" required>
+                  aria-describedby="shoppingNumber" name="number" min="0" placeholder="輸入購買數量 單位:{{item.unitId.name}}" required>
               </div>
               <div class="input-group mb-3">
                 <span class="input-group-text" id="chemicalNumber">小量化學編號/備註</span>

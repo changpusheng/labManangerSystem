@@ -14,12 +14,11 @@ const instrumentContriller = {
       if (keyWord === '') throw new Error('請輸入關鍵字')
       let checkObjFilter
       let instrumentFilter
-      console.log(instruments)
       if (keyWord) {
         keyWord = req.query.search.trim().toLowerCase()
         checkObjFilter = records.filter(obj => {
           const createDate = dimStringSearch(dayjs(obj.createAt).format('YYYY/MM/DD'), keyWord)
-          const name = dimStringSearch(obj.instrumentId.name, keyWord)
+          const name = dimStringSearch(obj.instrumentId.name.slice(-3), keyWord.slice(-3))
           return createDate || name
         })
         instrumentFilter = instruments.filter(obj => {
