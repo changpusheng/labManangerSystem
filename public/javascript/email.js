@@ -5,7 +5,7 @@ if (process.env.NODE.ENV !== 'production') {
 }
 
 
-//Gmailhost
+
 
 function sendEmail(title, receiver, html) {
 
@@ -33,7 +33,7 @@ function sendEmail(title, receiver, html) {
   // html: `<div>${html}</div>`// html 內文
   // }
 
-
+//Gmailhost
   let transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: 465,

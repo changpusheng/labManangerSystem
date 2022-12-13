@@ -2,7 +2,11 @@ const express = require('express')
 const router = express.Router()
 const adminCroller = require('../../controllers/admin-controller')
 
-
+router.delete('/ipqc/:id', adminCroller.deleteIPQC)
+router.put('/ipqc/:id', adminCroller.putIPQC)
+router.get('/ipqc/:id', adminCroller.getIPQC)
+router.get('/ipqc', adminCroller.getIPQC)
+router.post('/ipqc', adminCroller.postIPQC)
 router.delete('/itemUseRecord/:id', adminCroller.deleteItemUseRecord)
 router.delete('/itemBuyRecord/:id', adminCroller.deleteItemBuyRecord)
 router.patch('/toxicManager/:id', adminCroller.patchToxicManager)

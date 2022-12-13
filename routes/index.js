@@ -12,7 +12,7 @@ const { authenticated } = require('../middleware/auth')
 const { authenticatedAdmin } = require('../middleware/auth')
 const alertNotice = require('./modules/notice')
 
-router.use('/alertNotice', alertNotice)
+router.use('/alertNotice', authenticated,alertNotice)
 router.use('/labelPrint', authenticated, labelPrint)
 router.use('/instrument', authenticated, instrument)
 router.use('/item', authenticated, item)

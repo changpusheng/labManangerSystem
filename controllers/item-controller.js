@@ -281,7 +281,6 @@ const itemController = {
         Promise.all([Item.findById(req.params.id).populate('categoryId').lean(),
         User.find({ isToxicManager: true }).lean()
         ]).then(([obj, users]) => {
-          console.log(obj)
           if (obj.englishName === 'ACN') {
             const toxicUser = users.map(obj => {
               return obj.email

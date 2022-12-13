@@ -35,6 +35,7 @@
     "nodemon": "^2.0.16",
     "passport": "^0.5.3",
     "passport-local": "^1.0.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-style": "^0.8.13"
   }
 }

@@ -1,0 +1,324 @@
+{{>admin-tab route = 'IPQC'}}
+
+<div class="row mt-2" style="font-size: 15px;white-space: nowrap;">
+  <div class="col-md-12 m-auto ">
+    <div class="card card-body">
+      <div class="d-flex align-items-center pt-1 pb-1 my-3 text-white-50 bg-purple">
+        {{#if item}}
+        <form class="row" action="/admin/ipqc/{{item._id}}?_method=PUT" method="POST">
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="樣品名稱" name="name" style="width:150px"
+              value="{{item.name}}" required>
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="網址" name="url" style="width:150px" value="{{item.url}}"
+              required>
+          </div>
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目01" name="itemName1" style="width:150px"
+              value="{{item.itemName1}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="01上限" name="bigNumber1" style="width:150px"
+              value="{{item.bigNumber1}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="01下限" name="smallNumber1" style="width:150px"
+              value="{{item.smallNumber1}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目02" name="itemName2" style="width:150px"
+              value="{{item.itemName2}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="02上限" name="bigNumber2" style="width:150px"
+              value="{{item.bigNumber2}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="02下限" name="smallNumber2" style="width:150px"
+              value="{{item.smallNumber2}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目03" name="itemName3" style="width:150px"
+              value="{{item.itemName3}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="03上限" name="bigNumber3" style="width:150px"
+              value="{{item.bigNumber3}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="03下限" name="smallNumber3" style="width:150px"
+              value="{{item.smallNumber3}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目04" name="itemName4" style="width:150px"
+              value="{{item.itemName4}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="04上限" name="bigNumber4" style="width:150px"
+              value="{{item.bigNumber4}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="04下限" name="smallNumber4" style="width:150px"
+              value="{{item.smallNumber4}}">
+          </div>
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目05" name="itemName5" style="width:150px"
+              value="{{item.itemName5}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="05上限" name="bigNumber5" style="width:150px"
+              value="{{item.bigNumber5}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="05下限" name="smallNumber5" style="width:150px"
+              value="{{item.smallNumber5}}">
+          </div>
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目06" name="itemName6" style="width:150px"
+              value="{{item.itemName6}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="06上限" name="bigNumber6" style="width:150px"
+              value="{{item.bigNumber6}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="06下限" name="smallNumber6" style="width:150px"
+              value="{{item.smallNumber6}}">
+          </div>
+
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目07" name="itemName7" style="width:150px"
+              value="{{item.itemName7}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="07上限" name="bigNumber7" style="width:150px"
+              value="{{item.bigNumber7}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="07下限" name="smallNumber7" style="width:150px"
+              value="{{item.smallNumber7}}">
+          </div>
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目08" name="itemName8" style="width:150px"
+              value="{{item.itemName8}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="08上限" name="bigNumber8" style="width:150px"
+              value="{{item.bigNumber8}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="08下限" name="smallNumber8" style="width:150px"
+              value="{{item.smallNumber8}}">
+          </div>
+
+
+          <div class="col-auto">
+            <button class="btn btn-warning mt-3" type="submit">更改參數</button>
+            <a class="btn btn-link link-secondary" href="/admin/ipqc">or Create New</a>
+          </div>
+        </form>
+        {{else}}
+        <form class="row" action="/admin/ipqc" method="POST">
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="樣品名稱" name="name" value="{{item.name}}"
+              style="width:150px" required>
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="網址" name="url" value="{{item.url}}" style="width:150px"
+              required>
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目01" name="itemName1" style="width:150px"
+              value="{{item.itemName1}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="01上限" name="bigNumber1" style="width:150px"
+              value="{{item.bigNumber1}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="01下限" name="smallNumber1" style="width:150px"
+              value="{{item.smallNumber1}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目02" name="itemName2" style="width:150px"
+              value="{{item.itemName2}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="02上限" name="bigNumber2" style="width:150px"
+              value="{{item.bigNumber2}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="02下限" name="smallNumber2" style="width:150px"
+              value="{{item.smallNumber2}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目03" name="itemName3" style="width:150px"
+              value="{{item.itemName3}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="03上限" name="bigNumber3" style="width:150px"
+              value="{{item.bigNumber3}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="03下限" name="smallNumber3" style="width:150px"
+              value="{{item.smallNumber3}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目04" name="itemName4" style="width:150px"
+              value="{{item.itemName4}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="04上限" name="bigNumber4" style="width:150px"
+              value="{{item.bigNumber4}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="04下限" name="smallNumber4" style="width:150px"
+              value="{{item.smallNumber4}}">
+          </div>
+
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目05" name="itemName5" style="width:150px"
+              value="{{item.itemName5}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="05上限" name="bigNumber5" style="width:150px"
+              value="{{item.bigNumber5}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="05下限" name="smallNumber5" style="width:150px"
+              value="{{item.smallNumber5}}">
+          </div>
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目06" name="itemName6" style="width:150px"
+              value="{{item.itemName6}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="06上限" name="bigNumber6" style="width:150px"
+              value="{{item.bigNumber6}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="06下限" name="smallNumber6" style="width:150px"
+              value="{{item.smallNumber6}}">
+          </div>
+
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目07" name="itemName7" style="width:150px"
+              value="{{item.itemName7}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="07上限" name="bigNumber7" style="width:150px"
+              value="{{item.bigNumber7}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="07下限" name="smallNumber7" style="width:150px"
+              value="{{item.smallNumber7}}">
+          </div>
+
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="項目08" name="itemName8" style="width:150px"
+              value="{{item.itemName8}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="08上限" name="bigNumber8" style="width:150px"
+              value="{{item.bigNumber8}}">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" type="text" placeholder="08下限" name="smallNumber8" style="width:150px"
+              value="{{item.smallNumber8}}">
+          </div>
+
+          <div class="col-auto">
+            <button class="btn btn-outline-success" type="submit">新增參數</button>
+          </div>
+        </form>
+        {{/if}}
+      </div>
+      <div style="overflow-y:auto;height:600px;display:block;">
+        <table class="table align-middle">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">更改</th>
+              <th scope="col">刪除</th>
+              <th scope="col">樣品名稱</th>
+              <th scope="col">網址縮寫</th>
+              <th scope="col">項目01</th>
+              <th scope="col">01上限</th>
+              <th scope="col">01下限</th>
+              <th scope="col">項目02</th>
+              <th scope="col">02上限</th>
+              <th scope="col">02下限</th>
+              <th scope="col">項目03</th>
+              <th scope="col">03上限</th>
+              <th scope="col">03下限</th>
+              <th scope="col">項目04</th>
+              <th scope="col">04上限</th>
+              <th scope="col">04下限</th>
+              <th scope="col">項目05</th>
+              <th scope="col">05上限</th>
+              <th scope="col">05下限</th>
+              <th scope="col">項目06</th>
+              <th scope="col">06上限</th>
+              <th scope="col">06下限</th>
+              <th scope="col">項目07</th>
+              <th scope="col">07上限</th>
+              <th scope="col">07下限</th>
+              <th scope="col">項目08</th>
+              <th scope="col">08上限</th>
+              <th scope="col">08下限</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each items}}
+            <tr>
+              <td><a href="/admin/ipqc/{{this._id}}" class="btn btn-outline-primary">編輯</a></td>
+              <td>
+                <form action="/admin/ipqc/{{this._id}}?_method=Delete" method="POST">
+                  <button class="btn btn-outline-danger" type="submit" onclick="return confirm('確定要刪除{{this.name}}嗎?')">
+                    刪除
+                  </button>
+                </form>
+              </td>
+              <td>{{this.name}}</td>
+              <td>{{getEndText this.url 27}}</td>
+              <td>{{this.itemName1}}</td>
+              <td>{{this.bigNumber1}}</td>
+              <td>{{this.smallNumber1}}</td>
+              <td>{{this.itemName2}}</td>
+              <td>{{this.bigNumber2}}</td>
+              <td>{{this.smallNumber2}}</td>
+              <td>{{this.itemName3}}</td>
+              <td>{{this.bigNumber3}}</td>
+              <td>{{this.smallNumber3}}</td>
+              <td>{{this.itemName4}}</td>
+              <td>{{this.bigNumber4}}</td>
+              <td>{{this.smallNumber4}}</td>
+              <td>{{this.itemName5}}</td>
+              <td>{{this.bigNumber5}}</td>
+              <td>{{this.smallNumber5}}</td>
+              <td>{{this.itemName6}}</td>
+              <td>{{this.bigNumber6}}</td>
+              <td>{{this.smallNumber6}}</td>
+              <td>{{this.itemName7}}</td>
+              <td>{{this.bigNumber7}}</td>
+              <td>{{this.smallNumber7}}</td>
+              <td>{{this.itemName8}}</td>
+              <td>{{this.bigNumber8}}</td>
+              <td>{{this.smallNumber8}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

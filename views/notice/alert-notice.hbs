@@ -1,3 +1,175 @@
 {{>home-tab route ='alertNotice' }}
 <hr>
-<h1>異常通知</h1>
+<div style="display: flex;">
+  <h5 style="font-weight: 900;">選擇要查詢的日期</h5>
+</div>
+<form action="/alertNotice" method="GET">
+  <div style="display: flex;">
+    <div class="input-group mb-3" style="width: 250px;">
+      <span class="input-group-text" id="startDate">開始日期</span>
+      <input type="date" class="form-control" aria-label="startDate" aria-describedby="startDate" name="startDate"
+        value="{{startDate}}" required>
+    </div>
+    <div class="input-group mb-3 ms-3" style="width: 250px;">
+      <span class="input-group-text" id="endDate">結束日期</span>
+      <input type="date" class="form-control" aria-label="endDate" aria-describedby="endDate" name="endDate"
+        value="{{endDate}}" required>
+    </div>
+    <div class="input-group mb-3 ms-3" style="width: 250px;">
+      <span class="input-group-text" id="operator">檢測員</span>
+      <input type="text" class="form-control" aria-label="operator" aria-describedby="operator" name="operator"
+      value="{{operator}}">
+    </div>
+    <button type="submit" class="btn btn-outline-primary mb-3 ms-3">送出</button>
+  </div>
+</form>
+<hr>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header" style="display: flex;">
+        <h5 style="font-weight: 900;">線上送樣批號</h5>
+        <h5 style="font-weight: 900;">共 {{#if startDate}}{{onlineSampleArr.length}}{{else}}0{{/if}}件</h5>
+      </div>
+      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+        {{#if startDate}}
+        <div>
+          <table class="table ">
+            <thead>
+              <tr>
+                <th scope="col">日期</th>
+                <th scope="col">時間</th>
+                <th scope="col">品名</th>
+                <th scope="col">批號</th>
+                <th scope="col">反應時間</th>
+                <th scope="col">檢驗者</th>
+                  <th scope="col">終點判定</th>
+                <th scope="col">細項</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each onlineSampleArr}}
+              <tr {{#ifCond this.終點判定 "FAIL"}} style="color:brown;"{{/ifCond}}>
+                <td scope="row">{{this.日期}}</td>
+                <td scope="row">{{this.時間}}</td>
+                <td scope="row">{{this.sampleName}}</td>
+                <td scope="row">{{this.批號}}</td>
+                <td scope="row">{{#if this.作業}}{{this.作業}}{{else}}{{this.反應時間}}{{/if}}</td>
+                <td scope="row">{{#if this.檢驗者}}{{this.檢驗者}}{{else}}{{this.檢測員}}{{/if}}</td>
+                <td scope="row">{{#ifCond this.終點判定 "FAIL"}}FAIL{{else}}PASS{{/ifCond}}</td>
+                <td scope="row"><button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#{{this.id}}">
+                    詳情
+                  </button></td>
+              </tr>
+
+              <div class="modal fade" id="{{this.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">檢驗數據</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="{{this.id}}">
+                      {{#each this}}
+                      <ul class="list-group">
+                        <li class="list-group-item disabled" aria-disabled="true">
+                          <div style="display: flex;">
+                            <h6>{{@key}}:</h6>
+                            <h6 style="color:blue;">{{this}}</h6>
+                          </div>
+                        </li>
+                      </ul>
+                      {{/each}}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        {{else}}
+        <div class="input-group-text justify-content-center fs-5 fw-bold">請選擇日期</div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 mt-3">
+    <div class="card">
+      <div class="card-header" style="display: flex;">
+        <h5 style="font-weight: 900;">線上異常批號</h5>
+        <h5 style="font-weight: 900;">共 {{#if startDate}}{{obj.length}}{{else}}0{{/if}}件</h5>
+      </div>
+      <div class="card-body" style="overflow-y:auto;height:300px;display:block;">
+        {{#if startDate}}
+        <div>
+          <table class="table ">
+            <thead>
+              <tr>
+                <th scope="col">日期</th>
+                <th scope="col">時間</th>
+                <th scope="col">品名</th>
+                <th scope="col">批號</th>
+                <th scope="col">反應時間</th>
+                <th scope="col">檢驗者</th>
+                <th scope="col">細項</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each obj}}
+              <tr>
+                <td scope="row">{{this.日期}}</td>
+                <td scope="row">{{this.時間}}</td>
+                <td scope="row">{{this.sampleName}}</td>
+                <td scope="row">{{this.批號}}</td>
+                <td scope="row">{{#if this.作業}}{{this.作業}}{{else}}{{#if this.反應時間}}{{this.反應時間}}{{else}}{{this.反應段}}{{/if}}{{/if}}</td>
+                <td scope="row">{{#if this.檢驗者}}{{this.檢驗者}}{{else}}{{this.檢測員}}{{/if}}</td>
+                <td scope="row"><button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#{{this.id}}">
+                    詳情
+                  </button></td>
+              </tr>
+
+              <div class="modal fade" id="{{this.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">檢驗數據</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="{{this.id}}">
+                      {{#each this}}
+                      <ul class="list-group">
+                        <li class="list-group-item disabled" aria-disabled="true">
+                          <div style="display: flex;">
+                            <h6>{{@key}}:</h6>
+                            <h6 style="color:blue;">{{this}}</h6>
+                          </div>
+                        </li>
+                      </ul>
+                      {{/each}}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        {{else}}
+        <div class="input-group-text justify-content-center fs-5 fw-bold">請選擇日期</div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

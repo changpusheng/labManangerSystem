@@ -31,11 +31,11 @@
                 <td scope="row">{{checkItem.name}}</td>
                 <td scope="row">{{toFixed checkItem.stock 3}}</td>
                 <td scope="row">
-                  <input type="text" name="afterNumber" min="0" value="{{toFixed checkItem.stock 3}}"
+                  <input type="text" name="afterNumber" id="afterNumber" min="0" value="{{toFixed checkItem.stock 3}}"
                     style="width: 80px;" required>
                 </td>
                 <td scope="row"><button type="submit" class="btn btn-outline-primary"
-                    onclick="return confirm(`確定{{checkItem.name}}數量為{{toFixed checkItem.stock 3}}嗎?`)">送出</button></td>
+                    onclick="return confirm(`確定{{checkItem.name}}盤點數量正確嗎?`)">送出</button></td>
                 <td scope="row"><a href="javascript:history.back()" class="btn btn-outline-danger">取消</a></td>
               </form>
             </tr>

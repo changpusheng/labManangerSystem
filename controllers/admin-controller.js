@@ -7,6 +7,7 @@ const Item = require('../models/item')
 const Buy = require('../models/buy')
 const Config = require('../models/config')
 const Instrument = require('../models/instrument')
+const Ipqc = require('../models/ipqc')
 const dayjs = require('dayjs')
 const dimStringSearch = require('../public/javascript/dimStringSearch')
 const { getOffset, getPagination } = require('../helpers/page-helper')
@@ -342,6 +343,97 @@ const adminCroller = {
     }).then(() => {
       req.flash('success_messages', '變更成功')
       res.redirect('/admin/instrument')
+    }).catch(err => next(err))
+  },
+  getIPQC: (req, res, next) => {
+    return Promise.all([Ipqc.find().lean(),
+    req.params.id ? Ipqc.findById(req.params.id).lean() : null
+    ]).then(([items, item]) => {
+      res.render('admin/ipqc', { items, item })
+    }).catch(err => next(err))
+  },
+  postIPQC: (req, res, next) => {
+    const { name, url,
+      itemName1, bigNumber1, smallNumber1,
+      itemName2, bigNumber2, smallNumber2,
+      itemName3, bigNumber3, smallNumber3,
+      itemName4, bigNumber4, smallNumber4,
+      itemName5, bigNumber5, smallNumber5,
+      itemName6, bigNumber6, smallNumber6,
+      itemName7, bigNumber7, smallNumber7,
+      itemName8, bigNumber8, smallNumber8    } = req.body
+    if (!name || !url) throw new Error('名稱/網址不能是空白')
+    Ipqc.findOne({ name: name.toUpperCase() }).then(name => {
+      if (name) throw new Error('已經有該名稱')
+    }).then(() => {
+      return Ipqc.create({
+        name,
+        url,
+        itemName1: itemName1.trim(), bigNumber1: bigNumber1.trim(), smallNumber1: smallNumber1.trim(),
+        itemName2: itemName2.trim(), bigNumber2: bigNumber2.trim(), smallNumber2: smallNumber2.trim(),
+        itemName3: itemName3.trim(), bigNumber3: bigNumber3.trim(), smallNumber3: smallNumber3.trim(),
+        itemName4: itemName4.trim(), bigNumber4: bigNumber4.trim(), smallNumber4: smallNumber4.trim(),
+        itemName5: itemName5.trim(), bigNumber5: bigNumber5.trim(), smallNumber5: smallNumber5.trim(),
+        itemName6: itemName6.trim(), bigNumber6: bigNumber6.trim(), smallNumber6: smallNumber6.trim(),
+        itemName7: itemName7.trim(), bigNumber7: bigNumber7.trim(), smallNumber7: smallNumber7.trim(),
+        itemName8: itemName8.trim(), bigNumber8: bigNumber8.trim(), smallNumber8: smallNumber8.trim()
+      })
+    }).then(() => {
+      req.flash('success_messages', '新增成功')
+      res.redirect('/admin/ipqc')
+    }).catch(err => next(err))
+  },
+  putIPQC: (req, res, next) => {
+    const { name, url,
+      itemName1, bigNumber1, smallNumber1,
+      itemName2, bigNumber2, smallNumber2,
+      itemName3, bigNumber3, smallNumber3,
+      itemName4, bigNumber4, smallNumber4,
+      itemName5, bigNumber5, smallNumber5,
+      itemName6, bigNumber6, smallNumber6,
+      itemName7, bigNumber7, smallNumber7,
+      itemName8, bigNumber8, smallNumber8  } = req.body
+    if (!name || !url) throw new Error('名稱/網址不能是空白')
+    return Ipqc.findById(req.params.id).then(item => {
+      item.name = name
+      item.url = url
+      item.itemName1 = itemName1.trim()
+      item.bigNumber1 = bigNumber1.trim()
+      item.smallNumber1 = smallNumber1.trim()
+      item.itemName2 = itemName2.trim()
+      item.bigNumber2 = bigNumber2.trim()
+      item.smallNumber2 = smallNumber2.trim()
+      item.itemName3 = itemName3.trim()
+      item.bigNumber3 = bigNumber3.trim()
+      item.smallNumber3 = smallNumber3.trim()
+      item.itemName4 = itemName4.trim()
+      item.bigNumber4 = bigNumber4.trim()
+      item.smallNumber4 = smallNumber4.trim()
+      item.itemName5 = itemName5.trim()
+      item.bigNumber5 = bigNumber5.trim()
+      item.smallNumber5 = smallNumber5.trim()
+      item.itemName6 = itemName6.trim()
+      item.bigNumber6 = bigNumber6.trim()
+      item.smallNumber6 = smallNumber6.trim()
+      item.itemName7 = itemName7.trim()
+      item.bigNumber7 = bigNumber7.trim()
+      item.smallNumber7 = smallNumber7.trim()
+      item.itemName8 = itemName8.trim()
+      item.bigNumber8 = bigNumber8.trim()
+      item.smallNumber8 = smallNumber8.trim()
+      item.save()
+    }).then(() => {
+      req.flash('success_messages', '變更成功')
+      res.redirect('/admin/ipqc')
+    }).catch(err => next(err))
+  },
+  deleteIPQC: (req, res, next) => {
+    return Ipqc.findById(req.params.id).then(item => {
+      if (!item) throw new Error('物件不存在')
+      return item.remove()
+    }).then(() => {
+      req.flash('success_messages', '刪除成功')
+      res.redirect('/admin/ipqc')
     }).catch(err => next(err))
   }
 }

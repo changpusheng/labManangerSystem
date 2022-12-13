@@ -43,5 +43,23 @@ module.exports = {
   },
   firstIndexName: (a) => {
     return a[0].name
+  },
+  getEndText: (value, number) => {
+    const valueLength = value.length
+    const getNumber = valueLength - number
+    let getValue = value.slice(-getNumber)
+    return getValue
+  },
+  expandItemKey: (items) => {
+    console.log(items)
+    const itemsKeyLength = Object.keys(items).length
+    const itemKeyArr = []
+    for (let i = 0; i < itemsKeyLength; i++) {
+      const itemKey = Object.keys(items)[i]
+      const itemValue = items[`${itemKey}`]
+      const sample = `${itemKey}:${itemValue}`
+      itemKeyArr.push(sample)
+    }
+    return itemKeyArr.map(obj => obj)
   }
 }
